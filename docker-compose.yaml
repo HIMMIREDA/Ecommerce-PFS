@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # mysql
+  mysql:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecommerce
+
+  # phpmyadmin
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "81:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mysql
+
+  # springboot 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+      - 35729:35729
+    environment:
+      - DB_HOST=mysql
+      - DB_NAME=ecommerce
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_PORT=3306
+    volumes:
+      - ./backend/src:/app/src
+    depends_on:
+      - phpmyadmin
+
+  # react
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - HOST_UID=${HOST_UID}
+        - HOST_GID=${HOST_GID}
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app
+    depends_on:
+      - backend
+
+  # npm
+  npm:
+    image: node:lts-alpine3.17
+    working_dir: /app
+    entrypoint: npm
+    user: ${HOST_UID}:${HOST_GID}
+    tty: true
+    volumes:
+      - ./client:/app
+
+volumes:
+  db_data:

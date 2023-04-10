@@ -8,6 +8,8 @@ import com.ensa.ecommerce_backend.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ProductService {
@@ -27,6 +29,15 @@ public class ProductService {
 
     public ProductEntity saveProduct(ProductEntity product) {
         productRepository.save(product);
+        return product;
+    }
+
+    public List<ProductEntity> getAllProducts(){
+        return productRepository.findAll();
+    }
+
+    public ProductEntity getProductById(Long id){
+        ProductEntity product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Product not Found"));
         return product;
     }
 

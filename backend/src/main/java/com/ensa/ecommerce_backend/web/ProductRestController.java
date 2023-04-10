@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @AllArgsConstructor
 public class ProductRestController {
 
@@ -48,6 +49,16 @@ public class ProductRestController {
     public ResponseEntity<ProductEntity> saveProduct(@RequestBody ProductEntity product) {
         ProductEntity savedProduct = productService.saveProduct(product);
         return ResponseEntity.ok(savedProduct);
+    }
+
+    @GetMapping
+    public List<ProductEntity> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping("/{id}")
+    public ProductEntity getProductById(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 
 

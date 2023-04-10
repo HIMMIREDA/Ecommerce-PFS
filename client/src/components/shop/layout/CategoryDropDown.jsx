@@ -83,7 +83,7 @@ export default function CategoryDropDown() {
               <Link
                 tabIndex={0}
                 to={`/category/${category?.name}`}
-                className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                className="block rounded-lg px-4 py-2 text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-700"
               >
                 <span className="flex justify-between">
                   {category?.name} <FiChevronRight />

@@ -16,7 +16,7 @@ function NavBar({setOpenCart}) {
 
   return (
     
-    <nav className="shadow z-10 w-full">
+    <nav className="shadow z-20 bg-base-100 w-full sticky top-0">
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
           <div className="flex items-center justify-between">

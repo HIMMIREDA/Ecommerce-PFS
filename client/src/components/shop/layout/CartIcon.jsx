@@ -1,7 +1,7 @@
 import React from "react";
 import { BsBag } from "react-icons/bs";
 
-function Cart() {
+function CartIcon() {
   return (
     <div
       className="cursor-pointer flex mr-6 items-center hover:text-gray-600 relative h-fit"
@@ -14,4 +14,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default CartIcon;

@@ -10,7 +10,7 @@ function Cart({openCart,setOpenCart}) {
 
   return (
     <Transition.Root show={openCart} as={Fragment}>
-      <Dialog as="div" className="relative z-20" onClose={setOpenCart}>
+      <Dialog as="div" className="relative z-30" onClose={setOpenCart}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"

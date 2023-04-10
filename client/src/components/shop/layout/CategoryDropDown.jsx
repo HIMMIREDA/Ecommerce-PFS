@@ -1,4 +1,3 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiChevronDown, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
@@ -74,7 +73,6 @@ export default function CategoryDropDown() {
         <ul
           tabIndex={0}
           className="absolute dropdown-content menu right-0 z-10 p-3 w-56 rounded-md border border-base-300 badge-ghost shadow-lg"
-          role="menu"
         >
           {categories?.map((category) => (
             <li
@@ -93,7 +91,7 @@ export default function CategoryDropDown() {
               </Link>
               <ul
                 tabIndex={0}
-                class="absolute dropdown-content menu right-0 top-0 z-10 p-3 w-56 rounded-md border border-base-300 badge-ghost shadow-lg"
+                className="absolute dropdown-content menu right-0 top-0 z-10 p-3 w-56 rounded-md border border-base-300 badge-ghost shadow-lg"
               >
                 {category?.subcategories?.map((subCategory) => (
                   <li
@@ -112,10 +110,11 @@ export default function CategoryDropDown() {
                     {(subCategory?.subcategories || []).length !== 0 && (
                       <ul
                         tabIndex={0}
-                        class="absolute dropdown-content menu right-0 top-0 z-10 p-3 w-56 rounded-md border border-base-300 badge-ghost shadow-lg"
+                        className="absolute dropdown-content menu right-0 top-0 z-10 p-3 w-56 rounded-md border border-base-300 badge-ghost shadow-lg"
                       >
                         {subCategory?.subcategories?.map((subSubCategory) => (
                           <Link
+                          key={subSubCategory?.id}
                             to={`/category/${category?.name}/${subCategory?.name}/${subSubCategory?.name}`}
                             className="block rounded-lg px-4 py-2 text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                           >

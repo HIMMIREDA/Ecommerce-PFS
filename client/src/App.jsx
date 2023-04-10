@@ -11,7 +11,7 @@ function App() {
       <div className="flex flex-col min-h-[100vh] w-full">
         <NavBar setOpenCart={setOpenCart} />
         <Cart openCart={openCart} setOpenCart={setOpenCart} />
-        <main className="flex-grow mt-1 md:mt-5">
+        <main className="flex justify-center mt-1 md:mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>

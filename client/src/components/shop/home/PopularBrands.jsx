@@ -30,8 +30,8 @@ const PopularBrands = () => {
           <h2 className="text-xl font-bold sm:text-3xl">Popular Brands</h2>
 
           <Link
-            to="/featured"
-            className="group mt-4 inline-flex  gap-1 text-sm font-medium items-center"
+            to="/brands/popular"
+            className="group mt-4 inline-flex  gap-1 text-xl font-medium items-center"
           >
             Most popular brands in our shop
             <span

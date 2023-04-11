@@ -3,9 +3,7 @@ package com.ensa.ecommerce_backend.service;
 import com.ensa.ecommerce_backend.entity.ProductImageEntity;
 import com.ensa.ecommerce_backend.repository.ProductImageRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

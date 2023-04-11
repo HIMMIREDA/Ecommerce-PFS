@@ -20,7 +20,7 @@ public class ProductService {
 
     public ProductImageDTO addImageToProduct(ProductImageDTO productImageDTO){
         ProductEntity product = productRepository.findById(productImageDTO.getProductId()).orElseThrow(()->new RuntimeException("Product not Found"));
-        ProductImageEntity image = productImageRepository.findById(productImageDTO.getImageId());
+        ProductImageEntity image = productImageRepository.findById(productImageDTO.getImageId()).orElseThrow(() -> new RuntimeException("Image not found"));
         image.setProduct(product);
         product.getProductImages().add(image);
         productRepository.save(product);

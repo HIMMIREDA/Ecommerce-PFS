@@ -31,14 +31,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
-      - 35729:35729
-    environment:
-      - DB_HOST=mysql
-      - DB_NAME=ecommerce
-      - DB_USER=root
-      - DB_PASSWORD=root
-      - DB_PORT=3306
+      - "8080:8080"
+      - "35729:35729"
+    env_file:
+      - ./env/backend.env
     volumes:
       - ./backend/src:/app/src
     depends_on:
@@ -53,11 +49,12 @@ services:
         - HOST_UID=${HOST_UID}
         - HOST_GID=${HOST_GID}
     ports:
-      - 3000:3000
+      - "3000:3000"
     volumes:
       - ./client:/app
     depends_on:
       - backend
+      - redis
 
   # npm
   npm:
@@ -68,6 +65,15 @@ services:
     tty: true
     volumes:
       - ./client:/app
+  
+  # redis
+  redis:
+    container_name: redis
+    image: redis:6-alpine3.17
+    restart: always
+    volumes:
+      - redis_data:/data
 
 volumes:
   db_data:
+  redis_data:

@@ -12,18 +12,18 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-public class EmailVerificationToken {
+public class EmailVerificationTokenEntity {
     private static final int EXPIRATION = 1440; // 24 hours
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public EmailVerificationToken(UserEntity user,String token) {
+    public EmailVerificationTokenEntity(UserEntity user, String token) {
         this.token = token;
         this.expiryDate = this.calculateExpiryDate();
         this.user = user;
     }
-    public EmailVerificationToken() {
+    public EmailVerificationTokenEntity() {
 
     }
 

@@ -40,11 +40,11 @@ public class UserEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
+    private List<RoleEntity> roles = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RefreshToken> refreshTokens = new ArrayList<>();
+    private List<RefreshTokenEntity> refreshTokens = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<EmailVerificationToken> emailVerificationTokens = new ArrayList<>();
+    private List<EmailVerificationTokenEntity> emailVerificationTokens = new ArrayList<>();
 }

@@ -1,10 +1,8 @@
 package com.ensa.ecommerce_backend.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ensa.ecommerce_backend.enums.RoleEnum;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,12 +17,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Data
-public class Role {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

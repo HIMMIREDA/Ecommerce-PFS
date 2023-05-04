@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.entity.ProductImageEntity;
-import com.ensa.ecommerce_backend.repository.ProductImageRepository;
+import com.ensa.ecommerce_backend.entity.ImageEntity;
+import com.ensa.ecommerce_backend.repository.ImageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,16 +13,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
-public class StoringImageService {
+public class StoringImageServiceImpl {
 
-    private ProductImageRepository productImageRepository;
+    private ImageRepository imageRepository;
 
 
-    public StoringImageService(ProductImageRepository productImageRepository) {
-        this.productImageRepository = productImageRepository;
+    public StoringImageServiceImpl(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
     }
 
 
@@ -47,20 +48,22 @@ public class StoringImageService {
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // Save the file information to the database
-        productImageRepository.save(ProductImageEntity.builder()
-                .name(file.getOriginalFilename())
+        imageRepository.save(ImageEntity.builder()
+                .name(UUID.randomUUID().toString())
                 .type(file.getContentType())
                 .imagePath(filePath.toString())
                 .build());
 
-        return "File uploaded successfully: " + filePath.toString();
+        return "File uploaded successfully";
     }
 
 
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
-        Optional<ProductImageEntity> productImageEntity = productImageRepository.findByName(fileName);
+        Optional<ImageEntity> productImageEntity = imageRepository.findByName(fileName);
         String filePath=productImageEntity.get().getImagePath();
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
-        return images;
+        byte[] image = Files.readAllBytes(new File(filePath).toPath());
+        return image;
     }
+
+
 }

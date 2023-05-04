@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-public class ProductImageEntity {
+public class ImageEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -24,6 +24,13 @@ public class ProductImageEntity {
     private String type;
     private String imagePath;
 
+    //////////////////////////////////
     @ManyToOne(fetch = FetchType.LAZY)
-    private ProductEntity product;
+    private ProductItemEntity product;
+
+    //////////////////////////////////
+    @OneToOne(mappedBy = "image")
+    private BrandEntity brand;
+
+
 }

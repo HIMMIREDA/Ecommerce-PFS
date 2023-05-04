@@ -4,7 +4,8 @@ import NavBar from "./components/shop/layout/NavBar";
 import Cart from "./components/shop/shoppingcart/Cart";
 import { useState } from "react";
 import Footer from "./components/shop/layout/Footer";
-
+import Login from "./pages/shop/Login";
+import Register from "./pages/shop/Register";
 function App() {
   const [openCart, setOpenCart] = useState(false);
   return (
@@ -15,6 +16,8 @@ function App() {
         <main className="flex flex-col justify-center mt-1 md:mt-5">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
         <Footer />

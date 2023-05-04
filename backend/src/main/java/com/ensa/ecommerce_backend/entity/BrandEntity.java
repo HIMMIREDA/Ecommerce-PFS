@@ -12,18 +12,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductEntity {
+public class BrandEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private String description;
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductItemEntity> productItems=new ArrayList<>();
+    @OneToMany(mappedBy = "brand")
+    private List<ProductEntity> products = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private BrandEntity brand;
+    @OneToOne
+    private ImageEntity image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private CategoryEntity category;
+    @ManyToMany
+    private List<CategoryEntity> categories = new ArrayList<>();
+
 }

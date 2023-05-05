@@ -27,4 +27,7 @@ public class ProductItemEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ImageEntity> productImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "productItem",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<CartItemEntity> cartItems = new ArrayList<>();
+
 }

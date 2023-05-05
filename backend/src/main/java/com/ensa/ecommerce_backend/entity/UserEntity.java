@@ -38,6 +38,11 @@ public class UserEntity {
 
     private boolean enabled = false;
 
+    private String firstName;
+    private String lastName;
+
+    private String phoneNumber;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles = new ArrayList<>();
@@ -47,4 +52,10 @@ public class UserEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<EmailVerificationTokenEntity> emailVerificationTokens = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user",cascade = CascadeType.ALL)
+    private List<AddressEntity> addresses = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private CartEntity cart = new CartEntity();
 }

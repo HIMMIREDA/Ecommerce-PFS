@@ -4,6 +4,7 @@ import com.ensa.ecommerce_backend.DTO.ProductImageDTO;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.entity.ProductItemEntity;
+import com.ensa.ecommerce_backend.enums.RoleEnum;
 import com.ensa.ecommerce_backend.service.CategoryService;
 import com.ensa.ecommerce_backend.service.ProductItemServiceImpl;
 import com.ensa.ecommerce_backend.service.ProductService;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

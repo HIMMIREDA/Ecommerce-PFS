@@ -1,9 +1,6 @@
 package com.ensa.ecommerce_backend.service.impl;
 
-import com.ensa.ecommerce_backend.entity.EmailVerificationTokenEntity;
-import com.ensa.ecommerce_backend.entity.RefreshTokenEntity;
-import com.ensa.ecommerce_backend.entity.RoleEntity;
-import com.ensa.ecommerce_backend.entity.UserEntity;
+import com.ensa.ecommerce_backend.entity.*;
 import com.ensa.ecommerce_backend.enums.RoleEnum;
 import com.ensa.ecommerce_backend.enums.TokenType;
 import com.ensa.ecommerce_backend.event.OnRegistrationCompleteEvent;
@@ -39,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -73,27 +71,36 @@ public class AuthServiceImpl implements AuthService {
         UserEntity user = verificationToken.getUser();
         user.setEnabled(true);
         userRepository.save(user);
-        List<EmailVerificationTokenEntity> userTokens =  emailVerificationTokenRepository.findEmailVerificationTokenByUser(user).orElseThrow();
+        List<EmailVerificationTokenEntity> userTokens = emailVerificationTokenRepository.findEmailVerificationTokenByUser(user).orElseThrow();
         emailVerificationTokenRepository.deleteAll(userTokens);
     }
 
     @Override
     public RegistrationResponse createUser(RegistrationRequest registrationRequest, HttpServletRequest httpRequest) {
         UserEntity user = UserMapper.mapDtoToUser(registrationRequest);
-        String url = httpRequest.getRequestURI().replace("register","confirm-registration");
+        String url = httpRequest.getRequestURI().replace("register", "confirm-registration");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setFirstName(registrationRequest.getFirstName());
+        user.setLastName(registrationRequest.getLastName());
+        user.setPhoneNumber(registrationRequest.getPhoneNumber());
         user.setRoles(Collections.singletonList(roleRepository.findRoleByName(RoleEnum.USER)));
-        user.setEnabled(false);
+        user.setEnabled(true);
+        user.setCart(
+                CartEntity.builder()
+                        .cartItems(new ArrayList<>())
+                        .total(0)
+                        .user(user)
+                        .build()
+        );
         if (userExists(user.getEmail(), user.getUsername())) {
-            UserEntity fetchedUser = userRepository.findUserEntityByEmail(user.getEmail()).orElseThrow();
-            if (!fetchedUser.isEnabled()) {
+            UserEntity fetchedUser = userRepository.findUserEntityByEmailOrUsername(user.getEmail(), user.getUsername()).orElseThrow();
+            if (fetchedUser.getEmail().equals(user.getEmail()) && fetchedUser.getUsername().equals(user.getUsername()) && !fetchedUser.isEnabled()) {
                 eventPublisher.publishEvent(new OnRegistrationCompleteEvent(fetchedUser, url));
                 return RegistrationResponse.builder()
                         .id(fetchedUser.getId())
                         .email(fetchedUser.getEmail())
                         .build();
             } else {
-
                 throw new UserAlreadyFoundException("user with email " + user.getEmail() + " or username " + user.getUsername() + " already found !");
             }
         }

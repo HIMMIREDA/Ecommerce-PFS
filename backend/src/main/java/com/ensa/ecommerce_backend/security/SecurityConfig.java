@@ -39,7 +39,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(authz -> {
-                    authz.requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                    authz.requestMatchers(
+                            new AntPathRequestMatcher("/api/auth/**"),
+                            new AntPathRequestMatcher("/api/cart/**")
+                            )
+                            .permitAll()
                             .anyRequest().authenticated();
                 })
                 .securityContext(securityContext -> securityContext.securityContextRepository(

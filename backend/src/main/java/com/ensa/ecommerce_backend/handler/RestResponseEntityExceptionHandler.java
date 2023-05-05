@@ -1,8 +1,6 @@
 package com.ensa.ecommerce_backend.handler;
 
-import com.ensa.ecommerce_backend.exception.EmailVerifTokenExpiredException;
-import com.ensa.ecommerce_backend.exception.RefreshTokenNotValidException;
-import com.ensa.ecommerce_backend.exception.UserAlreadyFoundException;
+import com.ensa.ecommerce_backend.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -29,9 +27,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public ResponseEntity<JsonExceptionResponse> handleUserAlreadyFoundException(UserAlreadyFoundException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(value = {RefreshTokenNotValidException.class, EmailVerifTokenExpiredException.class})
     public ResponseEntity<JsonExceptionResponse> handleExpiredTokensException(RuntimeException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = ProductItemNotFoundException.class)
+    public ResponseEntity<JsonExceptionResponse> handleProductItemNotFoundException(ProductItemNotFoundException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ProductItemQuantityException.class)
+    public ResponseEntity<JsonExceptionResponse> handleProductItemQuantityException(ProductItemQuantityException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
     @Override

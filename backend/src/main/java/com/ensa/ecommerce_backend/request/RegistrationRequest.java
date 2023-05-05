@@ -2,6 +2,7 @@ package com.ensa.ecommerce_backend.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,16 @@ public class RegistrationRequest {
     @NotEmpty
     @Length(min = 6)
     private String password;
+
+    @NotEmpty
+    private String firstName;
+
+    @NotEmpty
+    private String lastName;
+
+    @NotEmpty
+    @Size(min = 10,max = 10)
+    // @Phone
+    private String phoneNumber;
+
 }

@@ -23,5 +23,5 @@ public class ProductDto {
     private CategoryDto category2;
     private CategoryDto category3;
 
-    private List<String> images;
+    private List<ImageDto> images;
 }

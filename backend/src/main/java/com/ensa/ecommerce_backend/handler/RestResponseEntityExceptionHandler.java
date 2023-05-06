@@ -5,10 +5,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -22,9 +20,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    record JsonExceptionResponse(String message, Integer errorCode) {
-    }
-
     @ExceptionHandler(value = {UserAlreadyFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleUserAlreadyFoundException(UserAlreadyFoundException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
@@ -35,8 +30,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(value = ProductNotFoundException.class)
-    public ResponseEntity<JsonExceptionResponse> handleProductItemNotFoundException(ProductNotFoundException exception) {
+    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class})
+    public ResponseEntity<JsonExceptionResponse> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
@@ -50,11 +45,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = CategoryNotFoundException.class)
-    public ResponseEntity<JsonExceptionResponse> handleCategoryNotFoundException(CategoryNotFoundException exception) {
-        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(value = ProductImageArraySizeException.class)
+    public ResponseEntity<JsonExceptionResponse> handleProductImageArraySizeException(ProductImageArraySizeException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
+    // validation errors handler
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<String> errors = ex.getBindingResult().getFieldErrors()
@@ -62,10 +58,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
         return errorResponse;
+    }
+
+    record JsonExceptionResponse(String message, Integer errorCode) {
     }
 }

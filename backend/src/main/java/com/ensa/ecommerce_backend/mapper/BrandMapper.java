@@ -9,7 +9,7 @@ public class BrandMapper {
         return brand == null ? null :
                 BrandDto.builder()
                         .id(brand.getId())
-                        .image(brand.getName())
+                        .image(ImageMapper.mapImageEntityToImageDto(brand.getImage()))
                         .name(brand.getName())
                         .build();
     }

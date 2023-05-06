@@ -1,29 +1,27 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.ProductImageDTO;
+import com.ensa.ecommerce_backend.DTO.ProductDto;
 import com.ensa.ecommerce_backend.entity.ProductEntity;
-import com.ensa.ecommerce_backend.mapper.ProductMapper;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
+import com.ensa.ecommerce_backend.request.UpdateProductRequest;
+import com.ensa.ecommerce_backend.response.getProductsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
 import com.ensa.ecommerce_backend.service.ProductService;
 import com.ensa.ecommerce_backend.service.StoringImageService;
-import com.ensa.ecommerce_backend.response.getProductsResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/products")
@@ -97,17 +95,17 @@ public class ProductRestController {
             throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
         }
         ProductEntity product = productService.saveProduct(addProductRequest);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Product with ID " + product.getId() + " has been saved.");
-        return ResponseEntity.ok(response);
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", product.getId());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<getProductsResponse> getAllProducts(@RequestParam(value = "page",defaultValue = "1") int numPage, @RequestParam(value = "count",defaultValue = "10") int count) {
-        Page<ProductEntity> productsPage = productService.getAllProducts(numPage - 1,count);
+    public ResponseEntity<getProductsResponse> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
+        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count);
         return ResponseEntity.ok(
                 getProductsResponse.builder()
-                        .products(productsPage.getContent().stream().map(ProductMapper::mapProductEntityToProductDto).collect(Collectors.toList()))
+                        .products(productsPage.getContent())
                         .currentPage(productsPage.getNumber() + 1)
                         .totalItems(productsPage.getTotalElements())
                         .totalPages(productsPage.getTotalPages())
@@ -116,22 +114,40 @@ public class ProductRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductEntity> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProductById(id);
-        return ResponseEntity.ok().body("Product with ID " + id + " has been deleted.");
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", id);
+        return ResponseEntity.ok(response);
     }
+
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable("id") Long id, @RequestBody ProductEntity product) {
-        productService.updateProductById(id, product);
-        return ResponseEntity.ok().body("Product with ID " + id + " has been updated.");
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @RequestBody UpdateProductRequest updateProductRequest) {
+        return ResponseEntity.ok(productService.updateProductById(id, updateProductRequest));
     }
 
+
+    @PostMapping("/{productId}/images")
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId,@RequestParam("image")MultipartFile image){
+        ProductDto productDto = productService.addImageToProduct(productId,image);
+        Map<String,Object> response = new HashMap<>();
+        response.put("images",productDto.getImages());
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{productId}/images/{imageId}")
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId,@PathVariable String imageId){
+        productService.deleteImageFromProduct(productId,imageId);
+        Map<String,Object> response = new HashMap<>();
+        response.put("id",imageId);
+        return ResponseEntity.ok(response);
+    }
     /*
     @PostMapping("/addImageToProductItem")
     public ResponseEntity<ProductImageDTO> addImageToProductItem(@RequestBody ProductImageDTO productImageDTO) {

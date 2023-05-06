@@ -5,8 +5,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -33,14 +35,24 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(value = ProductItemNotFoundException.class)
-    public ResponseEntity<JsonExceptionResponse> handleProductItemNotFoundException(ProductItemNotFoundException exception) {
+    @ExceptionHandler(value = ProductNotFoundException.class)
+    public ResponseEntity<JsonExceptionResponse> handleProductItemNotFoundException(ProductNotFoundException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = ProductItemQuantityException.class)
-    public ResponseEntity<JsonExceptionResponse> handleProductItemQuantityException(ProductItemQuantityException exception) {
+    @ExceptionHandler(value = ProductQuantityException.class)
+    public ResponseEntity<JsonExceptionResponse> handleProductItemQuantityException(ProductQuantityException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = UploadFileException.class)
+    public ResponseEntity<JsonExceptionResponse> handleUploadFileException(UploadFileException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = CategoryNotFoundException.class)
+    public ResponseEntity<JsonExceptionResponse> handleCategoryNotFoundException(CategoryNotFoundException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -49,6 +61,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 .stream().map(objectError -> ((FieldError) objectError).getField() + " " + objectError.getDefaultMessage()).collect(Collectors.toList());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();

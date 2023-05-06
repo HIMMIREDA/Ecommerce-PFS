@@ -1,7 +1,9 @@
-package com.ensa.ecommerce_backend.service;
+package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.entity.BrandEntity;
 import com.ensa.ecommerce_backend.repository.BrandRepository;
+import com.ensa.ecommerce_backend.service.BrandService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
     private BrandRepository brandRepository;

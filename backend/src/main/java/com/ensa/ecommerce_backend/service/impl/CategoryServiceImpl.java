@@ -1,7 +1,9 @@
-package com.ensa.ecommerce_backend.service;
+package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.repository.CategoryRepository;
+import com.ensa.ecommerce_backend.service.CategoryService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;

@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> {
                     authz.requestMatchers(
                             new AntPathRequestMatcher("/api/auth/**"),
-                            new AntPathRequestMatcher("/api/cart/**")
+                            new AntPathRequestMatcher("/api/cart/**"),
+                            new AntPathRequestMatcher("/api/products/**")
                             )
                             .permitAll()
                             .anyRequest().authenticated();

@@ -1,7 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.entity.BrandEntity;
-import com.ensa.ecommerce_backend.entity.ProductItemEntity;
 import com.ensa.ecommerce_backend.service.BrandService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

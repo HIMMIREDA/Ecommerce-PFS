@@ -19,7 +19,7 @@ public class CartItemEntity {
     private Integer quantity;
 
     @ManyToOne
-    private ProductItemEntity productItem;
+    private ProductEntity productItem;
 
     @ManyToOne
     private CartEntity cart;

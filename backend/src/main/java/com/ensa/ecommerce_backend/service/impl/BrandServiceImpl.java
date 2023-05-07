@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @AllArgsConstructor
 @Transactional
@@ -55,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brand = brandRepository.findById(id).orElseThrow(
                 () -> new BrandNotFoundException("brand with id: " + id + " not found")
         );
-        brand.setName(updateBrandRequest.getName());
+        brand.setName(Objects.requireNonNullElse(updateBrandRequest.getName(), brand.getName()));
         if (updateBrandRequest.getImage() != null) {
             ImageEntity imageEntity = imageService.uploadImageToFileSystem(updateBrandRequest.getImage());
             imageEntity.setBrand(brand);

@@ -5,6 +5,8 @@ import com.ensa.ecommerce_backend.entity.BrandEntity;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
 import com.ensa.ecommerce_backend.entity.ProductEntity;
+import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
+import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;
 import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
 import com.ensa.ecommerce_backend.exception.ProductNotFoundException;
 import com.ensa.ecommerce_backend.mapper.ProductMapper;
@@ -14,8 +16,8 @@ import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
-import com.ensa.ecommerce_backend.service.ProductService;
 import com.ensa.ecommerce_backend.service.ImageService;
+import com.ensa.ecommerce_backend.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,13 +45,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto saveProduct(AddProductRequest addProductRequest) {
-        ProductEntity product = ProductMapper.mapAddProductRequestToProductEntity(addProductRequest);
+        ProductEntity product = ProductEntity.builder()
+                .name(addProductRequest.getName())
+                .description(addProductRequest.getDescription())
+                .quantity(addProductRequest.getQuantity())
+                .price(addProductRequest.getPrice())
+                .build();
+
         BrandEntity brand = null;
         if (addProductRequest.getBrandName() != null) {
             brand = brandRepository.findBrandEntityByName(addProductRequest.getBrandName()).orElse(null);
         }
-        //CategoryEntity category = categoryRepository.findCategoryEntityByName(addProductRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("category with name : " + addProductRequest.getCategoryName() + " not found"));
-        CategoryEntity category = categoryRepository.findCategoryEntityByName(addProductRequest.getCategoryName()).orElse(null);
+        CategoryEntity category = categoryRepository.findCategoryEntityByName(addProductRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("category with name : " + addProductRequest.getCategoryName() + " not found")
+        );
+
+        // category is 1st or 2nd lvl category
+        if (category.getParentCategory() == null || category.getParentCategory().getParentCategory() == null) {
+            throw new InvalidCategoryLevelException(
+                    "category must be a 3rd level category"
+            );
+        }
 
         product.setBrand(brand);
         product.setCategory(category);
@@ -74,23 +90,32 @@ public class ProductServiceImpl implements ProductService {
         ProductEntity product = productRepository.findById(id).orElseThrow(
                 () -> new ProductNotFoundException("product with id: " + id + " not found")
         );
-        //CategoryEntity category = categoryRepository.findCategoryEntityByName(updateProductRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("category with name: " + updateProductRequest.getCategoryName() + " not found"));
-        CategoryEntity category = categoryRepository.findCategoryEntityByName(updateProductRequest.getCategoryName()).orElse(null);
-        BrandEntity brand = brandRepository.findBrandEntityByName(updateProductRequest.getBrandName()).orElse(null);
-        product.setName(updateProductRequest.getName());
-        product.setDescription(updateProductRequest.getDescription());
-        product.setQuantity(updateProductRequest.getQuantity());
-        product.setPrice(updateProductRequest.getPrice());
-        product.setCategory(category);
-        product.setBrand(brand);
+
+        product.setName(Objects.requireNonNullElse(updateProductRequest.getName(), product.getName()));
+        product.setDescription(Objects.requireNonNullElse(updateProductRequest.getDescription(), product.getDescription()));
+        product.setQuantity(Objects.requireNonNullElse(updateProductRequest.getQuantity(), product.getQuantity()));
+        product.setPrice(Objects.requireNonNullElse(updateProductRequest.getPrice(), product.getPrice()));
+
+        if (updateProductRequest.getBrandName() != null) {
+            BrandEntity brand = brandRepository.findBrandEntityByName(updateProductRequest.getBrandName()).orElse(null);
+            product.setBrand(brand);
+        }
+
+        if (updateProductRequest.getCategoryName() != null) {
+            CategoryEntity category = categoryRepository.findCategoryEntityByName(updateProductRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("category with name: " + updateProductRequest.getCategoryName() + " not found"));
+            product.setCategory(category);
+        }
 
         return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
     }
 
     @Override
-    public Page<ProductDto> getAllProducts(int numPage, int pageCount) {
+    public Page<ProductDto> getAllProducts(int numPage, int pageCount, String query) {
+
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return productRepository.findAll(paging).map(ProductMapper::mapProductEntityToProductDto);
+        return query.equals("") ?
+                productRepository.findAll(paging).map(ProductMapper::mapProductEntityToProductDto)
+                : productRepository.findProductEntitiesByNameContainingIgnoreCase(query, paging).map(ProductMapper::mapProductEntityToProductDto);
     }
 
     @Override

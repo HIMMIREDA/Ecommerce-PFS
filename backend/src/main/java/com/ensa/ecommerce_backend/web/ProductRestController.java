@@ -5,9 +5,10 @@ import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
-import com.ensa.ecommerce_backend.service.ProductService;
 import com.ensa.ecommerce_backend.service.ImageService;
+import com.ensa.ecommerce_backend.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
@@ -44,8 +45,8 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
-        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count);
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "query", defaultValue = "") String query) {
+        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, query);
         return ResponseEntity.ok(
                 GetItemsResponse.<ProductDto>builder()
                         .items(productsPage.getContent())
@@ -71,13 +72,13 @@ public class ProductRestController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @RequestBody UpdateProductRequest updateProductRequest) {
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @RequestBody @Valid UpdateProductRequest updateProductRequest) {
         return ResponseEntity.ok(productService.updateProductById(id, updateProductRequest));
     }
 
 
     @PostMapping("/{productId}/images")
-    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @RequestParam("image") @NotNull MultipartFile image) {
         ProductDto productDto = productService.addImageToProduct(productId, image);
         Map<String, Object> response = new HashMap<>();
         response.put("images", productDto.getImages());

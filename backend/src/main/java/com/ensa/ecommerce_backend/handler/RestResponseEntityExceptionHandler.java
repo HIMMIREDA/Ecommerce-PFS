@@ -50,6 +50,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = InvalidCategoryLevelException.class)
+    public ResponseEntity<JsonExceptionResponse> handleInvalidCategoryLevelException(InvalidCategoryLevelException exception) {
+        return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+    }
+
     // validation errors handler
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {

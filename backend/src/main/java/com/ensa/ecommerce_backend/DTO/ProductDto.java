@@ -19,9 +19,7 @@ public class ProductDto {
     private Double price;
 
     private BrandDto brand;
-    private CategoryDto category1;
-    private CategoryDto category2;
-    private CategoryDto category3;
+    private CategoryDto category;
 
     private List<ImageDto> images;
 }

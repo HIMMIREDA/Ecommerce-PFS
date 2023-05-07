@@ -6,16 +6,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class UpdateBrandRequest {
+@Data
+public class UpdateCategoryRequest {
+
     @Nullable
     @Size(min = 4)
     private String name;
 
-    private MultipartFile image = null;
+    @Nullable
+    @Size(max = 1000)
+    private String description;
 }

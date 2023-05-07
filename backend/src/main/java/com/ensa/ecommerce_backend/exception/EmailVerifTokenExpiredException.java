@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class EmailVerifTokenExpiredException extends RuntimeException{
+public class EmailVerifTokenExpiredException extends RuntimeException {
     public EmailVerifTokenExpiredException() {
     }
 

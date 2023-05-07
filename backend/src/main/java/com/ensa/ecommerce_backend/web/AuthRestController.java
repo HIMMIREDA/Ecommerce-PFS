@@ -23,27 +23,27 @@ public class AuthRestController {
 
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponse> register(@RequestBody @Valid RegistrationRequest registrationRequest, HttpServletRequest httpRequest) {
-        return new ResponseEntity<>(authService.createUser(registrationRequest,httpRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(authService.createUser(registrationRequest, httpRequest), HttpStatus.CREATED);
     }
 
     @PostMapping
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.loginUser(loginRequest,response));
+        return ResponseEntity.ok(authService.loginUser(loginRequest, response));
     }
 
     @GetMapping("/logout")
     public void logout(@CookieValue("jwt-refresh-token") String refreshToken, HttpSession session, HttpServletResponse response) {
         session.invalidate();
-        authService.logoutUser(refreshToken,response);
+        authService.logoutUser(refreshToken, response);
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token){
+    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token) {
         return ResponseEntity.ok(authService.refreshToken(token));
     }
 
     @GetMapping("/confirm-registration")
-    public void confirmRegistration(@RequestParam("token") String token){
+    public void confirmRegistration(@RequestParam("token") String token) {
         authService.verifyAccount(token);
     }
 }

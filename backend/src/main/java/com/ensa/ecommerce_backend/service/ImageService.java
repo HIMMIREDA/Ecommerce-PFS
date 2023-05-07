@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     public ImageEntity uploadImageToFileSystem(MultipartFile file);
+
     public byte[] getImageById(String fileName);
 
 }

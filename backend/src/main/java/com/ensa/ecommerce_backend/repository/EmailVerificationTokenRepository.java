@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationTokenEntity,Long> {
+public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationTokenEntity, Long> {
     Optional<List<EmailVerificationTokenEntity>> findEmailVerificationTokenByUser(UserEntity user);
+
     Optional<EmailVerificationTokenEntity> findEmailVerificationTokenByToken(String token);
 }

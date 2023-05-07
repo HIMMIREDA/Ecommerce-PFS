@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+
 import java.util.UUID;
 
 @Entity
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 public class ImageEntity {
     @Id
-    @Column(name = "id",updatable = false,nullable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
     private String extension;

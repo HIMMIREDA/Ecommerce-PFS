@@ -1,9 +1,9 @@
 package com.ensa.ecommerce_backend.request;
 
 
-import com.ensa.ecommerce_backend.entity.BrandEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AddProductRequest {
 
     @NotEmpty
-    @Size(min = 4,max = 100)
+    @Size(min = 4, max = 100)
     private String name;
 
     @NotEmpty
@@ -37,7 +37,7 @@ public class AddProductRequest {
     private String categoryName = null;
 
     @NotEmpty(message = "array cant be empty")
-    @Size(min = 1,max = 5, message = "array can contain at most 5 images")
+    @Size(min = 1, max = 5, message = "array can contain at most 5 images")
     private MultipartFile[] images;
 
 }

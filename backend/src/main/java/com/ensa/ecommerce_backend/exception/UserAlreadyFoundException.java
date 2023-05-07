@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class UserAlreadyFoundException extends RuntimeException{
+public class UserAlreadyFoundException extends RuntimeException {
     public UserAlreadyFoundException() {
     }
 

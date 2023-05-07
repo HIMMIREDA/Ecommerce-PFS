@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(registrationRequest.getLastName());
         user.setPhoneNumber(registrationRequest.getPhoneNumber());
         user.setRoles(Collections.singletonList(roleRepository.findRoleByName(RoleEnum.USER)));
-        user.setEnabled(true);
+        user.setEnabled(false);
         user.setCart(
                 CartEntity.builder()
                         .cartItems(new ArrayList<>())

@@ -25,6 +25,6 @@ public class CartEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItemEntity> cartItems = new ArrayList<>();
 }

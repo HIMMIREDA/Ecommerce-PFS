@@ -33,7 +33,7 @@ public class RegistrationRequest {
     private String lastName;
 
     @NotEmpty
-    @Size(min = 10,max = 10)
+    @Size(min = 10, max = 10)
     // @Phone
     private String phoneNumber;
 

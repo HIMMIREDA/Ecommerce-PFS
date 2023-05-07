@@ -1,8 +1,5 @@
 package com.ensa.ecommerce_backend.exception;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-
 public class BrandAlreadyFoundException extends RuntimeException {
     public BrandAlreadyFoundException() {
     }

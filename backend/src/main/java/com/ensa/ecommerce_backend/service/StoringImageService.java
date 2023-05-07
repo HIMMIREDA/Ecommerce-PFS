@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface StoringImageService {
-    public ImageEntity uploadImageToFileSystem(MultipartFile file) throws IOException;
+    public ImageEntity uploadImageToFileSystem(MultipartFile file);
     public byte[] downloadImageFromFileSystem(String fileName) throws IOException;
 
 }

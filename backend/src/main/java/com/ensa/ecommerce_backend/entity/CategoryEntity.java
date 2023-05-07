@@ -13,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class CategoryEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -31,8 +32,5 @@ public class CategoryEntity {
 
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> products = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "categories")
-    private List<BrandEntity> brands = new ArrayList<>();
 
 }

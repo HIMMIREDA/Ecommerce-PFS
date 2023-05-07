@@ -5,10 +5,8 @@ import com.ensa.ecommerce_backend.entity.BrandEntity;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
 import com.ensa.ecommerce_backend.entity.ProductEntity;
-import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
 import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
 import com.ensa.ecommerce_backend.exception.ProductNotFoundException;
-import com.ensa.ecommerce_backend.exception.UploadFileException;
 import com.ensa.ecommerce_backend.mapper.ProductMapper;
 import com.ensa.ecommerce_backend.repository.BrandRepository;
 import com.ensa.ecommerce_backend.repository.CategoryRepository;
@@ -26,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -44,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductEntity saveProduct(AddProductRequest addProductRequest) {
+    public ProductDto saveProduct(AddProductRequest addProductRequest) {
         ProductEntity product = ProductMapper.mapAddProductRequestToProductEntity(addProductRequest);
         BrandEntity brand = null;
         if (addProductRequest.getBrandName() != null) {
@@ -58,15 +55,13 @@ public class ProductServiceImpl implements ProductService {
 
         // save images
         product.setImages(Arrays.stream(addProductRequest.getImages()).map(image -> {
-            try {
-                ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
-                imageEntity.setProduct(product);
-                return imageEntity;
-            } catch (IOException e) {
-                throw new UploadFileException("error while uploading files");
-            }
-        }).collect(Collectors.toList()));
-        return productRepository.save(product);
+                            ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
+                            imageEntity.setProduct(product);
+                            return imageEntity;
+                        })
+                        .collect(Collectors.toList())
+        );
+        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
     }
 
     @Override
@@ -81,9 +76,7 @@ public class ProductServiceImpl implements ProductService {
         );
         //CategoryEntity category = categoryRepository.findCategoryEntityByName(updateProductRequest.getCategoryName()).orElseThrow(() -> new CategoryNotFoundException("category with name: " + updateProductRequest.getCategoryName() + " not found"));
         CategoryEntity category = categoryRepository.findCategoryEntityByName(updateProductRequest.getCategoryName()).orElse(null);
-
         BrandEntity brand = brandRepository.findBrandEntityByName(updateProductRequest.getBrandName()).orElse(null);
-
         product.setName(updateProductRequest.getName());
         product.setDescription(updateProductRequest.getDescription());
         product.setQuantity(updateProductRequest.getQuantity());
@@ -108,27 +101,23 @@ public class ProductServiceImpl implements ProductService {
         if (product.getImages().size() >= 5) {
             throw new ProductImageArraySizeException("product cant have more than 5 images, please remove image before adding new one.");
         }
-        try {
-            ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
-            imageEntity.setProduct(product);
-            product.getImages().add(imageEntity);
-            return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
-        } catch (IOException e) {
-            throw new UploadFileException("error while uploading files");
-        }
+        ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
+        imageEntity.setProduct(product);
+        product.getImages().add(imageEntity);
+        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
     }
 
     @Override
     public void deleteImageFromProduct(Long productId, String imageId) {
         ProductEntity product = productRepository.findById(productId).orElseThrow(
-                () -> new ProductNotFoundException("product with id: "+ productId + " not found")
+                () -> new ProductNotFoundException("product with id: " + productId + " not found")
         );
 
-        if(product.getImages().stream().noneMatch(imageEntity -> imageEntity.getId().toString().equals(imageId))){
+        if (product.getImages().stream().noneMatch(imageEntity -> imageEntity.getId().toString().equals(imageId))) {
             return;
         }
 
-        product.getImages().removeIf( imageEntity -> imageEntity.getId().toString().equals(imageId));
+        product.getImages().removeIf(imageEntity -> imageEntity.getId().toString().equals(imageId));
 
         productRepository.save(product);
         imageRepository.deleteById(UUID.fromString(imageId));

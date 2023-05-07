@@ -7,7 +7,7 @@ import com.ensa.ecommerce_backend.exception.ProductNotFoundException;
 import com.ensa.ecommerce_backend.exception.ProductQuantityException;
 import com.ensa.ecommerce_backend.mapper.CartMapper;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
-import com.ensa.ecommerce_backend.response.getCartResponse;
+import com.ensa.ecommerce_backend.response.GetCartResponse;
 import com.ensa.ecommerce_backend.repository.CartRepository;
 import com.ensa.ecommerce_backend.service.CartService;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class CartServiceImpl implements CartService {
     private ProductRepository productRepository;
 
     @Override
-    public getCartResponse getCartItems() {
+    public GetCartResponse getCartItems() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return CartMapper.mapCartToResponse(cartRepository.findCartEntityByUser_Email(authentication.getName()).orElseThrow());
     }

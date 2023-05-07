@@ -1,13 +1,9 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.entity.CartEntity;
-import com.ensa.ecommerce_backend.entity.CartItemEntity;
-import com.ensa.ecommerce_backend.response.getCartResponse;
-
-import java.util.List;
+import com.ensa.ecommerce_backend.response.GetCartResponse;
 
 public interface CartService {
-     getCartResponse getCartItems();
+     GetCartResponse getCartItems();
 
     void addItemToCart(Long productItemId,Integer quantity);
     void removeItemFromCart(Long CartItemId);

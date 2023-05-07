@@ -20,12 +20,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
 
+    static private final List<String> authorizedEndpoints = Arrays.asList(
+            "/api/auth/**",
+            "/api/cart/**",
+            "/api/products/**",
+            "/api/brands/**"
+    );
     private JwtAuthFilter jwtAuthFilter;
     private UserDetailsService userDetailsService;
     private JwtAuthEntryPoint unauthorizedHandler;
@@ -40,9 +49,9 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(authz -> {
                     authz.requestMatchers(
-                            new AntPathRequestMatcher("/api/auth/**"),
-                            new AntPathRequestMatcher("/api/cart/**"),
-                            new AntPathRequestMatcher("/api/products/**")
+                                    authorizedEndpoints.stream().map(
+                                            AntPathRequestMatcher::new
+                                    ).toList().toArray(AntPathRequestMatcher[]::new)
                             )
                             .permitAll()
                             .anyRequest().authenticated();

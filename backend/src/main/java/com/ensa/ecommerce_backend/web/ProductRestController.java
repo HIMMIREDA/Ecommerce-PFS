@@ -1,10 +1,9 @@
 package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
-import com.ensa.ecommerce_backend.response.getProductsResponse;
+import com.ensa.ecommerce_backend.response.GetItemsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
 import com.ensa.ecommerce_backend.service.ProductService;
 import com.ensa.ecommerce_backend.service.StoringImageService;
@@ -90,22 +89,21 @@ public class ProductRestController {
 
     ///////////PRODUCT///////////
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> saveProduct(@ModelAttribute @Valid AddProductRequest addProductRequest, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    public ResponseEntity<ProductDto> saveProduct(@ModelAttribute @Valid AddProductRequest addProductRequest, BindingResult bindingResult) throws MethodArgumentNotValidException {
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
         }
-        ProductEntity product = productService.saveProduct(addProductRequest);
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", product.getId());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        ProductDto productDto = productService.saveProduct(addProductRequest);
+
+        return new ResponseEntity<>(productDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<getProductsResponse> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
         Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count);
         return ResponseEntity.ok(
-                getProductsResponse.builder()
-                        .products(productsPage.getContent())
+                GetItemsResponse.<ProductDto>builder()
+                        .items(productsPage.getContent())
                         .currentPage(productsPage.getNumber() + 1)
                         .totalItems(productsPage.getTotalElements())
                         .totalPages(productsPage.getTotalPages())
@@ -134,18 +132,18 @@ public class ProductRestController {
 
 
     @PostMapping("/{productId}/images")
-    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId,@RequestParam("image")MultipartFile image){
-        ProductDto productDto = productService.addImageToProduct(productId,image);
-        Map<String,Object> response = new HashMap<>();
-        response.put("images",productDto.getImages());
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @RequestParam("image") MultipartFile image) {
+        ProductDto productDto = productService.addImageToProduct(productId, image);
+        Map<String, Object> response = new HashMap<>();
+        response.put("images", productDto.getImages());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{productId}/images/{imageId}")
-    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId,@PathVariable String imageId){
-        productService.deleteImageFromProduct(productId,imageId);
-        Map<String,Object> response = new HashMap<>();
-        response.put("id",imageId);
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @PathVariable String imageId) {
+        productService.deleteImageFromProduct(productId, imageId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", imageId);
         return ResponseEntity.ok(response);
     }
     /*

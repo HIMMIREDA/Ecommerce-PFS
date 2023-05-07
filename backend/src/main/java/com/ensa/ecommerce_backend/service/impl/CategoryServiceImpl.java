@@ -37,7 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
             updatedCategory.setParentCategory(category.getParentCategory());
             updatedCategory.setSubCategories(category.getSubCategories());
             updatedCategory.setProducts(category.getProducts());
-            updatedCategory.setBrands(category.getBrands());
             categoryRepository.save(updatedCategory);
         } else {
             throw new IllegalArgumentException("Category with ID " + id + " not found");
@@ -56,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void addSubCategory(CategoryEntity category, CategoryEntity subCategory) {
-        if(category.getSubCategories().size()>=2){
+        if (category.getSubCategories().size() >= 2) {
             throw new IllegalStateException("A Category can have at most 2 subcategories.");
         }
         category.getSubCategories().add(subCategory);

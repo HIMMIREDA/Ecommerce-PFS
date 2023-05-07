@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    ProductEntity saveProduct(AddProductRequest addProductRequest);
+    ProductDto saveProduct(AddProductRequest addProductRequest);
     void deleteProductById(Long id);
     ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
     Page<ProductDto> getAllProducts(int numPage, int pageCount);

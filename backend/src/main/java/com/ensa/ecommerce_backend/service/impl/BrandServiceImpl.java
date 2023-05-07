@@ -1,14 +1,25 @@
 package com.ensa.ecommerce_backend.service.impl;
 
+import com.ensa.ecommerce_backend.DTO.BrandDto;
+import com.ensa.ecommerce_backend.DTO.ProductDto;
 import com.ensa.ecommerce_backend.entity.BrandEntity;
+import com.ensa.ecommerce_backend.entity.ImageEntity;
+import com.ensa.ecommerce_backend.exception.BrandAlreadyFoundException;
+import com.ensa.ecommerce_backend.exception.BrandNotFoundException;
+import com.ensa.ecommerce_backend.mapper.BrandMapper;
+import com.ensa.ecommerce_backend.mapper.ProductMapper;
 import com.ensa.ecommerce_backend.repository.BrandRepository;
+import com.ensa.ecommerce_backend.repository.ProductRepository;
+import com.ensa.ecommerce_backend.request.AddBrandRequest;
+import com.ensa.ecommerce_backend.request.UpdateBrandRequest;
 import com.ensa.ecommerce_backend.service.BrandService;
+import com.ensa.ecommerce_backend.service.StoringImageService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -16,10 +27,22 @@ import java.util.Optional;
 public class BrandServiceImpl implements BrandService {
 
     private BrandRepository brandRepository;
+    private StoringImageService storingImageService;
+    private ProductRepository productRepository;
 
     @Override
-    public void saveBrand(BrandEntity brand) {
-        brandRepository.save(brand);
+    public BrandDto saveBrand(AddBrandRequest addBrandRequest) {
+        brandRepository.findBrandEntityByName(addBrandRequest.getName()).ifPresent(
+                (brand) -> {
+                    throw new BrandAlreadyFoundException("brand with name: " + addBrandRequest.getName() + " exists.");
+                }
+        );
+        BrandEntity brand = BrandEntity.builder()
+                .name(addBrandRequest.getName())
+                .build();
+        ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(addBrandRequest.getImage());
+        brand.setImage(imageEntity);
+        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
     }
 
     @Override
@@ -28,27 +51,38 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public void updateBrandById(Long id, BrandEntity brand) {
-        Optional<BrandEntity> existingBrand = brandRepository.findById(id);
-        if (existingBrand.isPresent()) {
-            BrandEntity updatedBrand = existingBrand.get();
-            updatedBrand.setName(brand.getName());
-            updatedBrand.setImage(brand.getImage());
-            updatedBrand.setProducts(brand.getProducts());
-            updatedBrand.setCategories(brand.getCategories());
-            brandRepository.save(updatedBrand);
-        } else {
-            throw new IllegalArgumentException("Brand with ID " + id + " not found");
+    public BrandDto updateBrandById(Long id, UpdateBrandRequest updateBrandRequest) {
+        BrandEntity brand = brandRepository.findById(id).orElseThrow(
+                () -> new BrandNotFoundException("brand with id: " + id + " not found")
+        );
+        brand.setName(updateBrandRequest.getName());
+        if (updateBrandRequest.getImage() != null) {
+            ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(updateBrandRequest.getImage());
+            imageEntity.setBrand(brand);
+            brand.setImage(imageEntity);
         }
+        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
     }
 
     @Override
-    public BrandEntity getBrandById(Long id) {
-        return brandRepository.findById(id).orElseThrow(()->new RuntimeException("Brand Not Found"));
+    public BrandDto getBrandById(Long id) {
+        return BrandMapper.mapBrandEntityToBrandDto(
+                brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException("Brand with id : " + id + " not found"))
+        );
     }
 
     @Override
-    public List<BrandEntity> getAllBrands() {
-        return brandRepository.findAll();
+    public Page<BrandDto> getAllBrands(int numPage, int pageCount) {
+        Pageable paging = PageRequest.of(numPage, pageCount);
+        return brandRepository.findAll(paging).map(BrandMapper::mapBrandEntityToBrandDto);
+    }
+
+    @Override
+    public Page<ProductDto> getBrandProducts(Long brandId, int numPage, int pageCount) {
+        BrandEntity brand = brandRepository.findById(brandId).orElseThrow(
+                () -> new BrandNotFoundException("Brand with id : " + brandId + " not found")
+        );
+        Pageable paging = PageRequest.of(numPage, pageCount);
+        return productRepository.findProductEntitiesByBrand(brand, paging).map(ProductMapper::mapProductEntityToProductDto);
     }
 }

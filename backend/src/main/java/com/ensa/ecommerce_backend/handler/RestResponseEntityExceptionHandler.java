@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {UserAlreadyFoundException.class})
-    public ResponseEntity<JsonExceptionResponse> handleUserAlreadyFoundException(UserAlreadyFoundException ex) {
+    @ExceptionHandler(value = {UserAlreadyFoundException.class, BrandAlreadyFoundException.class})
+    public ResponseEntity<JsonExceptionResponse> handleAlreadyFoundException(RuntimeException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
@@ -30,7 +30,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class})
+    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class, BrandNotFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }

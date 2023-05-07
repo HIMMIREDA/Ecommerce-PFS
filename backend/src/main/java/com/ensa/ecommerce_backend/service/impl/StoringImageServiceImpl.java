@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.entity.ImageEntity;
+import com.ensa.ecommerce_backend.exception.UploadFileException;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.service.StoringImageService;
 import jakarta.transaction.Transactional;
@@ -24,7 +25,7 @@ public class StoringImageServiceImpl implements StoringImageService {
 
     private ImageRepository imageRepository;
 
-    public ImageEntity uploadImageToFileSystem(MultipartFile file) throws IOException {
+    public ImageEntity uploadImageToFileSystem(MultipartFile file) {
 
         // Get the root directory of the project
         Path rootDir = Paths.get("").toAbsolutePath();
@@ -37,13 +38,21 @@ public class StoringImageServiceImpl implements StoringImageService {
 
         // Create the images directory if it doesn't exist
         if (!Files.exists(imagesDir)) {
-            Files.createDirectories(imagesDir);
+            try {
+                Files.createDirectories(imagesDir);
+            } catch (IOException e) {
+                throw new UploadFileException("an error occured while uploading file ");
+            }
         }
         UUID id = UUID.randomUUID();
         String storedFileName = id.toString();
         // Save the uploaded file to the images directory
         Path filePath = imagesDir.resolve(storedFileName + "." + com.google.common.io.Files.getFileExtension(file.getOriginalFilename()));
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // Save the file information to the database
         return imageRepository.save(
@@ -55,11 +64,14 @@ public class StoringImageServiceImpl implements StoringImageService {
 
     }
 
-
-    public byte[] downloadImageFromFileSystem(String fileName) throws IOException {
+    public byte[] downloadImageFromFileSystem(String fileName) {
         Optional<ImageEntity> productImageEntity = imageRepository.findById(UUID.fromString(fileName));
         String filePath = productImageEntity.orElseThrow().getImagePath();
-        byte[] image = Files.readAllBytes(new File(filePath).toPath());
+        byte[] image = null;
+        try {
+            image = Files.readAllBytes(new File(filePath).toPath());
+        } catch (IOException exception) {
+        }
         return image;
     }
 

@@ -1,23 +1,28 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.entity.CategoryEntity;
-import jdk.jfr.Category;
+import com.ensa.ecommerce_backend.DTO.CategoryDto;
+import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.request.AddCategoryRequest;
+import com.ensa.ecommerce_backend.request.UpdateCategoryRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CategoryService {
 
-    void saveCategory(CategoryEntity category);
+    List<CategoryDto> getAllCategories();
 
-    void deleteCategory(Long id);
+    CategoryDto saveParentCategory(AddCategoryRequest addCategoryRequest);
 
-    void updateCategory(Long id, CategoryEntity category);
+    CategoryDto saveChildCategory(Long parentCategoryId, AddCategoryRequest addCategoryRequest);
 
-    List<CategoryEntity> getAllCategories();
+    CategoryDto updateCategory(Long id, UpdateCategoryRequest updateCategoryRequest);
 
-    CategoryEntity getCategoryById(Long id);
+    void deleteCategoryById(Long id);
 
-    void addSubCategory(CategoryEntity category, CategoryEntity subCategory);
+    CategoryDto getCategoryById(Long id);
 
+    Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount);
+
+    Page<ProductDto> getCategoryProducts(Long id, int numPage, int pageCount);
 }

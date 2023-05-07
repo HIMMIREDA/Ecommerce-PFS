@@ -15,18 +15,15 @@ import java.util.UUID;
 @Builder
 public class ImageEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id",updatable = false,nullable = false)
     private UUID id;
 
-    private String name;
-    private String type;
+    private String extension;
     private String imagePath;
 
     //////////////////////////////////
     @ManyToOne(fetch = FetchType.LAZY)
-    private ProductItemEntity product;
+    private ProductEntity product;
 
     //////////////////////////////////
     @OneToOne(mappedBy = "image")

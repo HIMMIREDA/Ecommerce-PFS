@@ -2,6 +2,7 @@ package com.ensa.ecommerce_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class BrandEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "brand")
@@ -24,7 +28,5 @@ public class BrandEntity {
     @OneToOne
     private ImageEntity image;
 
-    @ManyToMany
-    private List<CategoryEntity> categories = new ArrayList<>();
 
 }

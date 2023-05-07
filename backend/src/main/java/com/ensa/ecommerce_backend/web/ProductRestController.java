@@ -1,148 +1,96 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.ProductImageDTO;
-import com.ensa.ecommerce_backend.entity.CategoryEntity;
-import com.ensa.ecommerce_backend.entity.ProductEntity;
-import com.ensa.ecommerce_backend.entity.ProductItemEntity;
+import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.request.AddProductRequest;
+import com.ensa.ecommerce_backend.request.UpdateProductRequest;
+import com.ensa.ecommerce_backend.response.GetItemsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
-import com.ensa.ecommerce_backend.service.ProductItemServiceImpl;
+import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
-import com.ensa.ecommerce_backend.service.StoringImageServiceImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 @AllArgsConstructor
 public class ProductRestController {
 
-    private StoringImageServiceImpl storingImageService;
-
-    private ProductItemServiceImpl productItemService;
+    private ImageService imageService;
 
     private ProductService productService;
 
     private CategoryService categoryService;
 
-    ///////////IMAGE///////////
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ProductDto> saveProduct(@ModelAttribute @Valid AddProductRequest addProductRequest, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException((MethodParameter) null, bindingResult);
+        }
+        ProductDto productDto = productService.saveProduct(addProductRequest);
 
-    @PostMapping("/fileSystem")
-    public ResponseEntity<?> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
-        String uploadImage = storingImageService.uploadImageToFileSystem(file);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+        return new ResponseEntity<>(productDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/fileSystem/{fileName}")
-    public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-        byte[] imageData=storingImageService.downloadImageFromFileSystem(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(imageData);
-
+    @GetMapping
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "query", defaultValue = "") String query) {
+        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, query);
+        return ResponseEntity.ok(
+                GetItemsResponse.<ProductDto>builder()
+                        .items(productsPage.getContent())
+                        .currentPage(productsPage.getNumber() + 1)
+                        .totalItems(productsPage.getTotalElements())
+                        .totalPages(productsPage.getTotalPages())
+                        .build()
+        );
     }
 
-    ///////////PRODUCT ITEM///////////
-
-    @PostMapping("/addImageToProductItem")
-    public ResponseEntity<ProductImageDTO> addImageToProductItem(@RequestBody ProductImageDTO productImageDTO) {
-        ProductImageDTO product = productItemService.addImageToProduct(productImageDTO);
-        return ResponseEntity.ok(product);
-    }
-
-    @PostMapping("/saveProductItem")
-    public void saveProductItem(@RequestBody ProductItemEntity product) {
-    productItemService.saveProduct(product);
-    }
-
-    @GetMapping("/productItems")
-    public List<ProductItemEntity> getAllProductItems() {
-        return productItemService.getAllProducts();
-    }
-
-    @GetMapping("/productItems/{id}")
-    public ProductItemEntity getProductItemById(@PathVariable Long id) {
-        return productItemService.getProductById(id);
-    }
-
-    @DeleteMapping("/deleteProductItem/{id}")
-    public ResponseEntity<String> deleteProductItem(@PathVariable("id") Long id){
-        productItemService.deleteProductById(id);
-        return ResponseEntity.ok().body("Product item with ID " + id + " has been deleted.");
-    }
-
-
-    @PutMapping("/updateProductItem/{id}")
-    public ResponseEntity<String> updateProductItem(@PathVariable("id") Long id, @RequestBody ProductItemEntity productItem) {
-        productItemService.updateProductById(id, productItem);
-        return ResponseEntity.ok().body("Product item with ID " + id + " has been updated.");
-    }
-
-
-    ///////////CATEGORY///////////
-
-    @GetMapping("/categories/{id}")
-    public ResponseEntity<CategoryEntity> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
-    }
-
-    @GetMapping("/categories")
-    public List<CategoryEntity> getAllBrands() {
-        return categoryService.getAllCategories();
-    }
-
-    @PostMapping("/saveCategory")
-    public ResponseEntity<String> saveCategory(@RequestBody CategoryEntity category) {
-
-        categoryService.saveCategory(category);
-        return ResponseEntity.ok().body("Category with ID " + category.getId() + " has been saved.");
-    }
-
-    @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id){
-        categoryService.deleteCategory(id);
-        return ResponseEntity.ok().body("Category with ID " + id + " has been deleted.");
-    }
-
-    @PutMapping("/updateCategory/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryEntity category) {
-        categoryService.updateCategory(id, category);
-        return ResponseEntity.ok().body("Category with ID " + id + " has been updated.");
-    }
-    ///////////PRODUCT///////////
-    @PostMapping("/saveProduct")
-    public ResponseEntity<String> saveProduct(@RequestBody ProductEntity product) {
-        productService.saveProduct(product);
-        return ResponseEntity.ok().body("Product with ID " + product.getId() + " has been saved.");
-    }
-
-    @GetMapping("/products")
-    public List<ProductEntity> getAllProducts() {
-        return productService.getAllProducts();
-    }
-
-    @GetMapping("/products/{id}")
-    public ResponseEntity<ProductEntity> getProductById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    @DeleteMapping("/deleteProduct/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable("id") Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProductById(id);
-        return ResponseEntity.ok().body("Product with ID " + id + " has been deleted.");
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", id);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable("id") Long id, @RequestBody ProductEntity product) {
-        productService.updateProductById(id, product);
-        return ResponseEntity.ok().body("Product with ID " + id + " has been updated.");
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @RequestBody @Valid UpdateProductRequest updateProductRequest) {
+        return ResponseEntity.ok(productService.updateProductById(id, updateProductRequest));
+    }
+
+
+    @PostMapping("/{productId}/images")
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @RequestParam("image") @NotNull MultipartFile image) {
+        ProductDto productDto = productService.addImageToProduct(productId, image);
+        Map<String, Object> response = new HashMap<>();
+        response.put("images", productDto.getImages());
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{productId}/images/{imageId}")
+    public ResponseEntity<Object> addImageToProduct(@PathVariable Long productId, @PathVariable String imageId) {
+        productService.deleteImageFromProduct(productId, imageId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", imageId);
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -15,7 +15,7 @@ import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.service.ProductService;
-import com.ensa.ecommerce_backend.service.StoringImageService;
+import com.ensa.ecommerce_backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
-    private StoringImageService storingImageService;
+    private ImageService imageService;
     private ImageRepository imageRepository;
     private CategoryRepository categoryRepository;
     private BrandRepository brandRepository;
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
         // save images
         product.setImages(Arrays.stream(addProductRequest.getImages()).map(image -> {
-                            ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
+                            ImageEntity imageEntity = imageService.uploadImageToFileSystem(image);
                             imageEntity.setProduct(product);
                             return imageEntity;
                         })
@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.getImages().size() >= 5) {
             throw new ProductImageArraySizeException("product cant have more than 5 images, please remove image before adding new one.");
         }
-        ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(image);
+        ImageEntity imageEntity = imageService.uploadImageToFileSystem(image);
         imageEntity.setProduct(product);
         product.getImages().add(imageEntity);
         return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));

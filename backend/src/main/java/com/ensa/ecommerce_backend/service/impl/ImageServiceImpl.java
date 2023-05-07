@@ -3,7 +3,7 @@ package com.ensa.ecommerce_backend.service.impl;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
 import com.ensa.ecommerce_backend.exception.UploadFileException;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
-import com.ensa.ecommerce_backend.service.StoringImageService;
+import com.ensa.ecommerce_backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @AllArgsConstructor
-public class StoringImageServiceImpl implements StoringImageService {
+public class ImageServiceImpl implements ImageService {
 
     private ImageRepository imageRepository;
 
@@ -64,7 +64,7 @@ public class StoringImageServiceImpl implements StoringImageService {
 
     }
 
-    public byte[] downloadImageFromFileSystem(String fileName) {
+    public byte[] getImageById(String fileName) {
         Optional<ImageEntity> productImageEntity = imageRepository.findById(UUID.fromString(fileName));
         String filePath = productImageEntity.orElseThrow().getImagePath();
         byte[] image = null;

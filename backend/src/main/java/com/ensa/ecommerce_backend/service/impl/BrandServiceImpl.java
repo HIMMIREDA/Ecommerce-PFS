@@ -13,7 +13,7 @@ import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddBrandRequest;
 import com.ensa.ecommerce_backend.request.UpdateBrandRequest;
 import com.ensa.ecommerce_backend.service.BrandService;
-import com.ensa.ecommerce_backend.service.StoringImageService;
+import com.ensa.ecommerce_backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class BrandServiceImpl implements BrandService {
 
     private BrandRepository brandRepository;
-    private StoringImageService storingImageService;
+    private ImageService imageService;
     private ProductRepository productRepository;
 
     @Override
@@ -40,7 +40,7 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brand = BrandEntity.builder()
                 .name(addBrandRequest.getName())
                 .build();
-        ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(addBrandRequest.getImage());
+        ImageEntity imageEntity = imageService.uploadImageToFileSystem(addBrandRequest.getImage());
         brand.setImage(imageEntity);
         return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
     }
@@ -57,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
         );
         brand.setName(updateBrandRequest.getName());
         if (updateBrandRequest.getImage() != null) {
-            ImageEntity imageEntity = storingImageService.uploadImageToFileSystem(updateBrandRequest.getImage());
+            ImageEntity imageEntity = imageService.uploadImageToFileSystem(updateBrandRequest.getImage());
             imageEntity.setBrand(brand);
             brand.setImage(imageEntity);
         }

@@ -6,7 +6,7 @@ import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
 import com.ensa.ecommerce_backend.service.ProductService;
-import com.ensa.ecommerce_backend.service.StoringImageService;
+import com.ensa.ecommerce_backend.service.ImageService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -27,67 +27,12 @@ import java.util.Map;
 @AllArgsConstructor
 public class ProductRestController {
 
-    private StoringImageService storingImageService;
+    private ImageService imageService;
 
     private ProductService productService;
 
     private CategoryService categoryService;
 
-    ///////////IMAGE///////////
-
-
-    /*
-    @PostMapping("/fileSystem")
-    public ResponseEntity<?> uploadImageToFIleSystem(@RequestParam("image") MultipartFile file) throws IOException {
-        String uploadImage = storingImageService.uploadImageToFileSystem(file);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
-    }
-
-    @GetMapping("/fileSystem/{fileName}")
-    public ResponseEntity<?> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-        byte[] imageData=storingImageService.downloadImageFromFileSystem(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(imageData);
-
-    }
-    */
-
-
-    ///////////CATEGORY///////////
-
-    /* @GetMapping("/categories/{id}")
-    public ResponseEntity<CategoryEntity> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
-    }
-
-    @GetMapping("/categories")
-    public List<CategoryEntity> getAllBrands() {
-        return categoryService.getAllCategories();
-    }
-
-    @PostMapping("/saveCategory")
-    public ResponseEntity<String> saveCategory(@RequestBody CategoryEntity category) {
-
-        categoryService.saveCategory(category);
-        return ResponseEntity.ok().body("Category with ID " + category.getId() + " has been saved.");
-    }
-
-    @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long id){
-        categoryService.deleteCategory(id);
-        return ResponseEntity.ok().body("Category with ID " + id + " has been deleted.");
-    }
-
-    @PutMapping("/updateCategory/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryEntity category) {
-        categoryService.updateCategory(id, category);
-        return ResponseEntity.ok().body("Category with ID " + id + " has been updated.");
-    }
-     */
-
-    ///////////PRODUCT///////////
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ProductDto> saveProduct(@ModelAttribute @Valid AddProductRequest addProductRequest, BindingResult bindingResult) throws MethodArgumentNotValidException {
         if (bindingResult.hasErrors()) {
@@ -146,11 +91,5 @@ public class ProductRestController {
         response.put("id", imageId);
         return ResponseEntity.ok(response);
     }
-    /*
-    @PostMapping("/addImageToProductItem")
-    public ResponseEntity<ProductImageDTO> addImageToProductItem(@RequestBody ProductImageDTO productImageDTO) {
-        //ProductImageDTO product = productService.addImageToProduct(productImageDTO);
-        //return ResponseEntity.ok(product);
-    }*/
 
 }

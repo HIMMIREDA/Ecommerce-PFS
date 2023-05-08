@@ -12,11 +12,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
     RegistrationResponse createUser(RegistrationRequest registrationRequest, HttpServletRequest httpRequest);
+
     LoginResponse loginUser(LoginRequest request, HttpServletResponse response);
-    void logoutUser(String refreshToken,HttpServletResponse response);
-    boolean userExists(String email,String username);
+
+    void logoutUser(String refreshToken, HttpServletResponse response);
+
+    boolean userExists(String email, String username);
+
     RefreshJwtResponse refreshToken(String token);
+
     EmailVerificationTokenEntity createEmailVerificationToken(UserEntity user, String token);
+
     void verifyAccount(String token);
 }
 

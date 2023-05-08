@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class ProductQuantityException extends RuntimeException{
+public class ProductQuantityException extends RuntimeException {
     public ProductQuantityException() {
     }
 

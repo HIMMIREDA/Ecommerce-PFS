@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \n}",
+					"raw": "{\n    \"name\": \"electronics\",\n    \"description\": \"includes all your high techs and electronics products\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -61,7 +61,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"laptops & computers\",\n    \"description\": \"computers for work and gaming\"\n}",
+					"raw": "{\n    \"name\": \"phones\",\n    \"description\": \"multi purpose phones\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -91,7 +91,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"gaming laptops\",\n    \"description\": \"start playing newest games titles now with our laptops\"\n}",
+					"raw": "{\n    \"name\": \"android phones\",\n    \"description\": \"get newest android phones\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -118,7 +118,20 @@
 			"name": "get 3rd lvl categories",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/categories/grandchilds",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"categories",
+						"grandchilds"
+					]
+				}
 			},
 			"response": []
 		},
@@ -126,7 +139,21 @@
 			"name": "get category products",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/categories/4/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"categories",
+						"4",
+						"products"
+					]
+				}
 			},
 			"response": []
 		},
@@ -137,7 +164,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"android phones\"\n}",
+					"raw": "{\n    \"name\": \"Electronis & High techs\",\n    \"description\": \"all Electronis and high techs devices\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

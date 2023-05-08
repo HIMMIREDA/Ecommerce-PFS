@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"redahimmi22@gmail.com\",\n    \"password\": \"reda123\",\n    \"username\": \"123456\"\n}",
+					"raw": "{\n    \"email\": \"redahimmi22@gmail.com\",\n    \"password\": \"123456\",\n    \"username\": \"reda1234\",\n    \"lastName\": \"Himmi\",\n    \"firstName\": \"Reda\",\n    \"phoneNumber\": \"0612218950\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,8 +67,30 @@
 		{
 			"name": "get cart items",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyZWRhaGltbWkyMkBnbWFpbC5jb20iLCJpYXQiOjE2ODMyNjcxNDUsImV4cCI6MTY4MzI2ODA0NX0.O6fj8IwatUoXKIxASNK2nGFqZ_UGyl7iqW5hXcG8n7vZysDw_OwEBvJHFJiHvGLIN3kv0T32RFXl7uF5_-009HgBMoDgJsreCtSArA4IE7rhIjDhZbBgLfj9UEYDMfznD9eevjWwd3gDici0TsIbXgCPPWUf_KkM3YCVcZX-F5md1jefaDZT4Lw0HNQlBPC6UO4x3eXENzWpZatCb1wIbnXjoZmnvP9ASnNWzpV-AuSsB4od7DUxH4ZUtijNdyPAaJbkB7SDjlz6X5W-lYm6xNn-7AI-m9t0npIygqpdko8EQH1z2clVZux2ImSkZDSV-hh2UZKZgFsy-CUyNXQBrw",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/cart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"cart"
+					]
+				}
 			},
 			"response": []
 		},
@@ -76,7 +98,29 @@
 			"name": "get products",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products?page=1&count=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "5"
+						}
+					]
+				}
 			},
 			"response": []
 		},
@@ -90,12 +134,12 @@
 					"formdata": [
 						{
 							"key": "name",
-							"value": "iphone 7s",
+							"value": "moto edge 20",
 							"type": "default"
 						},
 						{
 							"key": "description",
-							"value": "iphone 7s for oldies",
+							"value": "motorola phone",
 							"type": "default"
 						},
 						{
@@ -105,24 +149,28 @@
 						},
 						{
 							"key": "price",
-							"value": "129.99",
+							"value": "999.99",
 							"type": "default"
 						},
 						{
 							"key": "categoryName",
-							"value": "iphones",
+							"value": "android phones",
 							"type": "default"
 						},
 						{
 							"key": "images",
 							"type": "file",
 							"src": [
-								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-16-02-55-05_1920x1080.png",
-								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-12-55_1920x1080.png",
-								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-20-12_1920x1080.png",
+								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-28-08_1920x1080.png",
 								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-20-19_1920x1080.png",
-								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-28-08_1920x1080.png"
+								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-20-12_1920x1080.png",
+								"/home/reda/Pictures/ScreenShots/ShoT_2023-03-17-10-12-55_1920x1080.png"
 							]
+						},
+						{
+							"key": "brandName",
+							"value": "samsung",
+							"type": "default"
 						}
 					],
 					"options": {
@@ -195,7 +243,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"iphone 6s\",\n    \"description\": \"this is an iphone 6s\",\n    \"quantity\": 9,\n    \"price\": 100.99,\n    \"brand\": \"apple\"\n}",
+					"raw": "{\n    \"name\": \"iphone X\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -221,16 +269,18 @@
 		{
 			"name": "add image to product",
 			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "delete image product",
-			"request": {
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/reda/Pictures/ScreenShots/ShoT_2023-03-16-02-55-05_1920x1080.png"
+						}
+					]
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/products/1/images",
 					"protocol": "http",
@@ -243,6 +293,36 @@
 						"products",
 						"1",
 						"images"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete image product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/1/images/e1110dec-2053-4cb1-8ece-05d1f04cf088",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"1",
+						"images",
+						"e1110dec-2053-4cb1-8ece-05d1f04cf088"
 					]
 				}
 			},
@@ -253,6 +333,21 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "apple",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/reda/Downloads/apple.png"
+						}
+					]
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/brands",
 					"protocol": "http",
@@ -272,7 +367,19 @@
 			"name": "get brands",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/brands",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"brands"
+					]
+				}
 			},
 			"response": []
 		},
@@ -281,6 +388,27 @@
 			"request": {
 				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "samsung",
+							"type": "default"
+						},
+						{
+							"key": "image",
+							"value": "samsung",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/home/reda/Downloads/Samsung_logo_blue.png"
+						}
+					]
+				},
 				"url": {
 					"raw": "http://localhost:8080/api/brands/1",
 					"protocol": "http",
@@ -343,7 +471,31 @@
 			"name": "get brand products",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/brands/1/products?page=1&count=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"brands",
+						"1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "5"
+						}
+					]
+				}
 			},
 			"response": []
 		}

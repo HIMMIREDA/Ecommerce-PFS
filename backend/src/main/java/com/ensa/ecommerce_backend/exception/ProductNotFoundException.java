@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class ProductNotFoundException extends RuntimeException{
+public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException() {
     }
 

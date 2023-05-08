@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class BrandNotFoundException extends RuntimeException{
+public class BrandNotFoundException extends RuntimeException {
     public BrandNotFoundException() {
     }
 

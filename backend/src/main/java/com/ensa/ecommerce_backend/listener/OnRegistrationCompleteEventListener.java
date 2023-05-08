@@ -23,20 +23,20 @@ public class OnRegistrationCompleteEventListener {
     @Async
     @EventListener
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleRegistrationCompleteEvent(OnRegistrationCompleteEvent event){
+    public void handleRegistrationCompleteEvent(OnRegistrationCompleteEvent event) {
         UserEntity user = event.getUser();
         String token = UUID.randomUUID().toString();
-        authService.createEmailVerificationToken(user,token);
+        authService.createEmailVerificationToken(user, token);
 
         String recipientAddress = user.getEmail();
         String subject = "STORE Registration Confirmation";
-        String confirmationUrl = event.getUrl() + "?token="+token;
+        String confirmationUrl = event.getUrl() + "?token=" + token;
         String message = "Please validate your account at : ";
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + "\r\n" + "http://localhost:8080"+confirmationUrl);
+        email.setText(message + "\r\n" + "http://localhost:8080" + confirmationUrl);
         mailSender.send(email);
     }
 }

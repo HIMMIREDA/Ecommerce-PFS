@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class RefreshTokenNotValidException extends RuntimeException{
+public class RefreshTokenNotValidException extends RuntimeException {
     public RefreshTokenNotValidException() {
     }
 

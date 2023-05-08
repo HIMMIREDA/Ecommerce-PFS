@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.exception;
 
-public class CategoryNotFoundException extends RuntimeException{
+public class CategoryNotFoundException extends RuntimeException {
     public CategoryNotFoundException() {
     }
 

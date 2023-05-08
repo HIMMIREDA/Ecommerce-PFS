@@ -15,7 +15,8 @@ import java.util.List;
 @Data
 @Builder
 public class ProductEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -31,7 +32,7 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ImageEntity> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "productItem",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItemEntity> cartItems = new ArrayList<>();
 
 }

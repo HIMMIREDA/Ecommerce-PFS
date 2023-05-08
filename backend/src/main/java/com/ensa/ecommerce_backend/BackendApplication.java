@@ -28,6 +28,6 @@ public class BackendApplication implements CommandLineRunner {
         RoleEntity user = RoleEntity.builder().name(RoleEnum.USER).build();
         RoleEntity admin = RoleEntity.builder().name(RoleEnum.ADMIN).build();
         RoleEntity seller = RoleEntity.builder().name(RoleEnum.SELLER).build();
-        roleRepository.saveAll(Arrays.asList(user,admin,seller));
+        roleRepository.saveAll(Arrays.asList(user, admin, seller));
     }
 }

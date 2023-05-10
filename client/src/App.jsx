@@ -6,6 +6,9 @@ import { useState } from "react";
 import Footer from "./components/shop/layout/Footer";
 import Login from "./pages/shop/Login";
 import Register from "./pages/shop/Register";
+import Product from "./pages/shop/Product";
+
+
 function App() {
   const [openCart, setOpenCart] = useState(false);
   return (
@@ -18,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/product" element={<Product />} />
           </Routes>
         </main>
         <Footer />
@@ -25,5 +29,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

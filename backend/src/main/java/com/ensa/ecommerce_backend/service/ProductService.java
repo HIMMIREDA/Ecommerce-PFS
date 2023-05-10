@@ -1,45 +1,23 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.ProductImageDTO;
-import com.ensa.ecommerce_backend.entity.ProductEntity;
-import com.ensa.ecommerce_backend.entity.ProductImageEntity;
-import com.ensa.ecommerce_backend.repository.ProductImageRepository;
-import com.ensa.ecommerce_backend.repository.ProductRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.request.AddProductRequest;
+import com.ensa.ecommerce_backend.request.UpdateProductRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+public interface ProductService {
+    ProductDto saveProduct(AddProductRequest addProductRequest);
 
-@Service
-@AllArgsConstructor
-public class ProductService {
+    void deleteProductById(Long id);
 
-    private ProductRepository productRepository;
+    ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
 
-    private ProductImageRepository productImageRepository;
+    Page<ProductDto> getAllProducts(int numPage, int pageCount, String query);
 
-    public ProductImageDTO addImageToProduct(ProductImageDTO productImageDTO){
-        ProductEntity product = productRepository.findById(productImageDTO.getProductId()).orElseThrow(()->new RuntimeException("Product not Found"));
-        ProductImageEntity image = productImageRepository.findById(productImageDTO.getImageId()).orElseThrow(() -> new RuntimeException("Image not found"));
-        image.setProduct(product);
-        product.getProductImages().add(image);
-        productRepository.save(product);
-        return productImageDTO;
-    }
+    ProductDto getProductById(Long id);
 
-    public ProductEntity saveProduct(ProductEntity product) {
-        productRepository.save(product);
-        return product;
-    }
+    ProductDto addImageToProduct(Long productId, MultipartFile image);
 
-    public List<ProductEntity> getAllProducts(){
-        return productRepository.findAll();
-    }
-
-    public ProductEntity getProductById(Long id){
-        ProductEntity product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Product not Found"));
-        return product;
-    }
-
-
+    void deleteImageFromProduct(Long productId, String imageId);
 }

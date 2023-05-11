@@ -32,7 +32,11 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ImageEntity> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "productItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItemEntity> cartItems = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<VariationEntity> variations = new ArrayList<>();
+
 
 }

@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RegistrationResponse createUser(RegistrationRequest registrationRequest, HttpServletRequest httpRequest) {
-        UserEntity user = UserMapper.mapDtoToUser(registrationRequest);
+        UserEntity user = UserMapper.toEntity(registrationRequest);
         String url = httpRequest.getRequestURI().replace("register", "confirm-registration");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setFirstName(registrationRequest.getFirstName());

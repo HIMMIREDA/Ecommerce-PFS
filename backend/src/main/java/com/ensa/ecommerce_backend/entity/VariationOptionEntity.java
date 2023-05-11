@@ -12,15 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CartItemEntity {
+public class VariationOptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer quantity;
+    private String name;
 
-    @ManyToOne
-    private ProductEntity product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private VariationEntity variation;
 
-    @ManyToOne
-    private CartEntity cart;
 }

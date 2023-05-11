@@ -35,7 +35,7 @@ const CartItemList = () => {
       <div className="flow-root">
         <ul role="list" className="-my-6 divide-y divide-gray-200">
           {products.map((product) => (
-            <CartItem product={product} />
+            <CartItem key={product?.id} product={product} />
           ))}
         </ul>
       </div>

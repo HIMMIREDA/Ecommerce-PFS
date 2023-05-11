@@ -12,12 +12,12 @@ public class ImageMapper {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String scheme = request.getScheme();
-        String serverName = request.getServerName();
+        String serverName = "localhost"; // request.getServerName();
         int port = request.getServerPort();
         return scheme + "://" + serverName + ":" + port;
     }
 
-    static public ImageDto mapImageEntityToImageDto(ImageEntity imageEntity) {
+    static public ImageDto toDto(ImageEntity imageEntity) {
         return ImageDto.builder()
                 .id(imageEntity.getId())
                 .url(getBaseUrl() + "/api/images/" + imageEntity.getId() + "." + imageEntity.getExtension())

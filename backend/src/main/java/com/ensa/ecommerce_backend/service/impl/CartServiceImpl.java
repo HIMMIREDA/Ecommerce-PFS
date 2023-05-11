@@ -35,22 +35,22 @@ public class CartServiceImpl implements CartService {
     public void addItemToCart(Long productItemId, Integer quantity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CartEntity cart = cartRepository.findCartEntityByUser_Email(authentication.getName()).orElseThrow();
-        ProductEntity productItem = productRepository.findById(productItemId).orElseThrow(() ->
+        ProductEntity product = productRepository.findById(productItemId).orElseThrow(() ->
                 new ProductNotFoundException("product with id : " + productItemId + " not found")
         );
 
         // check if requested quantity is available
-        if (productItem.getQuantity() - quantity < 0) {
+        if (product.getQuantity() - quantity < 0) {
             throw new ProductQuantityException("quantity of product requested is not available.");
         }
 
         // update cart total
         cart.getCartItems().add(CartItemEntity.builder()
-                .productItem(productItem)
+                .product(product)
                 .cart(cart)
                 .quantity(quantity)
                 .build());
-        cart.setTotal(cart.getTotal() + (productItem.getPrice() * quantity));
+        cart.setTotal(cart.getTotal() + (product.getPrice() * quantity));
     }
 
     @Override

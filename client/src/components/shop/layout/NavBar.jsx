@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiFillShop,
   AiOutlineClose,
@@ -10,13 +10,39 @@ import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import NavigationLinks from "./NavigationLinks";
 import { Link } from "react-router-dom";
+import { fetchCategories, reset } from "../../../features/category/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function NavBar({setOpenCart}) {
   const [openMenu, setOpenMenu] = useState(false);
+  const {isError, message, isSuccess,categories} = useSelector((state) => state.category);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let abortController = new AbortController();
+    dispatch(fetchCategories(abortController));
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message);
+    }
+
+    dispatch(reset());
+  }, [
+    isError,
+    message,
+    isSuccess,
+    dispatch,
+  ]);
 
   return (
     
-    <nav className="shadow z-20 bg-base-100 w-full sticky top-0">
+    <nav className="shadow z-20 w-full sticky top-0 bg-base-100">
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
           <div className="flex items-center justify-between">
@@ -25,7 +51,7 @@ function NavBar({setOpenCart}) {
               className="flex items-center  w-32 normal-case text-xl"
             >
               <AiFillShop className="w-auto h-6 sm:h-7" size={40} />
-              STORE
+              E-SHOP
             </Link>
 
             {/* <!-- Mobile menu button --> */}
@@ -33,7 +59,7 @@ function NavBar({setOpenCart}) {
               <button
                 onClick={() => setOpenMenu((prev) => !prev)}
                 type="button"
-                className=" btn btn-ghost hover:text-gray-600  focus:outline-none"
+                className=" btn btn-ghost hover  focus:outline-none"
                 aria-label="toggle menu"
               >
                 {!openMenu ? (
@@ -57,20 +83,19 @@ function NavBar({setOpenCart}) {
             <div className="flex justify-center items-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
               <Link
                 to={"/wishlist"}
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
+                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
               >
                 <AiOutlineHeart size={30} />
               </Link>
               <a
-                href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
+                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
                 onClick={() => setOpenCart(isOpen => !isOpen)}
               >
                 <CartIcon />
               </a>
               <div
                 href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
+                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
               >
                 <div className="dropdown dropdown-end">
                   <label

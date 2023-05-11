@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const popularBrands = [
@@ -23,6 +24,9 @@ const popularBrands = [
 ];
 
 const PopularBrands = () => {
+
+  const {brands, isError, isLoading, isSuccess, message} = useSelector(state => state.brand);
+
   return (
     <section>
       <div className="max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
@@ -44,7 +48,7 @@ const PopularBrands = () => {
         </header>
 
         <ul className="grid grid-cols-1 gap-4 mt-8 lg:grid-cols-3">
-          {popularBrands?.slice(0, 3)?.map((brand, index) => (
+          {brands?.slice(0, 3)?.map((brand, index) => (
             <li
               key={brand?.id}
               className={
@@ -54,17 +58,17 @@ const PopularBrands = () => {
               }
             >
               <Link
-                to={`brand/${brand?.name}`}
+                to={`brand/${brand?.id}`}
                 className="relative block group"
               >
                 <img
-                  src={brand?.image}
+                  src={brand?.image?.url}
                   alt={brand?.name}
                   className="object-cover w-full transition duration-500 aspect-square group-hover:opacity-90"
                 />
 
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
-                  <h3 className="text-xl  font-bold text-white">
+                  <h3 className="text-xl  font-bold text-base-content">
                     {brand?.name}
                   </h3>
 

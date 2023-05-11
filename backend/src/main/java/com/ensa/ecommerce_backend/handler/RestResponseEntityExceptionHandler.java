@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(value = {UserAlreadyFoundException.class, BrandAlreadyFoundException.class})
+    record JsonExceptionResponse(String message, Integer errorCode) {
+    }
+    @ExceptionHandler(value = {UserAlreadyFoundException.class, BrandAlreadyFoundException.class, VariationAlreadyFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleAlreadyFoundException(RuntimeException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
@@ -69,6 +70,4 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return errorResponse;
     }
 
-    record JsonExceptionResponse(String message, Integer errorCode) {
-    }
 }

@@ -11,14 +11,14 @@ const navigationLinks = [
 ];
 const NavigationLinks = () => {
   return (
-    <ul className="flex flex-col mt-3 lg:mt-0 space-y-3 lg:space-y-0 text-gray-600 capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+    <ul className="flex flex-col mt-3 lg:mt-0 space-y-3 lg:space-y-0 capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
       
         {navigationLinks.map((navLink, index) => (
           <li key={index}>
             {navLink?.component || (
               <Link
                 to={navLink.link}
-                className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900"
+                className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-400"
               >
                 {navLink.title}
               </Link>

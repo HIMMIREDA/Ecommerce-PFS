@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
                         })
                         .collect(Collectors.toList())
         );
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory(category);
         }
 
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
@@ -114,8 +114,8 @@ public class ProductServiceImpl implements ProductService {
 
         Pageable paging = PageRequest.of(numPage, pageCount);
         return query.equals("") ?
-                productRepository.findAll(paging).map(ProductMapper::mapProductEntityToProductDto)
-                : productRepository.findProductEntitiesByNameContainingIgnoreCase(query, paging).map(ProductMapper::mapProductEntityToProductDto);
+                productRepository.findAll(paging).map(ProductMapper::toDto)
+                : productRepository.findProductEntitiesByNameContainingIgnoreCase(query, paging).map(ProductMapper::toDto);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
         ImageEntity imageEntity = imageService.uploadImageToFileSystem(image);
         imageEntity.setProduct(product);
         product.getImages().add(imageEntity);
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
@@ -150,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getProductById(Long id) {
-        return ProductMapper.mapProductEntityToProductDto(
+        return ProductMapper.toDto(
                 productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id : " + id + " not found"))
         );
     }

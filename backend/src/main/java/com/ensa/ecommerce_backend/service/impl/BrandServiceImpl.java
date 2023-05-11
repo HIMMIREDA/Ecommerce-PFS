@@ -44,7 +44,7 @@ public class BrandServiceImpl implements BrandService {
                 .build();
         ImageEntity imageEntity = imageService.uploadImageToFileSystem(addBrandRequest.getImage());
         brand.setImage(imageEntity);
-        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
+        return BrandMapper.toDto(brandRepository.save(brand));
     }
 
     @Override
@@ -63,12 +63,12 @@ public class BrandServiceImpl implements BrandService {
             imageEntity.setBrand(brand);
             brand.setImage(imageEntity);
         }
-        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
+        return BrandMapper.toDto(brandRepository.save(brand));
     }
 
     @Override
     public BrandDto getBrandById(Long id) {
-        return BrandMapper.mapBrandEntityToBrandDto(
+        return BrandMapper.toDto(
                 brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException("Brand with id : " + id + " not found"))
         );
     }
@@ -76,7 +76,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Page<BrandDto> getAllBrands(int numPage, int pageCount) {
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return brandRepository.findAll(paging).map(BrandMapper::mapBrandEntityToBrandDto);
+        return brandRepository.findAll(paging).map(BrandMapper::toDto);
     }
 
     @Override
@@ -85,6 +85,6 @@ public class BrandServiceImpl implements BrandService {
                 () -> new BrandNotFoundException("Brand with id : " + brandId + " not found")
         );
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return productRepository.findProductEntitiesByBrand(brand, paging).map(ProductMapper::mapProductEntityToProductDto);
+        return productRepository.findProductEntitiesByBrand(brand, paging).map(ProductMapper::toDto);
     }
 }

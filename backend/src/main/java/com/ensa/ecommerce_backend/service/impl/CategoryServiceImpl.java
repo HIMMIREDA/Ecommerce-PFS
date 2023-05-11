@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .parentCategory(null)
                 .build();
 
-        return CategoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
+        return CategoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
@@ -55,33 +55,33 @@ public class CategoryServiceImpl implements CategoryService {
         category.setName(Objects.requireNonNullElse(updateCategoryRequest.getName(), category.getName()));
         category.setDescription(Objects.requireNonNullElse(updateCategoryRequest.getDescription(), category.getDescription()));
 
-        return CategoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(category));
+        return CategoryMapper.toDto(categoryRepository.save(category));
     }
 
 
     @Override
     public List<CategoryDto> getAllCategories() {
         return categoryRepository.findCategoryEntityByParentCategoryNull().stream()
-                .map(CategoryMapper::mapCategoryEntityToCategoryDto)
+                .map(CategoryMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount) {
         Pageable pageable = PageRequest.of(numPage, pageCount);
-        return categoryRepository.findGrandChildCategories(pageable).map(CategoryMapper::mapCategoryEntityToCategoryDto);
+        return categoryRepository.findGrandChildCategories(pageable).map(CategoryMapper::toDto);
     }
 
     @Override
     public Page<ProductDto> getCategoryProducts(Long id, int numPage, int pageCount) {
         Pageable pageable = PageRequest.of(numPage, pageCount);
-        return productRepository.findProductEntitiesByCategoryId(id, pageable).map(ProductMapper::mapProductEntityToProductDto);
+        return productRepository.findProductEntitiesByCategoryId(id, pageable).map(ProductMapper::toDto);
     }
 
     @Override
     public CategoryDto getCategoryById(Long id) {
         CategoryEntity category = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException("category with id : " + id + " not found"));
-        return CategoryMapper.mapCategoryEntityToCategoryDto(category);
+        return CategoryMapper.toDto(category);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         parentCategory.getSubCategories().add(childCategory);
 
-        return CategoryMapper.mapCategoryEntityToCategoryDto(categoryRepository.save(childCategory));
+        return CategoryMapper.toDto(categoryRepository.save(childCategory));
     }
 
     private boolean isFirstLevelCategory(CategoryEntity category) {

@@ -30,7 +30,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class, BrandNotFoundException.class})
+    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class, BrandNotFoundException.class, ReviewNotFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }

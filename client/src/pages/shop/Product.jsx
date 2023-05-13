@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import productService from "../../features/product/productService";
 import ReactStars from "react-rating-stars-component";
-import { BsCart, BsFillBagHeartFill, BsHeart, BsShop } from "react-icons/bs";
+import { BsCart, BsHeart } from "react-icons/bs";
 import { Tab } from "@headlessui/react";
 import { useFormik } from "formik";
 import ValidationErrors from "../../components/common/ValidationErrors";

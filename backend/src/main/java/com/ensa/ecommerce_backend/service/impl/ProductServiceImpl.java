@@ -1,20 +1,21 @@
 package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.entity.BrandEntity;
-import com.ensa.ecommerce_backend.entity.CategoryEntity;
-import com.ensa.ecommerce_backend.entity.ImageEntity;
-import com.ensa.ecommerce_backend.entity.ProductEntity;
+import com.ensa.ecommerce_backend.DTO.ReviewDTO;
+import com.ensa.ecommerce_backend.entity.*;
+import com.ensa.ecommerce_backend.enums.RatingValue;
 import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
 import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;
 import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
 import com.ensa.ecommerce_backend.exception.ProductNotFoundException;
 import com.ensa.ecommerce_backend.mapper.ProductMapper;
+import com.ensa.ecommerce_backend.mapper.ReviewMapper;
 import com.ensa.ecommerce_backend.repository.BrandRepository;
 import com.ensa.ecommerce_backend.repository.CategoryRepository;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
+import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -147,6 +149,12 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
         imageRepository.deleteById(UUID.fromString(imageId));
     }
+
+    @Override
+    public List<ReviewDTO> getProductReviews(Long productId) {
+        ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id : " + productId + " not found"));
+        return product.getReviews().stream().map(ReviewMapper::mapReviewEntitytoReviewDTO).collect(Collectors.toList());
+                    }
 
     @Override
     public ProductDto getProductById(Long id) {

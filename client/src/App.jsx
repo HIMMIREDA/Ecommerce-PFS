@@ -9,6 +9,7 @@ import Register from "./pages/shop/Register";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Product from "./pages/shop/Product";
+import Products from "./pages/shop/Products";
 
 function App() {
   const [openCart, setOpenCart] = useState(false);
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/products/:productId" element={<Product />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         </main>
         <Footer />
@@ -32,5 +34,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

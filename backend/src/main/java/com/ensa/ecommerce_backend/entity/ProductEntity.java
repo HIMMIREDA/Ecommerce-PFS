@@ -39,5 +39,7 @@ public class ProductEntity implements Serializable {
     @ManyToMany(mappedBy = "products")
     private List<VariationEntity> variations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
 }

@@ -2,4 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
+.bg-custom-gray {
+    background-color: white;
+  }
+  
+  /* Dark mode */
+  .dark .bg-custom-gray {
+    background-color: #4b5563;
+  }

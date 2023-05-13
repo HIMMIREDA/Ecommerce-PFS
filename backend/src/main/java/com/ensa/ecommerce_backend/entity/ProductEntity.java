@@ -35,4 +35,7 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItemEntity> cartItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReviewEntity> reviews = new ArrayList<>();
+
 }

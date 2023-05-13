@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.DTO.ReviewDTO;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,6 +35,7 @@ public class ProductRestController {
     private ProductService productService;
 
     private CategoryService categoryService;
+
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ProductDto> saveProduct(@ModelAttribute @Valid AddProductRequest addProductRequest, BindingResult bindingResult) throws MethodArgumentNotValidException {
@@ -91,6 +94,11 @@ public class ProductRestController {
         Map<String, Object> response = new HashMap<>();
         response.put("id", imageId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{productId}/reviews")
+    public ResponseEntity<List<ReviewDTO>> getProductReviews(@PathVariable Long productId){
+        return ResponseEntity.ok(productService.getProductReviews(productId));
     }
 
 }

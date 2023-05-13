@@ -8,11 +8,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.util.Arrays;
 
 @EnableAsync
 @SpringBootApplication
+@EnableRedisHttpSession
 public class BackendApplication implements CommandLineRunner {
 
 
@@ -25,9 +27,13 @@ public class BackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        RoleEntity user = RoleEntity.builder().name(RoleEnum.USER).build();
-        RoleEntity admin = RoleEntity.builder().name(RoleEnum.ADMIN).build();
-        RoleEntity seller = RoleEntity.builder().name(RoleEnum.SELLER).build();
-        roleRepository.saveAll(Arrays.asList(user, admin, seller));
+        try {
+
+            RoleEntity user = RoleEntity.builder().name(RoleEnum.USER).build();
+            RoleEntity admin = RoleEntity.builder().name(RoleEnum.ADMIN).build();
+            RoleEntity seller = RoleEntity.builder().name(RoleEnum.SELLER).build();
+            roleRepository.saveAll(Arrays.asList(user, admin, seller));
+        } catch (Exception exception) {
+        }
     }
 }

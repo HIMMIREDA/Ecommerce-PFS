@@ -12,6 +12,7 @@ import NavigationLinks from "./NavigationLinks";
 import { Link } from "react-router-dom";
 import { fetchCategories, reset } from "../../../features/category/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function NavBar({setOpenCart}) {
   const [openMenu, setOpenMenu] = useState(false);

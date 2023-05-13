@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,23 +28,32 @@ public class AuthRestController {
     }
 
     @PostMapping
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.loginUser(loginRequest, response));
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response, HttpSession session) {
+        return ResponseEntity.ok(authService.loginUser(loginRequest, session, response));
     }
 
     @GetMapping("/logout")
-    public void logout(@CookieValue("jwt-refresh-token") String refreshToken, HttpSession session, HttpServletResponse response) {
-        session.invalidate();
-        authService.logoutUser(refreshToken, response);
+    public ResponseEntity<Void> logout(@CookieValue("jwt-refresh-token") String refreshToken, HttpServletRequest request) {
+        authService.logoutUser(refreshToken);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.SET_COOKIE, "jwt-refresh-token=; Path=/api; HttpOnly; Max-Age=0");
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        session = request.getSession(true);
+        return ResponseEntity.noContent()
+                .headers(headers)
+                .build();
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token) {
+    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token, HttpSession session) {
         return ResponseEntity.ok(authService.refreshToken(token));
     }
 
     @GetMapping("/confirm-registration")
-    public void confirmRegistration(@RequestParam("token") String token) {
-        authService.verifyAccount(token);
+    public void confirmRegistration(@RequestParam("token") String token, HttpSession session) {
+        authService.verifyAccount(token, session);
     }
 }

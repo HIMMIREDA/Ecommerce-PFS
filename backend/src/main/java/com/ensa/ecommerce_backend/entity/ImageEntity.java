@@ -1,11 +1,9 @@
 package com.ensa.ecommerce_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
-public class ImageEntity {
+@EqualsAndHashCode(exclude = {"product","brand"})
+public class ImageEntity implements Serializable {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
@@ -26,7 +25,7 @@ public class ImageEntity {
     private ProductEntity product;
 
     //////////////////////////////////
-    @OneToOne(mappedBy = "image")
+    @OneToOne(mappedBy = "image",fetch = FetchType.LAZY)
     private BrandEntity brand;
 
 

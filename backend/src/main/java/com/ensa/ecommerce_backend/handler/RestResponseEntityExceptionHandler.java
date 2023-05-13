@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    record JsonExceptionResponse(String message, Integer errorCode) {
-    }
     @ExceptionHandler(value = {UserAlreadyFoundException.class, BrandAlreadyFoundException.class, VariationAlreadyFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleAlreadyFoundException(RuntimeException ex) {
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
@@ -31,7 +29,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(new JsonExceptionResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class, BrandNotFoundException.class})
+    @ExceptionHandler(value = {ProductNotFoundException.class, CategoryNotFoundException.class, BrandNotFoundException.class, CartItemNotFoundException.class})
     public ResponseEntity<JsonExceptionResponse> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(new JsonExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
@@ -68,6 +66,9 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         Map<String, List<String>> errorResponse = new HashMap<>();
         errorResponse.put("errors", errors);
         return errorResponse;
+    }
+
+    record JsonExceptionResponse(String message, Integer errorCode) {
     }
 
 }

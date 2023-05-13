@@ -1,14 +1,17 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.response.GetCartResponse;
+import com.ensa.ecommerce_backend.DTO.CartDto;
+import com.ensa.ecommerce_backend.entity.CartEntity;
+import jakarta.servlet.http.HttpSession;
 
 public interface CartService {
-    GetCartResponse getCartItems();
+    CartDto getCartItems(HttpSession session);
 
-    void addItemToCart(Long productItemId, Integer quantity);
+    CartDto addItemToCart(Long productItemId, Integer quantity,HttpSession session);
 
-    void removeItemFromCart(Long CartItemId);
+    CartDto deleteCartItem(String CartItemId,HttpSession session);
 
-    void updateItemQuantity(Long id, Integer quantity);
+    CartDto updateCartItem(String cartItemId, Integer quantity, HttpSession session);
 
+    void mergeCarts(CartEntity sessionCart, CartEntity storedCart);
 }

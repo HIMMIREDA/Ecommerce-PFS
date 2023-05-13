@@ -1,14 +1,16 @@
 package com.ensa.ecommerce_backend.mapper;
 
 
+import com.ensa.ecommerce_backend.DTO.CartDto;
 import com.ensa.ecommerce_backend.entity.CartEntity;
-import com.ensa.ecommerce_backend.response.GetCartResponse;
+
+import java.util.stream.Collectors;
 
 public class CartMapper {
-    static public GetCartResponse mapCartToResponse(CartEntity cart) {
-        return GetCartResponse.builder()
+    static public CartDto toDto(CartEntity cart) {
+        return CartDto.builder()
                 .total(cart.getTotal())
-                .items(cart.getCartItems())
+                .items(cart.getCartItems().stream().map(CartItemMapper::toDto).collect(Collectors.toList()))
                 .build();
     }
 }

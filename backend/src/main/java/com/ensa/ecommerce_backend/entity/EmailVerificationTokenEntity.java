@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-public class EmailVerificationTokenEntity {
+public class EmailVerificationTokenEntity implements Serializable {
     private static final int EXPIRATION = 1440; // 24 hours
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

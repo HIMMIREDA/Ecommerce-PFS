@@ -31,7 +31,7 @@ const createBrand = async (axiosPrivate, token, brand) => {
 const updateBrand = async (axiosPrivate, token, brandId, brand) => {
   const response = await axiosPrivate.put(
     `/brands/${brandId}`,
-    category,
+    brand,
     {
       headers: {
         Authorization: `Bearer ${token}`,

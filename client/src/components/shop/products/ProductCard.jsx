@@ -1,6 +1,7 @@
 import React from "react";
 import { FiHeart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import AddToCartBtn from "../shoppingcart/AddToCartBtn";
 
 const ProductCard = ({ product }) => {
   return (
@@ -20,7 +21,6 @@ const ProductCard = ({ product }) => {
       </Link>
 
       <div className="relative border border-gray-100 p-6">
-
         <Link
           to={`products/${product?.id}`}
           className="mt-4 text-lg font-medium"
@@ -30,14 +30,9 @@ const ProductCard = ({ product }) => {
 
         <p className="mt-1.5 text-sm">{product?.price} $</p>
 
-        <form className="mt-4">
-          <button className="block w-full rounded bg-pink-400 p-4 text-sm font-medium transition hover:scale-105 text-base-100">
-            Add to Cart
-          </button>
-        </form>
+          <AddToCartBtn productId={product?.id} />
       </div>
     </div>
-   
   );
 };
 

@@ -13,8 +13,9 @@ import { Link } from "react-router-dom";
 import { fetchCategories, reset } from "../../../features/category/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { toggleOpenCart } from "../../../features/cart/cartSlice";
 
-function NavBar({setOpenCart}) {
+function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
   const {isError, message, isSuccess,categories} = useSelector((state) => state.category);
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function NavBar({setOpenCart}) {
     isSuccess,
     dispatch,
   ]);
+
 
   return (
     
@@ -90,7 +92,7 @@ function NavBar({setOpenCart}) {
               </Link>
               <a
                 className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
-                onClick={() => setOpenCart(isOpen => !isOpen)}
+                onClick={() => dispatch(toggleOpenCart())}
               >
                 <CartIcon />
               </a>

@@ -6,6 +6,12 @@ import { BsCart, BsHeart } from "react-icons/bs";
 import { Tab } from "@headlessui/react";
 import { useFormik } from "formik";
 import ValidationErrors from "../../components/common/ValidationErrors";
+import * as Yup from "yup";
+import VariationInputList from "../../components/shop/products/VariationInputList";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, reset } from "../../features/cart/cartSlice";
+import { toast } from "react-toastify";
+import ImagesNavigation from "../../components/shop/products/ImagesNavigation";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -13,8 +19,11 @@ function classNames(...classes) {
 
 function Product() {
   const [product, setProduct] = useState({});
-  const [selectedImage, setSelectedImage] = useState(null);
   const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { message, isLoading, isError, isSuccess } = useSelector(
+    (state) => state.cart
+  );
 
   const addToCartForm = useFormik({
     initialValues: {
@@ -33,8 +42,24 @@ function Product() {
       }
       return errors;
     },
+    validationSchema: Yup.object({
+      quantity: Yup.number()
+        .max(
+          product?.quantity,
+          `the quantity of product added to cart cant surpass ${product?.quantity}`
+        )
+        .min(1, "the quantity of product added to cart cant be less than 1")
+        .required("Required"),
+    }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      dispatch(
+        addToCart({
+          cartItem: {
+            productId: values.productId,
+            quantity: values.quantity,
+          },
+        })
+      );
     },
   });
 
@@ -46,7 +71,6 @@ function Product() {
         productId
       );
       setProduct(product);
-      setSelectedImage(product?.images[0]?.url);
     };
 
     fetchProductById(productId);
@@ -54,6 +78,20 @@ function Product() {
       abortController.abort();
     };
   }, []);
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message, {
+        toastId: "cartErrorToast",
+      });
+    }
+    if (isSuccess && message) {
+      toast.success(message, {
+        toastId: "createUpdateDeleteCartToast",
+      });
+    }
+    dispatch(reset());
+  }, [message, isError, isSuccess, isLoading, dispatch]);
 
   return (
     <section className="py-12 sm:py-16">
@@ -109,40 +147,7 @@ function Product() {
         </nav>
 
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
-          <div className="lg:col-span-3 lg:row-end-1">
-            <div className="lg:flex lg:items-start">
-              <div className="lg:order-2 lg:ml-5">
-                <div className="max-w-xl overflow-hidden rounded-lg">
-                  <img
-                    className="h-full w-full max-w-full object-cover"
-                    src={selectedImage}
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-                <div className="flex flex-row items-start lg:flex-col">
-                  {product?.images?.map((image) => (
-                    <button
-                      key={image?.id}
-                      type="button"
-                      className={`flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 ${
-                        selectedImage === image?.url && "border-yellow-400"
-                      } text-center`}
-                      onClick={() => setSelectedImage(image?.url)}
-                    >
-                      <img
-                        className="h-full w-full object-cover"
-                        src={image?.url}
-                        alt=""
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <ImagesNavigation images={product?.images} />
 
           <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
             <h1 className="sm: text-2xl font-bold text-base-content sm:text-3xl">
@@ -166,153 +171,90 @@ function Product() {
                     product?.quantity > 0 ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {product?.quantity > 0 ? `in stock (${product?.quantity} items)` : "out of stock"}
+                  {product?.quantity > 0
+                    ? `in stock (${product?.quantity} items)`
+                    : "out of stock"}
                 </p>
               </div>
             </div>
 
-            <h2 className="mt-8 text-base text-base-content">Coffee Type</h2>
-            <form className="mt-3 flex select-none flex-wrap items-center gap-1">
-              <label className="">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addToCartForm.handleSubmit();
+              } }
+              className="mt-3 flex select-none flex-wrap justify-center gap-1 flex-col"
+            >
+              <VariationInputList />
+              <div className="flex items-center justify-start mt-6">
+                <h2 className="me-2">Quantity:</h2>
+                <button
+                  className="border border-gray-400 rounded-l px-3 py-1"
+                  type="button"
+                  onClick={() => {
+                    addToCartForm.setValues({
+                      ...addToCartForm.values,
+                      quantity:
+                        addToCartForm.values.quantity > 1
+                          ? addToCartForm.values.quantity - 1
+                          : addToCartForm.values.quantity,
+                    });
+                  }}
+                >
+                  -
+                </button>
                 <input
-                  type="radio"
-                  name="type"
-                  value="Powder"
-                  className="peer sr-only"
-                  defaultChecked
+                  type="number"
+                  min="1"
+                  max={product?.quantity}
+                  className="w-12 text-center border-t border-b border-gray-400 py-1"
+                  id="firstName"
+                  name="firstName"
+                  onChange={addToCartForm.handleChange}
+                  value={addToCartForm.values.quantity}
                 />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  Powder
-                </p>
-              </label>
-              <label className="">
-                <input
-                  type="radio"
-                  name="type"
-                  value="Whole Bean"
-                  className="peer sr-only"
-                />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  Whole Bean
-                </p>
-              </label>
-              <label className="">
-                <input
-                  type="radio"
-                  name="type"
-                  value="Groud"
-                  className="peer sr-only"
-                />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  Groud
-                </p>
-              </label>
-            </form>
 
-            <h2 className="mt-8 text-base text-base-content">
-              Choose subscription
-            </h2>
-            <div className="mt-3 flex select-none flex-wrap items-center gap-1">
-              <label className="">
-                <input
-                  type="radio"
-                  name="subscription"
-                  value="4 Months"
-                  className="peer sr-only"
-                />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  4 Months
-                </p>
-              </label>
-              <label className="">
-                <input
-                  type="radio"
-                  name="subscription"
-                  value="8 Months"
-                  className="peer sr-only"
-                  defaultChecked
-                />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  8 Months
-                </p>
-              </label>
-              <label className="">
-                <input
-                  type="radio"
-                  name="subscription"
-                  value="12 Months"
-                  className="peer sr-only"
-                />
-                <p className="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                  12 Months
-                </p>
-              </label>
-            </div>
-            <div className="flex items-center justify-start mt-6">
-              <button
-                className="border border-gray-400 rounded-l px-3 py-1"
-                onClick={() => {
-                  addToCartForm.setValues({
-                    ...addToCartForm.values,
-                    quantity:
-                      addToCartForm.values.quantity > 1
-                        ? addToCartForm.values.quantity - 1
-                        : addToCartForm.values.quantity,
-                  });
-                }}
-              >
-                -
-              </button>
-              <input
-                type="number"
-                min="1"
-                max={product?.quantity}
-                className="w-12 text-center border-t border-b border-gray-400 py-1"
-                id="firstName"
-                name="firstName"
-                onChange={addToCartForm.handleChange}
-                value={addToCartForm.values.quantity}
-              />
+                <button
+                  className="border border-gray-400 rounded-r px-3 py-1"
+                  type="button"
+                  onClick={() => {
+                    addToCartForm.setValues({
+                      ...addToCartForm.values,
+                      quantity:
+                        addToCartForm.values.quantity < product?.quantity
+                          ? addToCartForm.values.quantity + 1
+                          : addToCartForm.values.quantity,
+                    });
+                  }}
+                >
+                  +
+                </button>
+              </div>
 
-              <button
-                className="border border-gray-400 rounded-r px-3 py-1"
-                onClick={() => {
-                  addToCartForm.setValues({
-                    ...addToCartForm.values,
-                    quantity:
-                      addToCartForm.values.quantity < product?.quantity
-                        ? addToCartForm.values.quantity + 1
-                        : addToCartForm.values.quantity,
-                  });
-                }}
-              >
-                +
-              </button>
-            </div>
-
-            <div className="mt-10 flex flex-col items-center justify-between space-y-4 space-x-3 border-t border-b py-4 md:flex-row sm:space-y-0">
-              {product?.price > 0 && (
-                <div className="flex items-end">
-                  <h1 className="text-3xl font-bold">{product?.price}$</h1>
-                </div>
-              )}
-              {product?.price > 0 && (
+              <div className="mt-10 flex flex-col items-center justify-between space-y-4 space-x-3 border-t border-b py-4 md:flex-row sm:space-y-0">
+                {product?.price > 0 && (
+                  <div className="flex items-end">
+                    <h1 className="text-3xl font-bold">{product?.price}$</h1>
+                  </div>
+                )}
+                {product?.price > 0 && (
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-base-content  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                  >
+                    <BsCart className="shrink-0 mr-3 h-5 w-5" />
+                    Add to cart
+                  </button>
+                )}
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-base-content  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-400  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-red-500"
                 >
-                  <BsCart className="shrink-0 mr-3 h-5 w-5" />
-                  Add to cart
+                  <BsHeart className="shrink-0 mr-3 h-5 w-5" />
+                  Add to wishlist
                 </button>
-              )}
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-400  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-red-500"
-              >
-                <BsHeart className="shrink-0 mr-3 h-5 w-5" />
-                Add to wishlist
-              </button>
-            </div>
+              </div>
+            </form>
           </div>
 
           <div className="w-full max-w-md px-2 py-16 sm:px-0">

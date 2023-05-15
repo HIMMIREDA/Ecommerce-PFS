@@ -34,7 +34,6 @@ const Home = () => {
     };
   }, [dispatch]);
 
-
   useEffect(() => {
     if (brandSlice.isError && brandSlice.message) {
       toast.error(brandSlice.message);
@@ -56,6 +55,9 @@ const Home = () => {
     dispatch,
   ]);
 
+  if (productSlice.isLoading || brandSlice.isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <Carousel />

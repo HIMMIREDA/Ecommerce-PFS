@@ -1,11 +1,14 @@
 import axios from "../../api/axios";
 
-const fetchProducts = async (abortController) => {
-  const response = await axios.get(`/products`, {
+const PAGE_LIMIT = 2;
+
+
+const fetchProducts = async (abortController, page, limit) => {
+  const response = await axios.get(`/products?page=${page}&count=${limit || PAGE_LIMIT}`, {
     signal: abortController.signal,
   });
 
-  return response.data?.items;
+  return response.data;
 };
 
 const fetchProduct = async (abortController, productId) => {

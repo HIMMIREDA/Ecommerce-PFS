@@ -13,7 +13,8 @@ const AddToCartBtn = ({ productId }) => {
   );
   const dispatch = useDispatch();
 
-  const addItemToCart = async () => {
+  const addItemToCart = (e) => {
+    e.preventDefault();
     dispatch(
       addToCart({
         cartItem: {

@@ -3,12 +3,9 @@ import productService from "./productService";
 
 export const fetchProducts = createAsyncThunk(
   "product/fetch",
-  async ( abortController , thunkAPI) => {
-
+  async ({ abortController, page, limit }, thunkAPI) => {
     try {
-      const data = await productService.fetchProducts(
-        abortController
-      );
+      const data = await productService.fetchProducts(abortController, page, limit);
 
       return data;
     } catch (error) {
@@ -28,7 +25,7 @@ export const fetchProducts = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
   "product/create",
-  async ({axiosPrivate, product}, thunkAPI) => {
+  async ({ axiosPrivate, product }, thunkAPI) => {
     const { accessToken: token } = thunkAPI.getState().auth.user;
 
     try {
@@ -103,6 +100,9 @@ export const updateProduct = createAsyncThunk(
 );
 
 const initialState = {
+  currentPage: 1,
+  totalPages: 1,
+  totalItems: 0,
   products: [],
   isSuccess: false,
   isError: false,
@@ -119,6 +119,9 @@ const productSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.message = "";
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -137,7 +140,10 @@ const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.products = action.payload;
+        state.products = action.payload?.items;
+        state.currentPage = action.payload?.currentPage;
+        state.totalItems = action.payload?.totalItems;
+        state.totalPages = action.payload?.totalPages;
       })
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true;
@@ -186,11 +192,13 @@ const productSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.products = state.products.map((product) => product.id == action.payload?.id ? action.payload : product)
+        state.products = state.products.map((product) =>
+          product.id == action.payload?.id ? action.payload : product
+        );
       });
   },
 });
 
-export const { reset } = productSlice.actions;
+export const { reset, setCurrentPage } = productSlice.actions;
 
 export default productSlice.reducer;

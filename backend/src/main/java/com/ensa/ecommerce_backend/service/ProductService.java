@@ -18,7 +18,7 @@ public interface ProductService {
 
     ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
 
-    Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto);
+    Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder);
 
     ProductDto getProductById(Long id);
 

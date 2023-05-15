@@ -28,6 +28,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +42,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
-
+    static private final List<String> sortByFieldsList = Arrays.asList(
+            "createdAt",
+            "name",
+            "price"
+    );
     private ProductRepository productRepository;
     private ImageService imageService;
     private ImageRepository imageRepository;
@@ -116,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto) {
+    public Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder) {
         ProductSpecificationBuilder builder = new ProductSpecificationBuilder();
         if (productSearchDto != null) {
             List<SearchCriteria> criteriaList = productSearchDto.getSearchCriteriaList();
@@ -127,7 +132,11 @@ public class ProductServiceImpl implements ProductService {
                 });
             }
         }
-        Pageable paging = PageRequest.of(numPage, pageCount);
+        Sort sortCriteria = Sort.by(Sort.Direction.DESC, "createdAt");
+        if (sortByFieldsList.contains(sortBy)) {
+            sortCriteria = Sort.by(sortOrder.equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
+        Pageable paging = PageRequest.of(numPage, pageCount, sortCriteria);
         Page<ProductEntity> pageOfProducts = productSearchDto == null ? productRepository.findAll(paging) : productRepository.findAll(builder.build(), paging);
         return pageOfProducts.map(ProductMapper::toDto);
     }

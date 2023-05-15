@@ -49,8 +49,8 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestBody ProductSearchDto productSearchDto) {
-        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto);
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "sortBy",defaultValue = "createdAt") String sortBy, @RequestParam(value = "order",defaultValue = "DESC") String sortOrder, @RequestBody(required = false) ProductSearchDto productSearchDto) {
+        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto, sortBy, sortOrder);
         return ResponseEntity.ok(
                 GetItemsResponse.<ProductDto>builder()
                         .items(productsPage.getContent())

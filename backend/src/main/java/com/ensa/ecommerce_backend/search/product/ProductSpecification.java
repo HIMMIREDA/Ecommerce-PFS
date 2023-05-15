@@ -29,73 +29,73 @@ public class ProductSpecification implements Specification<ProductEntity> {
         switch(Objects.requireNonNull(SearchOperation.getSimpleOperation(searchCriteria.getOperation()))){
             case CONTAINS:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
+                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), "%" + strToSearch + "%");
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
+                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), "%" + strToSearch + "%");
                 }
                 return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
 
             case DOES_NOT_CONTAIN:
                 if (searchCriteria.getFilterKey().equals("categoryName")) {
-                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
+                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), "%" + strToSearch + "%");
                 }
                 if (searchCriteria.getFilterKey().equals("brandName")) {
-                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
+                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), "%" + strToSearch + "%");
                 }
                 return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
 
             case BEGINS_WITH:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), strToSearch + "%");
+                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), strToSearch + "%");
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), strToSearch + "%");
+                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), strToSearch + "%");
                 }
                 return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), strToSearch + "%");
 
             case DOES_NOT_BEGIN_WITH:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), strToSearch + "%");
+                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), strToSearch + "%");
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), strToSearch + "%");
+                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), strToSearch + "%");
                 }
                 return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), strToSearch + "%");
 
             case ENDS_WITH:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch);
+                    return cb.like(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), "%" + strToSearch);
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch);
+                    return cb.like(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), "%" + strToSearch);
                 }
                 return cb.like(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + strToSearch);
 
             case DOES_NOT_END_WITH:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch);
+                    return cb.notLike(cb.lower(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase())), "%" + strToSearch);
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey())), "%" + strToSearch);
+                    return cb.notLike(cb.lower(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase())), "%" + strToSearch);
                 }
                 return cb.notLike(cb.lower(root.get(searchCriteria.getFilterKey())), "%" + strToSearch);
 
             case EQUAL:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.equal(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey()), searchCriteria.getValue());
+                    return cb.equal(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase()), searchCriteria.getValue());
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.equal(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey()), searchCriteria.getValue());
+                    return cb.equal(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase()), searchCriteria.getValue());
                 }
                 return cb.equal(root.get(searchCriteria.getFilterKey()), searchCriteria.getValue());
 
             case NOT_EQUAL:
                 if(searchCriteria.getFilterKey().equals("categoryName")){
-                    return cb.notEqual(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey()), searchCriteria.getValue() );
+                    return cb.notEqual(categoryEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("category","").toLowerCase()), searchCriteria.getValue() );
                 }
                 if(searchCriteria.getFilterKey().equals("brandName")){
-                    return cb.notEqual(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey()), searchCriteria.getValue() );
+                    return cb.notEqual(brandEntityJoin(root).<String>get(searchCriteria.getFilterKey().replace("brand","").toLowerCase()), searchCriteria.getValue() );
                 }
                 return cb.notEqual(root.get(searchCriteria.getFilterKey()), searchCriteria.getValue());
 

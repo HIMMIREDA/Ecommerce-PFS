@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.service;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
 import com.ensa.ecommerce_backend.DTO.ReviewDTO;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.AddReviewRequest;
@@ -17,7 +18,7 @@ public interface ProductService {
 
     ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
 
-    Page<ProductDto> getAllProducts(int numPage, int pageCount, String query);
+    Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto);
 
     ProductDto getProductById(Long id);
 

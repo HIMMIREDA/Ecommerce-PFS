@@ -1,9 +1,12 @@
 package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
 import com.ensa.ecommerce_backend.DTO.ReviewDTO;
-import com.ensa.ecommerce_backend.entity.*;
-import com.ensa.ecommerce_backend.enums.RatingValue;
+import com.ensa.ecommerce_backend.entity.BrandEntity;
+import com.ensa.ecommerce_backend.entity.CategoryEntity;
+import com.ensa.ecommerce_backend.entity.ImageEntity;
+import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
 import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;
 import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
@@ -15,8 +18,9 @@ import com.ensa.ecommerce_backend.repository.CategoryRepository;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
-import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
+import com.ensa.ecommerce_backend.search.SearchCriteria;
+import com.ensa.ecommerce_backend.search.product.ProductSpecificationBuilder;
 import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -112,12 +116,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> getAllProducts(int numPage, int pageCount, String query) {
-
+    public Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto) {
+        ProductSpecificationBuilder builder = new ProductSpecificationBuilder();
+        if (productSearchDto != null) {
+            List<SearchCriteria> criteriaList = productSearchDto.getSearchCriteriaList();
+            if (criteriaList != null) {
+                criteriaList.forEach(x -> {
+                    x.setDataOption(productSearchDto.getDataOption());
+                    builder.with(x);
+                });
+            }
+        }
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return query.equals("") ?
-                productRepository.findAll(paging).map(ProductMapper::toDto)
-                : productRepository.findProductEntitiesByNameContainingIgnoreCase(query, paging).map(ProductMapper::toDto);
+        Page<ProductEntity> pageOfProducts = productSearchDto == null ? productRepository.findAll(paging) : productRepository.findAll(builder.build(), paging);
+        return pageOfProducts.map(ProductMapper::toDto);
     }
 
     @Override
@@ -154,7 +166,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ReviewDTO> getProductReviews(Long productId) {
         ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id : " + productId + " not found"));
         return product.getReviews().stream().map(ReviewMapper::mapReviewEntitytoReviewDTO).collect(Collectors.toList());
-                    }
+    }
 
     @Override
     public ProductDto getProductById(Long id) {

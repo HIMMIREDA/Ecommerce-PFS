@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
 import com.ensa.ecommerce_backend.DTO.ReviewDTO;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
@@ -48,8 +49,8 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "query", defaultValue = "") String query) {
-        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, query);
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestBody ProductSearchDto productSearchDto) {
+        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto);
         return ResponseEntity.ok(
                 GetItemsResponse.<ProductDto>builder()
                         .items(productsPage.getContent())

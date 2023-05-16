@@ -48,6 +48,13 @@ public class ProductEntity implements Serializable {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(name = "mean_rating")
+    private Integer meanRating = 0;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void initializeMeanRating() {
+        this.meanRating = 0;
+    }
 }

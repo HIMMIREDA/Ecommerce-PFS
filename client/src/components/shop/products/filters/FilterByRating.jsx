@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaChevronDown, FaStar } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProducts,
+  setRatingFilter,
+} from "../../../../features/product/productSlice";
 
 function FilterByRating() {
+  const { ratingFilter } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let abortController = new AbortController();
+    dispatch(fetchProducts({ abortController, page: 1 }));
+    return () => {
+      abortController.abort();
+    };
+  }, [ratingFilter]);
   return (
     <details className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
       <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition">
-        <span className="text-sm font-medium">Rating</span>
+        <span className="text-sm font-medium">Rating (more than)</span>
         <span className="transition group-open:-rotate-180">
           <FaChevronDown />
         </span>
@@ -23,16 +38,29 @@ function FilterByRating() {
                   name="rating"
                   id="FilterRating"
                   className="radio checked:bg-blue-500"
+                  checked={ratingFilter === i + 1}
+                  onChange={() => dispatch(setRatingFilter(i+1))}
                 />
                 <span className="font-medium text-base flex">
-                  {[...Array(i+1).keys()].map((j) => (
-                    <FaStar className="text-yellow-500" key={`star-${i}-${j}`} />
+                  {[...Array(i + 1).keys()].map((j) => (
+                    <FaStar
+                      className="text-yellow-500"
+                      key={`star-${i}-${j}`}
+                    />
                   ))}
                 </span>
               </label>
             </li>
           ))}
         </ul>
+        <div className="w-full my-3 flex justify-center">
+          <button
+            className="btn"
+            onClick={() => dispatch(setRatingFilter(null))}
+          >
+            Clear
+          </button>
+        </div>
       </div>
     </details>
   );

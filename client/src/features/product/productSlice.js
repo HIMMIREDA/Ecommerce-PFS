@@ -4,8 +4,30 @@ import productService from "./productService";
 export const fetchProducts = createAsyncThunk(
   "product/fetch",
   async ({ abortController, page, limit }, thunkAPI) => {
+    const {
+      brandFilter,
+      categoryFilter,
+      ratingFilter,
+      priceFilter,
+      sortBy,
+      sortOrder,
+    } = thunkAPI.getState().product;
+
+    const filterOptions = {
+      brandFilter,
+      categoryFilter,
+      ratingFilter,
+      sortBy,
+      sortOrder,
+      priceFilter,
+    };
     try {
-      const data = await productService.fetchProducts(abortController, page, limit);
+      const data = await productService.fetchProducts(
+        abortController,
+        page,
+        limit,
+        filterOptions
+      );
 
       return data;
     } catch (error) {
@@ -103,6 +125,12 @@ const initialState = {
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
+  categoryFilter: null,
+  brandFilter: null,
+  ratingFilter: null,
+  priceFilter: { minPrice: null, maxPrice: null },
+  sortBy: null,
+  sortOrder: null,
   products: [],
   isSuccess: false,
   isError: false,
@@ -122,6 +150,22 @@ const productSlice = createSlice({
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
+    },
+    setCategoryFilter: (state, action) => {
+      state.categoryFilter = action.payload;
+    },
+    setBrandFilter: (state, action) => {
+      state.brandFilter = action.payload;
+    },
+    setSortOptions: (state, action) => {
+      state.sortBy = action.payload.sortBy;
+      state.sortOrder = action.payload.sortOrder;
+    },
+    setPriceFilter: (state, action) => {
+      state.priceFilter = action.payload;
+    },
+    setRatingFilter: (state, action) => {
+      state.ratingFilter = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -199,6 +243,14 @@ const productSlice = createSlice({
   },
 });
 
-export const { reset, setCurrentPage } = productSlice.actions;
+export const {
+  reset,
+  setCurrentPage,
+  setBrandFilter,
+  setCategoryFilter,
+  setPriceFilter,
+  setRatingFilter,
+  setSortOptions,
+} = productSlice.actions;
 
 export default productSlice.reducer;

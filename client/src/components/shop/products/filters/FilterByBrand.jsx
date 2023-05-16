@@ -3,12 +3,18 @@ import { FaChevronDown } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBrands, reset } from "../../../../features/brand/brandSlice";
 import { toast } from "react-toastify";
+import {
+  fetchProducts,
+  setBrandFilter,
+} from "../../../../features/product/productSlice";
 
 function FilterByBrand() {
   const dispatch = useDispatch();
   const { isLoading, isSuccess, isError, message, brands } = useSelector(
     (state) => state.brand
   );
+
+  const { brandFilter } = useSelector((state) => state.product);
 
   useEffect(() => {
     let abortController = new AbortController();
@@ -26,6 +32,13 @@ function FilterByBrand() {
     dispatch(reset());
   }, [isLoading, isError, isSuccess, message]);
 
+  useEffect(() => {
+    let abortController = new AbortController();
+    dispatch(fetchProducts({ abortController, page: 1 }));
+    return () => {
+      abortController.abort();
+    };
+  }, [brandFilter]);
   return (
     <details className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
       <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition">
@@ -49,6 +62,8 @@ function FilterByBrand() {
                   name="brand"
                   id="FilterBrand"
                   className="radio checked:bg-blue-500"
+                  checked={brandFilter === brand?.name}
+                  onChange={() => dispatch(setBrandFilter(brand?.name))}
                 />
 
                 <span className=" font-medium text-base">{brand?.name}</span>
@@ -56,6 +71,14 @@ function FilterByBrand() {
             </li>
           ))}
         </ul>
+        <div className="w-full my-3 flex justify-center">
+          <button
+            className="btn"
+            onClick={() => dispatch(setBrandFilter(null))}
+          >
+            Clear
+          </button>
+        </div>
       </div>
     </details>
   );

@@ -2,11 +2,68 @@ import axios from "../../api/axios";
 
 const PAGE_LIMIT = 3;
 
+const fetchProducts = async (abortController, page, limit, filterOptions) => {
+  const {
+    sortBy,
+    sortOrder,
+    priceFilter,
+    brandFilter,
+    categoryFilter,
+    ratingFilter,
+  } = filterOptions;
 
-const fetchProducts = async (abortController, page, limit) => {
-  const response = await axios.get(`/products?page=${page}&count=${limit || PAGE_LIMIT}`, {
-    signal: abortController.signal,
-  });
+  const payload = {
+    dataOption: "all",
+    searchCriteriaList: [],
+  };
+
+  if (brandFilter && brandFilter !== "") {
+    payload.searchCriteriaList.push({
+      filterKey: "brandName",
+      operation: "eq",
+      value: brandFilter,
+    });
+  }
+  if (categoryFilter && categoryFilter !== "") {
+    payload.searchCriteriaList.push({
+      filterKey: "categoryName",
+      operation: "eq",
+      value: categoryFilter,
+    });
+  }
+
+  if (ratingFilter && !isNaN(ratingFilter)) {
+    payload.searchCriteriaList.push({
+      filterKey: "meanRating",
+      operation: "ge",
+      value: ratingFilter,
+    });
+  }
+  if (priceFilter?.minPrice && !isNaN(priceFilter?.minPrice)) {
+    payload.searchCriteriaList.push({
+      filterKey: "price",
+      operation: "ge",
+      value: priceFilter?.minPrice,
+    });
+  }
+  if (priceFilter?.maxPrice && !isNaN(priceFilter?.maxPrice)) {
+    payload.searchCriteriaList.push({
+      filterKey: "price",
+      operation: "le",
+      value: priceFilter?.maxPrice,
+    });
+  }
+  const response = await axios.post(
+    `/products/search?page=${page}&count=${
+      limit || PAGE_LIMIT
+    }&sortBy=${sortBy}&sortOrder=${sortOrder}`,payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      signal: abortController.signal
+    }
+  );
 
   return response.data;
 };

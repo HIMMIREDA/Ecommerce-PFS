@@ -1,8 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.CategoryDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDTO;
+import com.ensa.ecommerce_backend.DTO.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.service.ReviewService;
 import jakarta.validation.Valid;
@@ -22,13 +20,13 @@ public class ReviewRestController {
     private ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest){
-        ReviewDTO reviewDTO = reviewService.saveReview(addReviewRequest);
+    public ResponseEntity<ReviewDto> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest){
+        ReviewDto reviewDTO = reviewService.saveReview(addReviewRequest);
         return new ResponseEntity<>(reviewDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long id) {
+    public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
         return ResponseEntity.ok(reviewService.getReviewById(id));
     }
 

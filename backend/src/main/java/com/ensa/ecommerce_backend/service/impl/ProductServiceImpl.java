@@ -2,7 +2,7 @@ package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
 import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDTO;
+import com.ensa.ecommerce_backend.DTO.ReviewDto;
 import com.ensa.ecommerce_backend.entity.BrandEntity;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
@@ -172,7 +172,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ReviewDTO> getProductReviews(Long productId) {
+    public List<ReviewDto> getProductReviews(Long productId) {
         ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id : " + productId + " not found"));
         return product.getReviews().stream().map(ReviewMapper::mapReviewEntitytoReviewDTO).collect(Collectors.toList());
     }

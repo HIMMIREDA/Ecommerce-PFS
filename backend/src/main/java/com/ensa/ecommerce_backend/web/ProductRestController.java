@@ -2,7 +2,7 @@ package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
 import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDTO;
+import com.ensa.ecommerce_backend.DTO.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;
@@ -48,8 +48,14 @@ public class ProductRestController {
         return new ResponseEntity<>(productDto, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "sortBy",defaultValue = "createdAt") String sortBy, @RequestParam(value = "order",defaultValue = "DESC") String sortOrder, @RequestBody(required = false) ProductSearchDto productSearchDto) {
+    @PostMapping("/search")
+    public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "1") int numPage,
+            @RequestParam(value = "count", defaultValue = "10") int count,
+            @RequestParam(value = "sortBy",defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortOrder",defaultValue = "DESC") String sortOrder,
+            @RequestBody(required = false) ProductSearchDto productSearchDto
+    ) {
         Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto, sortBy, sortOrder);
         return ResponseEntity.ok(
                 GetItemsResponse.<ProductDto>builder()
@@ -98,7 +104,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/{productId}/reviews")
-    public ResponseEntity<List<ReviewDTO>> getProductReviews(@PathVariable Long productId){
+    public ResponseEntity<List<ReviewDto>> getProductReviews(@PathVariable Long productId){
         return ResponseEntity.ok(productService.getProductReviews(productId));
     }
 

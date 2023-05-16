@@ -4,10 +4,10 @@ import ProductItemList from "../../components/shop/products/ProductItemList";
 import Pagination from "../../components/common/Pagination";
 import { fetchProducts } from "../../features/product/productSlice";
 import FilterByCategory from "../../components/shop/products/filters/FilterByCategory";
-import FIlterByPrice from "../../components/shop/products/filters/FIlterByPrice";
 import FilterByBrand from "../../components/shop/products/filters/FilterByBrand";
 import FilterByRating from "../../components/shop/products/filters/FilterByRating";
 import SortBy from "../../components/shop/products/filters/SortBy";
+import FilterByPrice from "../../components/shop/products/filters/FilterByPrice";
 function Products() {
   return (
     <div>
@@ -61,11 +61,11 @@ function Products() {
                 <div className="mt-1 space-y-2">
                   <FilterByCategory />
 
-                  <FIlterByPrice />
+                  <FilterByPrice />
 
                   <FilterByBrand />
 
-                    <FilterByRating />
+                  <FilterByRating />
                 </div>
               </div>
             </div>

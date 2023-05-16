@@ -11,6 +11,7 @@ export const fetchProducts = createAsyncThunk(
       priceFilter,
       sortBy,
       sortOrder,
+      search
     } = thunkAPI.getState().product;
 
     const filterOptions = {
@@ -20,6 +21,7 @@ export const fetchProducts = createAsyncThunk(
       sortBy,
       sortOrder,
       priceFilter,
+      search
     };
     try {
       const data = await productService.fetchProducts(
@@ -131,6 +133,7 @@ const initialState = {
   priceFilter: { minPrice: null, maxPrice: null },
   sortBy: null,
   sortOrder: null,
+  search: null,
   products: [],
   isSuccess: false,
   isError: false,
@@ -167,6 +170,9 @@ const productSlice = createSlice({
     setRatingFilter: (state, action) => {
       state.ratingFilter = action.payload;
     },
+    setSearchQuery: (state, action) => {
+      state.search = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -251,6 +257,7 @@ export const {
   setPriceFilter,
   setRatingFilter,
   setSortOptions,
+  setSearchQuery
 } = productSlice.actions;
 
 export default productSlice.reducer;

@@ -10,6 +10,7 @@ const fetchProducts = async (abortController, page, limit, filterOptions) => {
     brandFilter,
     categoryFilter,
     ratingFilter,
+    search
   } = filterOptions;
 
   const payload = {
@@ -17,6 +18,13 @@ const fetchProducts = async (abortController, page, limit, filterOptions) => {
     searchCriteriaList: [],
   };
 
+  if(search && search !== ""){
+    payload.searchCriteriaList.push({
+      filterKey: "name",
+      operation: "cn",
+      value: search,
+    });
+  }
   if (brandFilter && brandFilter !== "") {
     payload.searchCriteriaList.push({
       filterKey: "brandName",

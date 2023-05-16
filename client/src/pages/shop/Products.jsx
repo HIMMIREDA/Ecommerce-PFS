@@ -1,25 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import ProductItemList from "../../components/shop/products/ProductItemList";
 import Pagination from "../../components/common/Pagination";
-import { fetchProducts } from "../../features/product/productSlice";
+import {
+  fetchProducts,
+  setSearchQuery,
+} from "../../features/product/productSlice";
 import FilterByCategory from "../../components/shop/products/filters/FilterByCategory";
 import FilterByBrand from "../../components/shop/products/filters/FilterByBrand";
 import FilterByRating from "../../components/shop/products/filters/FilterByRating";
 import SortBy from "../../components/shop/products/filters/SortBy";
 import FilterByPrice from "../../components/shop/products/filters/FilterByPrice";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSearchQuery(searchParams.get("search")));
+    let abortController = new AbortController();
+    dispatch(fetchProducts({ abortController, page: 1 }));
+    return () => {
+      abortController.abort();
+    };
+  }, [searchParams]);
   return (
     <div>
-      {/*
-    Heads up! 👋
-  
-    This component comes with some `rtl` classes. Please remove them if they are not needed in your project.
-  
-    Plugins:
-      - @tailwindcss/forms
-  */}
-
       <section>
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <header>

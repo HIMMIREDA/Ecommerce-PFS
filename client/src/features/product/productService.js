@@ -1,6 +1,6 @@
 import axios from "../../api/axios";
 
-const PAGE_LIMIT = 2;
+const PAGE_LIMIT = 3;
 
 
 const fetchProducts = async (abortController, page, limit) => {

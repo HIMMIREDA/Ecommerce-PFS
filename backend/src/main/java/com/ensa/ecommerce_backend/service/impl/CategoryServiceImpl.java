@@ -67,8 +67,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount) {
+    public Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount, String all) {
         Pageable pageable = PageRequest.of(numPage, pageCount);
+        if(all.equalsIgnoreCase("true")){
+            pageable = Pageable.unpaged();
+        }
         return categoryRepository.findGrandChildCategories(pageable).map(CategoryMapper::toDto);
     }
 

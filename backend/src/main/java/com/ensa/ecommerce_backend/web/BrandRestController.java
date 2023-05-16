@@ -28,8 +28,8 @@ public class BrandRestController {
     private BrandService brandService;
 
     @GetMapping
-    public ResponseEntity<GetItemsResponse<BrandDto>> getBrands(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
-        Page<BrandDto> brandPage = brandService.getAllBrands(numPage - 1, count);
+    public ResponseEntity<GetItemsResponse<BrandDto>> getBrands(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(value = "all",defaultValue = "false",required = false) String all) {
+        Page<BrandDto> brandPage = brandService.getAllBrands(numPage - 1, count, all);
         return ResponseEntity.ok(
                 GetItemsResponse.<BrandDto>builder()
                         .items(brandPage.getContent())

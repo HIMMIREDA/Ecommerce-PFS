@@ -58,7 +58,7 @@ const Pagination = ({ sliceName, fetchDataAction }) => {
     <ol className="flex justify-center gap-1 text-xs font-medium">
       <li>
         <button
-          onClick={() => dispatch(setCurrentPage(currentPage - 1))}
+          onClick={() => currentPage > 1 && dispatch(setCurrentPage(currentPage - 1))}
           className="inline-flex h-8 w-8 items-center justify-center rounded border border-basr bg-base text-base rtl:rotate-180"
         >
           <span className="sr-only">Prev Page</span>
@@ -68,7 +68,7 @@ const Pagination = ({ sliceName, fetchDataAction }) => {
       {renderPageNumbers()}
       <li>
         <button
-          onClick={() => dispatch(setCurrentPage(currentPage + 1))}
+          onClick={() => currentPage < totalPages  && dispatch(setCurrentPage(currentPage + 1))}
           className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-base text-base rtl:rotate-180"
         >
           <span className="sr-only">Next Page</span>

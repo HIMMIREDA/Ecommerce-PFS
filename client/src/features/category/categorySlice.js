@@ -3,11 +3,35 @@ import categoryService from "./categoryService";
 
 export const fetchCategories = createAsyncThunk(
   "category/fetch",
-  async ( abortController , thunkAPI) => {
-
+  async (abortController, thunkAPI) => {
     try {
-      const data = await categoryService.fetchCategories(
-        abortController
+      const data = await categoryService.fetchCategories(abortController);
+
+      return data;
+    } catch (error) {
+      let message = "";
+      if (error.name !== "CanceledError") {
+        message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchGrandChildCategories = createAsyncThunk(
+  "category/fetchgrandchild",
+  async ({ abortController, page, limit, all }, thunkAPI) => {
+    try {
+      const data = await categoryService.fetchGrandChildCategories(
+        abortController,
+        page,
+        limit,
+        all
       );
 
       return data;
@@ -28,7 +52,7 @@ export const fetchCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   "category/create",
-  async ({axiosPrivate, category}, thunkAPI) => {
+  async ({ axiosPrivate, category }, thunkAPI) => {
     const { accessToken: token } = thunkAPI.getState().auth.user;
 
     try {
@@ -103,7 +127,11 @@ export const updateCategory = createAsyncThunk(
 );
 
 const initialState = {
-  categories: null,
+  currentPage: 1,
+  totalPages: 1,
+  totalItems: 0,
+  categories: [],
+  grandChildCategories: [],
   isSuccess: false,
   isError: false,
   message: "",
@@ -120,6 +148,9 @@ const categorySlice = createSlice({
       state.isSuccess = false;
       state.message = "";
     },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -138,6 +169,25 @@ const categorySlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.categories = action.payload;
+      })
+      .addCase(fetchGrandChildCategories.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(fetchGrandChildCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(fetchGrandChildCategories.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.grandChildCategories = action.payload?.items;
+        state.currentPage = action.payload?.currentPage;
+        state.totalItems = action.payload?.totalItems;
+        state.totalPages = action.payload?.totalPages;
       })
       .addCase(deleteCategory.pending, (state) => {
         state.isLoading = true;
@@ -186,7 +236,9 @@ const categorySlice = createSlice({
       .addCase(updateCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categories = state.categories.map((category) => category.id == action.payload?.id ? action.payload : category)
+        state.categories = state.categories.map((category) =>
+          category.id == action.payload?.id ? action.payload : category
+        );
       });
   },
 });

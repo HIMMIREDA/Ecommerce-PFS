@@ -3,11 +3,13 @@ import brandService from "./brandService";
 
 export const fetchBrands = createAsyncThunk(
   "brand/fetch",
-  async ( abortController , thunkAPI) => {
-
+  async ({ abortController, page, limit, all }, thunkAPI) => {
     try {
       const data = await brandService.fetchBrands(
-        abortController
+        abortController,
+        page,
+        limit,
+        all
       );
 
       return data;
@@ -28,15 +30,11 @@ export const fetchBrands = createAsyncThunk(
 
 export const createBrand = createAsyncThunk(
   "brand/create",
-  async ({axiosPrivate, brand}, thunkAPI) => {
+  async ({ axiosPrivate, brand }, thunkAPI) => {
     const { accessToken: token } = thunkAPI.getState().auth.user;
 
     try {
-      const data = await brandService.createBrand(
-        axiosPrivate,
-        token,
-        brand
-      );
+      const data = await brandService.createBrand(axiosPrivate, token, brand);
       return data;
     } catch (error) {
       let message = "";
@@ -57,11 +55,7 @@ export const deleteBrand = createAsyncThunk(
     const { accessToken: token } = thunkAPI.getState().auth.user;
 
     try {
-      const data = await brandService.deleteBrand(
-        axiosPrivate,
-        token,
-        brandId
-      );
+      const data = await brandService.deleteBrand(axiosPrivate, token, brandId);
       return data;
     } catch (error) {
       let message = "";
@@ -104,6 +98,9 @@ export const updateBrand = createAsyncThunk(
 
 const initialState = {
   brands: [],
+  currentPage: 1,
+  totalPages: 1,
+  totalItems: 0,
   isSuccess: false,
   isError: false,
   message: "",
@@ -137,7 +134,10 @@ const brandSlice = createSlice({
       .addCase(fetchBrands.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.brands = action.payload;
+        state.brands = action.payload?.items;
+        state.currentPage = action.payload?.currentPage;
+        state.totalPages = action.payload?.totalPages;
+        state.totalItems = action.payload?.totalItems;
       })
       .addCase(deleteBrand.pending, (state) => {
         state.isLoading = true;
@@ -186,8 +186,8 @@ const brandSlice = createSlice({
       .addCase(updateBrand.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.brands = state.brands.map(
-          (brand) => brand.id == action.payload?.id ? action.payload : brand
+        state.brands = state.brands.map((brand) =>
+          brand.id == action.payload?.id ? action.payload : brand
         );
       });
   },

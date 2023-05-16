@@ -1,11 +1,16 @@
 import axios from "../../api/axios";
 
-const fetchBrands = async (abortController) => {
-  const response = await axios.get(`/brands`, {
-    signal: abortController.signal,
-  });
+const PAGE_LIMIT = 10;
 
-  return response.data?.items;
+const fetchBrands = async (abortController, page, limit, all) => {
+  const response = await axios.get(
+    `/brands?page=${page || 1}&count=${limit || PAGE_LIMIT}&all=${all}`,
+    {
+      signal: abortController.signal,
+    }
+  );
+
+  return response.data;
 };
 
 const deleteBrand = async (axiosPrivate, token, brandId) => {
@@ -29,15 +34,11 @@ const createBrand = async (axiosPrivate, token, brand) => {
 };
 
 const updateBrand = async (axiosPrivate, token, brandId, brand) => {
-  const response = await axiosPrivate.put(
-    `/brands/${brandId}`,
-    brand,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axiosPrivate.put(`/brands/${brandId}`, brand, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return response.data;
 };

@@ -26,8 +26,8 @@ const Home = () => {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchBrands(abortController));
-    dispatch(fetchProducts(abortController));
+    dispatch(fetchBrands({abortController, page: 1, limit: 3}));
+    dispatch(fetchProducts({ abortController, page: 1, limit: 10 }));
 
     return () => {
       abortController.abort();

@@ -74,8 +74,11 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Page<BrandDto> getAllBrands(int numPage, int pageCount) {
+    public Page<BrandDto> getAllBrands(int numPage, int pageCount, String all) {
         Pageable paging = PageRequest.of(numPage, pageCount);
+        if (all.equalsIgnoreCase("true")) {
+            paging = Pageable.unpaged();
+        }
         return brandRepository.findAll(paging).map(BrandMapper::toDto);
     }
 

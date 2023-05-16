@@ -22,7 +22,7 @@ public interface CategoryService {
 
     CategoryDto getCategoryById(Long id);
 
-    Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount);
+    Page<CategoryDto> getGrandChildCategories(int numPage, int pageCount, String all);
 
     Page<ProductDto> getCategoryProducts(Long id, int numPage, int pageCount);
 }

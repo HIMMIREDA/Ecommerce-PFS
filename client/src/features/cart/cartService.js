@@ -1,6 +1,16 @@
-import axios from "../../api/axios";
+import axios, { axiosPrivate } from "../../api/axios";
 
-const fetchCartItems = async (abortController) => {
+const fetchCartItems = async (abortController, token) => {
+  if (token) {
+    const response = await axiosPrivate.get(`/cart`, {
+      signal: abortController.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  }
   const response = await axios.get(`/cart`, {
     signal: abortController.signal,
   });
@@ -8,35 +18,44 @@ const fetchCartItems = async (abortController) => {
   return response.data;
 };
 
-const deleteCartItem = async (token, cartItemId) => {
-  const headers = token
-    ? {
+const deleteCartItem = async (cartItemId, token) => {
+  if (token) {
+    const response = await axiosPrivate.delete(`/cart/${cartItemId}`, {
+      headers: {
         Authorization: `Bearer ${token}`,
-      }
-    : {};
+      },
+    });
+    return response.data;
+  }
   const response = await axios.delete(`/cart/${cartItemId}`, headers);
 
   return response.data;
 };
 
-const addToCart = async (token, cartItem) => {
-  const headers = token
-    ? {
+const addToCart = async (cartItem, token) => {
+  if (token) {
+    const response = await axiosPrivate.post(`/cart`, cartItem, {
+      headers: {
         Authorization: `Bearer ${token}`,
-      }
-    : {};
-  const response = await axios.post(`/cart`, cartItem, headers);
+      },
+    });
+    return response.data;
+  }
+  const response = await axios.post(`/cart`, cartItem);
 
   return response.data;
 };
 
-const updateCartItem = async (token, cartItemId, cartItem) => {
-  const headers = token
-    ? {
+const updateCartItem = async (cartItemId, cartItem, token) => {
+  if (token) {
+    const response = await axiosPrivate.put(`/cart/${cartItemId}`, cartItem, {
+      headers: {
         Authorization: `Bearer ${token}`,
-      }
-    : {};
-  const response = await axios.put(`/cart/${cartItemId}`, cartItem, headers);
+      },
+    });
+    return response.data;
+  }
+  const response = await axios.put(`/cart/${cartItemId}`, cartItem);
 
   return response.data;
 };

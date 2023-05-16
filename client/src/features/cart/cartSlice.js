@@ -5,8 +5,8 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetch",
   async (abortController, thunkAPI) => {
     try {
-      const data = await cartService.fetchCartItems(abortController);
-
+      const token = thunkAPI.getState().auth?.user?.accessToken || null;
+      const data = await cartService.fetchCartItems(abortController, token);
       return data;
     } catch (error) {
       let message = "";
@@ -26,10 +26,9 @@ export const fetchCartItems = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/add",
   async ({ cartItem }, thunkAPI) => {
-    // const { accessToken: token } = thunkAPI.getState().auth.user || null;
-    const token = null;
+    const token = thunkAPI.getState().auth?.user?.accessToken || null;
     try {
-      const data = await cartService.addToCart(token, cartItem);
+      const data = await cartService.addToCart(cartItem, token);
       return data;
     } catch (error) {
       let message = "";
@@ -47,10 +46,9 @@ export const addToCart = createAsyncThunk(
 export const deleteCartItem = createAsyncThunk(
   "cart/delete",
   async ({ cartItemId }, thunkAPI) => {
-    // const { accessToken: token } = thunkAPI.getState().auth.user || null;
-    const token = null;
+    const token = thunkAPI.getState().auth?.user?.accessToken || null;
     try {
-      const data = await cartService.deleteCartItem(token, cartItemId);
+      const data = await cartService.deleteCartItem(cartItemId, token);
       return data;
     } catch (error) {
       let message = "";
@@ -68,13 +66,12 @@ export const deleteCartItem = createAsyncThunk(
 export const updateCartItem = createAsyncThunk(
   "cart/update",
   async ({ cartItemId, cartItem }, thunkAPI) => {
-    // const { accessToken: token } = thunkAPI.getState().auth.user || null;
-    const token = null;
+    const token = thunkAPI.getState().auth?.user?.accessToken || null;
     try {
       const data = await cartService.updateCartItem(
-        token,
         cartItemId,
-        cartItem
+        cartItem,
+        token
       );
       return data;
     } catch (error) {

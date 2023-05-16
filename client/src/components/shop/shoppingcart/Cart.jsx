@@ -19,11 +19,13 @@ function Cart() {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchCartItems(abortController));
+    if (isOpenCart) {
+      dispatch(fetchCartItems(abortController));
+    }
     return () => {
       abortController.abort();
     };
-  }, [dispatch]);
+  }, [dispatch, isOpenCart]);
 
   useEffect(() => {
     if (isError && message) {

@@ -10,3 +10,14 @@ export default axios.create({
   withCredentials: true,
   validateStatus: (status) => status >= 200 && status < 400,
 });
+
+
+// axios instance for requesting resources
+export const axiosPrivate = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true, //include cookies (REFRESH JWT cookie)
+  headers: {
+    "Content-Type": "application/json",
+  },
+  validateStatus: (status) => status >= 200 && status < 400,
+});

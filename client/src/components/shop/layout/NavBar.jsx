@@ -9,17 +9,29 @@ import {
 import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import NavigationLinks from "./NavigationLinks";
-import { Link } from "react-router-dom";
-import { fetchCategories, reset } from "../../../features/category/categorySlice";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  fetchCategories,
+  reset,
+} from "../../../features/category/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { toggleOpenCart } from "../../../features/cart/cartSlice";
+import { logoutUser } from "../../../features/auth/authSlice";
 
 function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
-  const {isError, message, isSuccess,categories} = useSelector((state) => state.category);
+  const { isError, message, isSuccess, categories } = useSelector(
+    (state) => state.category
+  );
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const logoutClickHandler = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  };
   useEffect(() => {
     let abortController = new AbortController();
     dispatch(fetchCategories(abortController));
@@ -35,16 +47,9 @@ function NavBar() {
     }
 
     dispatch(reset());
-  }, [
-    isError,
-    message,
-    isSuccess,
-    dispatch,
-  ]);
-
+  }, [isError, message, isSuccess, dispatch]);
 
   return (
-    
     <nav className="shadow z-20 w-full sticky top-0 bg-base-100">
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
@@ -92,14 +97,14 @@ function NavBar() {
               </Link>
               <a
                 className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
-                onClick={() => dispatch(toggleOpenCart())}
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(toggleOpenCart());
+                }}
               >
                 <CartIcon />
               </a>
-              <div
-                href="#"
-                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
-              >
+              <div className="mx-2 transition-colors duration-300 transform hover:text-gray-500 ">
                 <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
@@ -113,13 +118,29 @@ function NavBar() {
                     tabIndex={0}
                     className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
                   >
-                    
-                    <li>
-                      <Link to="/login">Sign In</Link>
-                    </li>
-                    <li>
-                      <Link to="/register">Sign Up</Link>
-                    </li>
+                    {user ? (
+                      <>
+                        <Link to="/profile" className="p-2">
+                          Profile
+                        </Link>
+                        <Link onClick={logoutClickHandler} className="p-2">
+                          Logout
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <li>
+                          <Link className="p-2" to="/login">
+                            Sign In
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="p-2" to="/register">
+                            Sign Up
+                          </Link>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>

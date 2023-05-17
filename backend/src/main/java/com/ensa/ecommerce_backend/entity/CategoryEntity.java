@@ -33,7 +33,7 @@ public class CategoryEntity implements Serializable {
     @JoinColumn(name = "parent_id")
     private List<CategoryEntity> subCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
     private List<ProductEntity> products = new ArrayList<>();
 
 }

@@ -21,7 +21,7 @@ public class BrandEntity implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductEntity> products = new ArrayList<>();
 
     @OneToOne

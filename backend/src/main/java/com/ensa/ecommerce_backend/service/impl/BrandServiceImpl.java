@@ -57,6 +57,9 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brand = brandRepository.findById(id).orElseThrow(
                 () -> new BrandNotFoundException("brand with id: " + id + " not found")
         );
+        brandRepository.findBrandEntityByName(updateBrandRequest.getName()).ifPresent((brandEntity) -> {
+            throw new BrandAlreadyFoundException("a brand with name : " + updateBrandRequest.getName() + " already found");
+        });
         brand.setName(Objects.requireNonNullElse(updateBrandRequest.getName(), brand.getName()));
         if (updateBrandRequest.getImage() != null) {
             ImageEntity imageEntity = imageService.uploadImageToFileSystem(updateBrandRequest.getImage());

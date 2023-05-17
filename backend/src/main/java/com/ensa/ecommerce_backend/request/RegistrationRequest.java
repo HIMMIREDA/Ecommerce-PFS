@@ -37,4 +37,7 @@ public class RegistrationRequest {
     // @Phone
     private String phoneNumber;
 
+    @NotEmpty
+    private String address;
+
 }

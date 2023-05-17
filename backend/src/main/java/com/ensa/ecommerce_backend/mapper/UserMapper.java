@@ -5,7 +5,7 @@ import com.ensa.ecommerce_backend.request.RegistrationRequest;
 
 public class UserMapper {
 
-    static public UserEntity mapDtoToUser(RegistrationRequest request) {
+    static public UserEntity toEntity(RegistrationRequest request) {
         return UserEntity.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())

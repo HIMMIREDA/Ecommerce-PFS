@@ -1,605 +1,343 @@
-import React from 'react'
-import { FaStar } from 'react-icons/fa';
-function Product() {
-  return (
-    <div>{/*
-    Heads up! 👋
-  
-    This component comes with some `rtl` classes. Please remove them if they are not needed in your project.
-  
-    Plugins:
-      - @tailwindcss/forms
-  */}
-  
-  <section>
-    <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-      <header>
-        <h2 className="text-xl font-bold text-base sm:text-3xl">
-          Product Collection
-        </h2>
-  
-        <p className="mt-4 max-w-md text-base ">
-          Hello Chez Darif 
-        </p>
-      </header>
-  
-      <div className="mt-8 block lg:hidden">
-        <button
-          className="flex cursor-pointer items-center gap-2 border-b border-gray-400 pb-1 text-base-300 transition hover:border-gray-600"
-        >
-          <span className="text-sm font-medium"> Filters & Sorting </span>
-  
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="h-4 w-4 rtl:rotate-180"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
-        </button>
-      </div>
-  
-      <div className="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
-        <div className="space-y-4 lg:block">
-          <div>
-            <label htmlFor="SortBy" className="block text-xs font-medium text-base">
-              Sort By
-            </label>
-  
-            <select id="SortBy" className="mt-1 rounded border-gray-300 text-sm">
-              <option>Sort By</option>
-              <option value="Title, DESC">Title, DESC</option>
-              <option value="Title, ASC">Title, ASC</option>
-              <option value="Price, DESC">Price, DESC</option>
-              <option value="Price, ASC">Price, ASC</option>
-            </select>
-          </div>
-  
-          <div>
-            <p className="block text-xs font-medium text-base">Filters</p>
-  
-            <div className="mt-1 space-y-2">
-              <details
-                className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden"
-              >
-                <summary
-                  className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition"
-                >
-                  <span className="text-sm font-medium"> Availability </span>
-  
-                  <span className="transition group-open:-rotate-180">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="h-4 w-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </span>
-                </summary>
-  
-                <div className="border-t border-base-200 ">
-  
-                  <ul className="space-y-1 border-t border-gray-200 p-4">
-                    <li>
-                      <label
-                        htmlFor="FilterInStock"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterInStock"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base ">
-                          In Stock (5+)
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterPreOrder"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterPreOrder"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base ">
-                          Pre Order (3+)
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterOutOfStock"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterOutOfStock"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Out of Stock (10+)
-                        </span>
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-              </details>
-  
-              <details
-                className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden"
-              >
-                <summary
-                  className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition"
-                >
-                  <span className="text-sm font-medium"> Price </span>
-  
-                  <span className="transition group-open:-rotate-180">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="h-4 w-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </span>
-                </summary>
-  
-                <div className="border-t border-gray-200 ">
-                  <header className="flex items-center justify-between p-4">
-                    <span className="text-sm text-base">
-                      The highest price is $600
-                    </span>
-  
-                    <button
-                      type="button"
-                      className="text-sm text-base underline underline-offset-4"
-                    >
-                      Reset
-                    </button>
-                  </header>
-  
-                  <div className="border-t border-gray-200 p-4">
-                    <div className="flex justify-between gap-4">
-                      <label
-                        htmlFor="FilterPriceFrom"
-                        className="flex items-center gap-2"
-                      >
-                        <span className="text-sm text-base">$</span>
-  
-                        <input
-                          type="number"
-                          id="FilterPriceFrom"
-                          placeholder="From"
-                          className="w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                        />
-                      </label>
-  
-                      <label htmlFor="FilterPriceTo" className="flex items-center gap-2">
-                        <span className="text-sm text-base">$</span>
-  
-                        <input
-                          type="number"
-                          id="FilterPriceTo"
-                          placeholder="To"
-                          className="w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </details>
-  
-              <details
-                className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden"
-              >
-                <summary
-                  className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition"
-                >
-                  <span className="text-sm font-medium"> Colors </span>
-  
-                  <span className="transition group-open:-rotate-180">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="h-4 w-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </span>
-                </summary>
-  
-                <div className="border-t border-gray-200">  
-                  <ul className="space-y-1 border-t border-gray-200 p-4">
-                    <li>
-                      <label
-                        htmlFor="FilterRed"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterRed"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Red
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterBlue"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterBlue"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Blue
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterGreen"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterGreen"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Green
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterOrange"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterOrange"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Orange
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterPurple"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterPurple"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Purple
-                        </span>
-                      </label>
-                    </li>
-  
-                    <li>
-                      <label
-                        htmlFor="FilterTeal"
-                        className="inline-flex items-center gap-2"
-                      >
-                        <input
-                          type="checkbox"
-                          id="FilterTeal"
-                          className="h-5 w-5 rounded border-gray-300"
-                        />
-  
-                        <span className="text-sm font-medium text-base">
-                          Teal
-                        </span>
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-              </details>
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import productService from "../../features/product/productService";
+import ReactStars from "react-rating-stars-component";
+import { BsCart, BsHeart } from "react-icons/bs";
+import { Tab } from "@headlessui/react";
+import { useFormik } from "formik";
+import ValidationErrors from "../../components/common/ValidationErrors";
+import * as Yup from "yup";
+import VariationInputList from "../../components/shop/products/VariationInputList";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, reset } from "../../features/cart/cartSlice";
+import { toast } from "react-toastify";
+import ImagesNavigation from "../../components/shop/products/ImagesNavigation";
 
-              <details className="overflow rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-2 p-4 text-base transition">
-                  <span className="text-sm font-medium">Rating</span>
-                  <span className="transition group-open:-rotate-180">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-4 w-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-                  </span>
-                </summary>
-                <div className="border-t border-base-200">
-                  <ul className="space-y-1 border-t border-gray-200 p-4">
-                    <li>
-                      <label htmlFor="Filter1Star" className="inline-flex items-center gap-2">
-                        <input type="checkbox" id="Filter1Star" className="h-5 w-5 rounded border-gray-300" />
-                        <span className="text-sm font-medium text-base flex">
-                          <FaStar className="text-yellow-500" />
-                        </span>
-                      </label>
-                    </li>
-                    <li>
-                      <label htmlFor="Filter2Stars" className="inline-flex items-center gap-2">
-                        <input type="checkbox" id="Filter2Stars" className="h-5 w-5 rounded border-gray-300" />
-                        <span className="text-sm font-medium text-base flex">
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                        </span>
-                      </label>
-                    </li>
-                    <li>
-                      <label htmlFor="Filter3Stars" className="inline-flex items-center gap-2">
-                        <input type="checkbox" id="Filter3Stars" className="h-5 w-5 rounded border-gray-300" />
-                        <span className="text-sm font-medium text-base flex">
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                        </span>
-                      </label>
-                    </li>
-                    <li>
-                      <label htmlFor="Filter4Stars" className="inline-flex items-center gap-2">
-                        <input type="checkbox" id="Filter4Stars" className="h-5 w-5 rounded border-gray-300" />
-                        <span className="text-sm font-medium text-base flex">
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                          <FaStar className="text-yellow-500" />
-                          
-                          
-                        </span>
-                      </label>
-                    </li>
-                    <li>
-                      <label htmlFor="Filter5Stars" className="inline-flex items-center gap-2">
-                        <input type="checkbox" id="Filter5Stars" className="h-5 w-5 rounded border-gray-300" />
-                        <span className="text-sm font-medium text-base flex">
-                        <FaStar className="text-yellow-500" />
-                        <FaStar className="text-yellow-500" />
-                        <FaStar className="text-yellow-500" />
-                        <FaStar className="text-yellow-500" />
-                        <FaStar className="text-yellow-500" />
-
-                        </span>
-                      </label>                  
-                    </li>
-                  </ul>
-                </div>    
-              </details>
-            </div>
-          </div>
-        </div>
-  
-        <div className="lg:col-span-3">
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <li>
-              <a href="#" className="group block overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                  alt=""
-                  className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-                />
-  
-                <div className="relative pt-3">
-                  <h3
-                    className="text-xs text-base group-hover:underline group-hover:underline-offset-4"
-                  >
-                    Basic Tee
-                  </h3>
-  
-                  <p className="mt-2">
-                    <span className="sr-only"> Regular Price </span>
-  
-                    <span className="tracking-wider text-base"> £24.00 GBP </span>
-
-                  </p>
-                  <br></br>
-                  <button class="group mx-auto mb-2 flex h-10 w-10/12 items-stretch overflow-hidden rounded-md text-gray-600 dark:text-gray-400">
-                    <div class="flex w-full items-center justify-center bg-gray-100 dark:bg-gray-700 text-xs uppercase transition group-hover:bg-emerald-600 group-hover:text-white">Add</div>
-                    <div class="flex items-center justify-center bg-gray-200 dark:bg-gray-600 px-5 transition group-hover:bg-emerald-500 group-hover:text-white">+</div>
-                  </button> 
-                </div>
-              </a>
-            </li>
-  
-            <li>
-              <a href="#" className="group block overflow-hidden">
-                <img
-                  src="https://static.massimodutti.net/3/photos//2023/V/0/2/p/1417/275/820/1417275820_1_1_16.jpg?t=1668598558874&impolicy=massimodutti-itxmediumhigh&imwidth=700&imformat=chrome"
-                  alt=""
-                  className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-                />
-  
-                <div className="relative pt-3">
-                  <h3
-                    className="text-xs text-base group-hover:underline group-hover:underline-offset-4"
-                  >
-                    Basic Tee
-                  </h3>
-  
-                  <p className="mt-2">
-                    <span className="sr-only"> Regular Price </span>
-  
-                    <span className="tracking-wider text-base"> £24.00 GBP </span>
-                  </p>
-                  <br></br>
-                  <button class="group mx-auto mb-2 flex h-10 w-10/12 items-stretch overflow rounded-md text-gray-600 dark:text-gray-400">
-                    <div class="flex w-full items-center justify-center bg-gray-100 dark:bg-gray-700 text-xs uppercase transition group-hover:bg-emerald-600 group-hover:text-white">Add</div>
-                    <div class="flex items-center justify-center bg-gray-200 dark:bg-gray-600 px-5 transition group-hover:bg-emerald-500 group-hover:text-white">+</div>
-                  </button> 
-                </div>
-              </a>
-            </li>
-  
-            <li>
-              <a href="#" className="group block overflow-hidden">
-                <img
-                  src="https://static.massimodutti.net/3/photos//2023/V/0/2/p/1429/277/507/1429277507_1_1_16.jpg?t=1678791549985&impolicy=massimodutti-itxmediumhigh&imwidth=700&imformat=chrome"
-                  alt=""
-                  className="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-                />
-  
-                <div className="relative pt-3">
-                  <h3
-                    className="text-xs text-base group-hover:underline group-hover:underline-offset-4"
-                  >
-                    Basic Tee
-                  </h3>
-  
-                  <p className="mt-2">
-                    <span className="sr-only"> Regular Price </span>
-  
-                    <span className="tracking-wider text-base"> £24.00 GBP </span>
-                  </p>
-                  <br></br>
-                  <button class="group mx-auto mb-2 flex h-10 w-10/12 items-stretch overflow rounded-md text-gray-600 dark:text-gray-400">
-                    <div class="flex w-full items-center justify-center bg-gray-100 dark:bg-gray-700 text-xs uppercase transition group-hover:bg-emerald-600 group-hover:text-white">Add</div>
-                    <div class="flex items-center justify-center bg-gray-200 dark:bg-gray-600 px-5 transition group-hover:bg-emerald-500 group-hover:text-white">+</div>
-                  </button> 
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <br></br>
-      <br></br>
-      <ol className="flex justify-center gap-1 text-xs font-medium">
-        <li>
-          <a
-            href="#"
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-basr bg-base text-base rtl:rotate-180"
-          >
-            <span className="sr-only">Prev Page</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            className="block h-8 w-8 rounded border border-gray-100 bg-base text-center leading-8 text-base"
-          >
-            1
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            className="block h-8 w-8 rounded border border-gray-100 bg-base text-center leading-8 text-base"
-          >
-            2
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            className="block h-8 w-8 rounded border border-gray-100 bg-base text-center leading-8 text-base"
-          >
-            3
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            className="block h-8 w-8 rounded border border-gray-100 bg-base text-center leading-8 text-base"
-          >
-            4
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-base text-base rtl:rotate-180"
-          >
-            <span className="sr-only">Next Page</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </a>
-        </li>
-      </ol>
-    </div>
-  </section>
-  </div>
-  )
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
 }
-export default Product
+
+function Product() {
+  const [product, setProduct] = useState({});
+  const { productId } = useParams();
+  const dispatch = useDispatch();
+  const { message, isLoading, isError, isSuccess } = useSelector(
+    (state) => state.cart
+  );
+
+  const addToCartForm = useFormik({
+    initialValues: {
+      quantity: 1,
+      productId,
+      // maybe add some product properties later
+    },
+    validate: (values) => {
+      const errors = {};
+      if (values.quantity > product.quantity) {
+        errors.quantity = `the quantity of product added to cart cant surpass ${product?.quantity}`;
+      }
+      if (values.quantity <= 0) {
+        errors.quantity =
+          "the quantity of product added to cart cant be less than zero";
+      }
+      return errors;
+    },
+    validationSchema: Yup.object({
+      quantity: Yup.number()
+        .max(
+          product?.quantity,
+          `the quantity of product added to cart cant surpass ${product?.quantity}`
+        )
+        .min(1, "the quantity of product added to cart cant be less than 1")
+        .required("Required"),
+    }),
+    onSubmit: (values) => {
+      dispatch(
+        addToCart({
+          cartItem: {
+            productId: values.productId,
+            quantity: values.quantity,
+          },
+        })
+      );
+    },
+  });
+
+  useEffect(() => {
+    let abortController = new AbortController();
+    const fetchProductById = async (productId) => {
+      const product = await productService.fetchProduct(
+        abortController,
+        productId
+      );
+      setProduct(product);
+    };
+
+    fetchProductById(productId);
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message, {
+        toastId: "cartErrorToast",
+      });
+    }
+    if (isSuccess && message) {
+      toast.success(message, {
+        toastId: "createUpdateDeleteCartToast",
+      });
+    }
+    dispatch(reset());
+  }, [message, isError, isSuccess, isLoading, dispatch]);
+
+  return (
+    <section className="py-12 sm:py-16">
+      <div className="container mx-auto px-4">
+        <nav className="flex">
+          <ol role="list" className="flex items-center">
+            <li className="text-left">
+              <div className="-m-1">
+                <Link
+                  to={`/categories/${product?.category?.id}/products`}
+                  className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-base-content focus:shadow hover:text-gray-800"
+                >
+                  {" "}
+                  {product?.category?.name}{" "}
+                </Link>
+              </div>
+            </li>
+
+            <li className="text-left">
+              <div className="flex items-center">
+                <span className="mx-2 text-gray-400">/</span>
+                <div className="-m-1">
+                  <Link
+                    to={`/categories/${product?.category?.subCategories[0]?.id}/products`}
+                    className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-base-content focus:shadow hover:text-gray-800"
+                  >
+                    {" "}
+                    {product?.category?.subCategories[0]?.name}{" "}
+                  </Link>
+                </div>
+              </div>
+            </li>
+
+            <li className="text-left">
+              <div className="flex items-center">
+                <span className="mx-2 text-gray-400">/</span>
+                <div className="-m-1">
+                  <Link
+                    to={`/categories/${product?.category?.subCategories[0]?.subCategories[0]?.id}/products`}
+                    className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-base-content focus:shadow hover:text-gray-800"
+                    aria-current="page"
+                  >
+                    {" "}
+                    {
+                      product?.category?.subCategories[0]?.subCategories[0]
+                        ?.name
+                    }{" "}
+                  </Link>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </nav>
+
+        <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
+          <ImagesNavigation images={product?.images} />
+
+          <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+            <h1 className="sm: text-2xl font-bold text-base-content sm:text-3xl">
+              {product?.name}
+            </h1>
+
+            <div className="mt-5 flex items-center">
+              <div className="flex items-center">
+                <ReactStars count={5} size={20} color="#ffd700" edit={false} />
+                <p className="ml-2 text-sm font-medium text-gray-500">
+                  1,209 Reviews
+                </p>
+              </div>
+            </div>
+            <ValidationErrors errors={addToCartForm.errors} />
+            <div className="mt-5 flex items-center">
+              <div className="flex items-center">
+                Availability :
+                <p
+                  className={`ml-2 text-sm font-medium ${
+                    product?.quantity > 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {product?.quantity > 0
+                    ? `in stock (${product?.quantity} items)`
+                    : "out of stock"}
+                </p>
+              </div>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addToCartForm.handleSubmit();
+              } }
+              className="mt-3 flex select-none flex-wrap justify-center gap-1 flex-col"
+            >
+              <VariationInputList />
+              <div className="flex items-center justify-start mt-6">
+                <h2 className="me-2">Quantity:</h2>
+                <button
+                  className="border border-gray-400 rounded-l px-3 py-1"
+                  type="button"
+                  onClick={() => {
+                    addToCartForm.setValues({
+                      ...addToCartForm.values,
+                      quantity:
+                        addToCartForm.values.quantity > 1
+                          ? addToCartForm.values.quantity - 1
+                          : addToCartForm.values.quantity,
+                    });
+                  }}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  max={product?.quantity}
+                  className="w-12 text-center border-t border-b border-gray-400 py-1"
+                  id="firstName"
+                  name="firstName"
+                  onChange={addToCartForm.handleChange}
+                  value={addToCartForm.values.quantity}
+                />
+
+                <button
+                  className="border border-gray-400 rounded-r px-3 py-1"
+                  type="button"
+                  onClick={() => {
+                    addToCartForm.setValues({
+                      ...addToCartForm.values,
+                      quantity:
+                        addToCartForm.values.quantity < product?.quantity
+                          ? addToCartForm.values.quantity + 1
+                          : addToCartForm.values.quantity,
+                    });
+                  }}
+                >
+                  +
+                </button>
+              </div>
+
+              <div className="mt-10 flex flex-col items-center justify-between space-y-4 space-x-3 border-t border-b py-4 md:flex-row sm:space-y-0">
+                {product?.price > 0 && (
+                  <div className="flex items-end">
+                    <h1 className="text-3xl font-bold">{product?.price}$</h1>
+                  </div>
+                )}
+                {product?.price > 0 && (
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-base-content  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                  >
+                    <BsCart className="shrink-0 mr-3 h-5 w-5" />
+                    Add to cart
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-400  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-red-500"
+                >
+                  <BsHeart className="shrink-0 mr-3 h-5 w-5" />
+                  Add to wishlist
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div className="w-full max-w-md px-2 py-16 sm:px-0">
+            <Tab.Group>
+              <Tab.List className="flex space-x-1 rounded-xl  p-1">
+                <Tab
+                  key={1}
+                  className={({ selected }) =>
+                    classNames(
+                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content ",
+                      "focus:outline-none focus:ring-2",
+                      selected
+                        ? " shadow border-b-2 border-base-content"
+                        : " hover:bg-base-300 hover:text-base-content"
+                    )
+                  }
+                >
+                  Description
+                </Tab>
+                <Tab
+                  key={2}
+                  className={({ selected }) =>
+                    classNames(
+                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
+                      "focus:outline-none focus:ring-2",
+                      selected
+                        ? " shadow border-b-2 border-base-content"
+                        : " hover:bg-base-300 hover:text-base-content"
+                    )
+                  }
+                >
+                  Reviews
+                </Tab>
+                <Tab
+                  key={3}
+                  className={({ selected }) =>
+                    classNames(
+                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
+                      "focus:outline-none focus:ring-2",
+                      selected
+                        ? " shadow border-b-2 border-base-content"
+                        : " hover:bg-base-300 hover:text-base-content"
+                    )
+                  }
+                >
+                  Add Review
+                </Tab>
+              </Tab.List>
+              <Tab.Panels className="mt-2">
+                <Tab.Panel
+                  key={1}
+                  className={classNames(
+                    "rounded-xl  p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                  )}
+                >
+                  {product?.description}
+                </Tab.Panel>
+                <Tab.Panel
+                  key={2}
+                  className={classNames(
+                    "rounded-xl  p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                  )}
+                >
+                  here's reviews
+                </Tab.Panel>
+                <Tab.Panel
+                  key={3}
+                  className={classNames(
+                    "rounded-xl  p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                  )}
+                >
+                  here's add review
+                </Tab.Panel>
+              </Tab.Panels>
+            </Tab.Group>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Product;

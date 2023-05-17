@@ -1,9 +1,9 @@
 package com.ensa.ecommerce_backend.service;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDTO;
+import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
+import com.ensa.ecommerce_backend.DTO.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
-import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +17,7 @@ public interface ProductService {
 
     ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
 
-    Page<ProductDto> getAllProducts(int numPage, int pageCount, String query);
+    Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder);
 
     ProductDto getProductById(Long id);
 
@@ -26,5 +26,5 @@ public interface ProductService {
     void deleteImageFromProduct(Long productId, String imageId);
 
 
-    List<ReviewDTO> getProductReviews(Long productId);
+    List<ReviewDto> getProductReviews(Long productId);
 }

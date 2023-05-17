@@ -1,36 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { fetchCategories, reset } from "../../../features/category/categorySlice";
+import { toast } from "react-toastify";
 
-const categories = [
-  {
-    id: 1,
-    name: "laptops",
-    description: "buy new professional and gaming laptops",
-  },
-  { id: 2, name: "clothes", description: "buy new clothes" },
-  {
-    id: 3,
-    name: "women's clothes",
-    description: "new stylish collections for womens",
-  },
-  {
-    id: 4,
-    name: "iphones & ipads",
-    description: "new apple products are available",
-  },
-  {
-    id: 5,
-    name: "android smartphones",
-    description: "new samsung and oppo are available",
-  },
-  {
-    id: 6,
-    name: "asian clothes",
-    description: "new korean, chineese and japaneese collections are available",
-  },
-];
 
 const ShopByCategory = () => {
+
+  const { categories } = useSelector(
+    (state) => state.category
+  );
+
   return (
     <section >
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-8 space-y-5 flex flex-col items-center">
@@ -43,11 +23,11 @@ const ShopByCategory = () => {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {categories?.map((category) => (
+          {categories?.slice(0,9)?.map((category) => (
             <Link
             key={category?.id}
               className="block rounded-xl border border-gray-800 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
-              to={`/category/${category?.name}`}
+              to={`/category/${category?.id}`}
             >
               
               <h2 className="mt-4 text-xl font-bold ">

@@ -8,10 +8,7 @@ import com.ensa.ecommerce_backend.exception.EmailVerifTokenExpiredException;
 import com.ensa.ecommerce_backend.exception.RefreshTokenNotValidException;
 import com.ensa.ecommerce_backend.exception.UserAlreadyFoundException;
 import com.ensa.ecommerce_backend.mapper.UserMapper;
-import com.ensa.ecommerce_backend.repository.EmailVerificationTokenRepository;
-import com.ensa.ecommerce_backend.repository.RefreshTokenRepository;
-import com.ensa.ecommerce_backend.repository.RoleRepository;
-import com.ensa.ecommerce_backend.repository.UserRepository;
+import com.ensa.ecommerce_backend.repository.*;
 import com.ensa.ecommerce_backend.request.LoginRequest;
 import com.ensa.ecommerce_backend.request.RegistrationRequest;
 import com.ensa.ecommerce_backend.response.LoginResponse;
@@ -19,9 +16,11 @@ import com.ensa.ecommerce_backend.response.RefreshJwtResponse;
 import com.ensa.ecommerce_backend.response.RegistrationResponse;
 import com.ensa.ecommerce_backend.security.jwt.JwtService;
 import com.ensa.ecommerce_backend.service.AuthService;
+import com.ensa.ecommerce_backend.service.CartService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +35,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +52,9 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
+    private final CartItemRepository cartItemRepository;
+
+    private final CartService cartService;
 
     private ApplicationEventPublisher eventPublisher;
 
@@ -62,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void verifyAccount(String token) {
+    public void verifyAccount(String token, HttpSession session) {
         EmailVerificationTokenEntity verificationToken = emailVerificationTokenRepository.findEmailVerificationTokenByToken(token).orElseThrow();
 
         if (verificationToken.getExpiryDate().before(new Date())) {
@@ -70,6 +72,13 @@ public class AuthServiceImpl implements AuthService {
         }
         UserEntity user = verificationToken.getUser();
         user.setEnabled(true);
+        user.setCart(
+                CartEntity.builder()
+                        .cartItems(new HashSet<>())
+                        .total(0)
+                        .user(user)
+                        .build()
+        );
         userRepository.save(user);
         List<EmailVerificationTokenEntity> userTokens = emailVerificationTokenRepository.findEmailVerificationTokenByUser(user).orElseThrow();
         emailVerificationTokenRepository.deleteAll(userTokens);
@@ -77,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RegistrationResponse createUser(RegistrationRequest registrationRequest, HttpServletRequest httpRequest) {
-        UserEntity user = UserMapper.mapDtoToUser(registrationRequest);
+        UserEntity user = UserMapper.toEntity(registrationRequest);
         String url = httpRequest.getRequestURI().replace("register", "confirm-registration");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setFirstName(registrationRequest.getFirstName());
@@ -85,13 +94,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPhoneNumber(registrationRequest.getPhoneNumber());
         user.setRoles(Collections.singletonList(roleRepository.findRoleByName(RoleEnum.USER)));
         user.setEnabled(false);
-        user.setCart(
-                CartEntity.builder()
-                        .cartItems(new ArrayList<>())
-                        .total(0)
-                        .user(user)
-                        .build()
-        );
+
         if (userExists(user.getEmail(), user.getUsername())) {
             UserEntity fetchedUser = userRepository.findUserEntityByEmailOrUsername(user.getEmail(), user.getUsername()).orElseThrow();
             if (fetchedUser.getEmail().equals(user.getEmail()) && fetchedUser.getUsername().equals(user.getUsername()) && !fetchedUser.isEnabled()) {
@@ -120,13 +123,9 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public void logoutUser(String refreshToken, HttpServletResponse response) {
-
+    public void logoutUser(String refreshToken) {
         refreshTokenRepository.deleteRefreshTokenByToken(refreshToken);
         SecurityContextHolder.clearContext();
-        Cookie refreshTokenCookie = new Cookie("jwt-refresh-token", null);
-        refreshTokenCookie.setMaxAge(0);
-        response.addCookie(refreshTokenCookie);
     }
 
     @Override
@@ -148,7 +147,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse loginUser(LoginRequest request, HttpServletResponse response) throws AuthenticationException {
+    public LoginResponse loginUser(LoginRequest request, HttpSession session, HttpServletResponse response) throws AuthenticationException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -157,6 +156,13 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken((UserDetails) authentication.getPrincipal());
         RefreshTokenEntity refreshTokenObject = RefreshTokenEntity.builder().token(refreshToken).user(user).build();
         refreshTokenRepository.save(refreshTokenObject);
+
+        // merge session cart with mysql cart
+        CartEntity sessionCart = (CartEntity) session.getAttribute("cart");
+        if (sessionCart != null) {
+            cartService.mergeCarts(sessionCart, user.getCart());
+        }
+        session.removeAttribute("cart");
 
         Cookie refreshTokenCookie = new Cookie("jwt-refresh-token", refreshToken);
         refreshTokenCookie.setHttpOnly(true);

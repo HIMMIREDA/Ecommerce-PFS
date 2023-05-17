@@ -44,7 +44,7 @@ public class BrandServiceImpl implements BrandService {
                 .build();
         ImageEntity imageEntity = imageService.uploadImageToFileSystem(addBrandRequest.getImage());
         brand.setImage(imageEntity);
-        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
+        return BrandMapper.toDto(brandRepository.save(brand));
     }
 
     @Override
@@ -57,26 +57,32 @@ public class BrandServiceImpl implements BrandService {
         BrandEntity brand = brandRepository.findById(id).orElseThrow(
                 () -> new BrandNotFoundException("brand with id: " + id + " not found")
         );
+        brandRepository.findBrandEntityByName(updateBrandRequest.getName()).ifPresent((brandEntity) -> {
+            throw new BrandAlreadyFoundException("a brand with name : " + updateBrandRequest.getName() + " already found");
+        });
         brand.setName(Objects.requireNonNullElse(updateBrandRequest.getName(), brand.getName()));
         if (updateBrandRequest.getImage() != null) {
             ImageEntity imageEntity = imageService.uploadImageToFileSystem(updateBrandRequest.getImage());
             imageEntity.setBrand(brand);
             brand.setImage(imageEntity);
         }
-        return BrandMapper.mapBrandEntityToBrandDto(brandRepository.save(brand));
+        return BrandMapper.toDto(brandRepository.save(brand));
     }
 
     @Override
     public BrandDto getBrandById(Long id) {
-        return BrandMapper.mapBrandEntityToBrandDto(
+        return BrandMapper.toDto(
                 brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException("Brand with id : " + id + " not found"))
         );
     }
 
     @Override
-    public Page<BrandDto> getAllBrands(int numPage, int pageCount) {
+    public Page<BrandDto> getAllBrands(int numPage, int pageCount, String all) {
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return brandRepository.findAll(paging).map(BrandMapper::mapBrandEntityToBrandDto);
+        if (all.equalsIgnoreCase("true")) {
+            paging = Pageable.unpaged();
+        }
+        return brandRepository.findAll(paging).map(BrandMapper::toDto);
     }
 
     @Override
@@ -85,6 +91,6 @@ public class BrandServiceImpl implements BrandService {
                 () -> new BrandNotFoundException("Brand with id : " + brandId + " not found")
         );
         Pageable paging = PageRequest.of(numPage, pageCount);
-        return productRepository.findProductEntitiesByBrand(brand, paging).map(ProductMapper::mapProductEntityToProductDto);
+        return productRepository.findProductEntitiesByBrand(brand, paging).map(ProductMapper::toDto);
     }
 }

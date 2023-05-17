@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AiFillShop,
   AiOutlineClose,
@@ -9,14 +9,48 @@ import {
 import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import NavigationLinks from "./NavigationLinks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  fetchCategories,
+  reset,
+} from "../../../features/category/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { toggleOpenCart } from "../../../features/cart/cartSlice";
+import { logoutUser } from "../../../features/auth/authSlice";
 
-function NavBar({setOpenCart}) {
+function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
+  const { isError, message, isSuccess, categories } = useSelector(
+    (state) => state.category
+  );
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutClickHandler = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  };
+  useEffect(() => {
+    let abortController = new AbortController();
+    dispatch(fetchCategories(abortController));
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message);
+    }
+
+    dispatch(reset());
+  }, [isError, message, isSuccess, dispatch]);
 
   return (
-    
-    <nav className="shadow z-20 bg-base-100 w-full sticky top-0">
+    <nav className="shadow z-20 w-full sticky top-0 bg-base-100">
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
           <div className="flex items-center justify-between">
@@ -25,7 +59,7 @@ function NavBar({setOpenCart}) {
               className="flex items-center  w-32 normal-case text-xl"
             >
               <AiFillShop className="w-auto h-6 sm:h-7" size={40} />
-              STORE
+              E-SHOP
             </Link>
 
             {/* <!-- Mobile menu button --> */}
@@ -33,7 +67,7 @@ function NavBar({setOpenCart}) {
               <button
                 onClick={() => setOpenMenu((prev) => !prev)}
                 type="button"
-                className=" btn btn-ghost hover:text-gray-600  focus:outline-none"
+                className=" btn btn-ghost hover  focus:outline-none"
                 aria-label="toggle menu"
               >
                 {!openMenu ? (
@@ -57,21 +91,20 @@ function NavBar({setOpenCart}) {
             <div className="flex justify-center items-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
               <Link
                 to={"/wishlist"}
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
+                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
               >
                 <AiOutlineHeart size={30} />
               </Link>
               <a
-                href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
-                onClick={() => setOpenCart(isOpen => !isOpen)}
+                className="mx-2 transition-colors duration-300 transform hover:text-gray-500 "
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(toggleOpenCart());
+                }}
               >
                 <CartIcon />
               </a>
-              <div
-                href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 transform hover:text-gray-500 "
-              >
+              <div className="mx-2 transition-colors duration-300 transform hover:text-gray-500 ">
                 <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
@@ -85,13 +118,29 @@ function NavBar({setOpenCart}) {
                     tabIndex={0}
                     className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
                   >
-                    
-                    <li>
-                      <Link to="/login">Sign In</Link>
-                    </li>
-                    <li>
-                      <Link to="/register">Sign Up</Link>
-                    </li>
+                    {user ? (
+                      <>
+                        <Link to="/profile" className="p-2">
+                          Profile
+                        </Link>
+                        <Link onClick={logoutClickHandler} className="p-2">
+                          Logout
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <li>
+                          <Link className="p-2" to="/login">
+                            Sign In
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="p-2" to="/register">
+                            Sign Up
+                          </Link>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-package com.ensa.ecommerce_backend.response;
+package com.ensa.ecommerce_backend.DTO;
 
 import com.ensa.ecommerce_backend.entity.CartItemEntity;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
-@AllArgsConstructor
 @Builder
-public class GetCartResponse {
+public class CartDto {
     private double total;
-
-    private List<CartItemEntity> items;
+    private List<CartItemDto> items;
 }

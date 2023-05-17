@@ -1,239 +1,186 @@
 import React from "react";
 import { AiFillShop } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
     <footer aria-label="Site Footer">
+      <div className="divider"></div>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="lg:flex lg:items-start lg:gap-8">
-          <div className="text-teal-600">
-            <AiFillShop size={40}/>
+          <div className="text-blue-700">
+            <AiFillShop size={40} />
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-8 lg:mt-0 lg:grid-cols-5 lg:gap-y-16">
-            <div className="col-span-2">
+            <div className="col-span-5">
               <div>
                 <h2 className="text-2xl font-bold">
-                  Get the latest news!
+                  Discover a World of Products on Our E-SHOP
                 </h2>
 
                 <p className="mt-4 text-gray-500">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse
-                  non cupiditate quae nam molestias.
+                  Welcome to our ecommerce app, featuring a global collection of
+                  products. Browse the latest fashion, tech, and handmade items
+                  with ease. Shop confidently with our secure payment options,
+                  or sell your own products with our simple listing and customer
+                  connection tools.
                 </p>
               </div>
             </div>
 
-            <div className="col-span-2 lg:col-span-3 lg:flex lg:items-end">
-              <form className="w-full">
-                <label htmlFor="UserEmail" className="sr-only">
-                  {" "}
-                  Email{" "}
-                </label>
-
-                <div className="border border-gray-100 p-2 focus-within:ring sm:flex sm:items-center sm:gap-4">
-                  <input
-                    type="email"
-                    id="UserEmail"
-                    placeholder="john@rhcp.com"
-                    className="input input-bordered w-full border-none focus:border-transparent focus:ring-transparent sm:text-sm"
-                  />
-
-                  <button className="mt-1 w-full bg-teal-500 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:flex-shrink-0">
-                    Sign Up
-                  </button>
-                </div>
-              </form>
-            </div>
-
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-medium">Services</p>
+              <p className="font-bold">SHOP</p>
 
               <nav aria-label="Footer Navigation - Services" className="mt-6">
                 <ul className="space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to={"/products"}
                       className="text-gray-700 transition hover:opacity-75"
                     >
-                      1on1 Coaching
-                    </a>
+                      Products
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
-                      Company Review
-                    </a>
+                      Brands
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
-                      Accounts Review
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      HR Consulting
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      SEO Optimisation
-                    </a>
+                      Deals
+                    </Link>
                   </li>
                 </ul>
               </nav>
             </div>
 
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-medium">Company</p>
+              <p className="font-bold">COMPANY</p>
 
               <nav aria-label="Footer Navigation - Company" className="mt-6">
                 <ul className="space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       About
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Meet the Team
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Accounts Review
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
             </div>
 
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-medium">Helpful Links</p>
+              <p className="font-bold">HELPFUL LINKS</p>
 
               <nav aria-label="Footer Navigation - Company" className="mt-6">
                 <ul className="space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Contact
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      FAQs
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Live Chat
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
             </div>
 
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-medium">Legal</p>
+              <p className="font-bold">LEGAL</p>
 
               <nav aria-label="Footer Navigation - Legal" className="mt-6">
                 <ul className="space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Accessibility
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Returns Policy
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
                       Refund Policy
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      Hiring Statistics
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </nav>
             </div>
 
             <div className="col-span-2 sm:col-span-1">
-              <p className="font-medium">Downloads</p>
+              <p className="font-bold">SELLER</p>
 
               <nav aria-label="Footer Navigation - Downloads" className="mt-6">
                 <ul className="space-y-4 text-sm">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
-                      Marketing Calendar
-                    </a>
+                      Be a seller
+                    </Link>
                   </li>
 
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-gray-700 transition hover:opacity-75"
                     >
-                      SEO Infographics
-                    </a>
+                      Seller dashboard
+                    </Link>
                   </li>
                 </ul>
               </nav>
@@ -241,11 +188,11 @@ function Footer() {
 
             <ul className="col-span-2 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-blue-700 transition hover:opacity-75"
                 >
                   <span className="sr-only">Facebook</span>
 
@@ -261,15 +208,15 @@ function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-blue-700 transition hover:opacity-75"
                 >
                   <span className="sr-only">Instagram</span>
 
@@ -285,15 +232,15 @@ function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-blue-700 transition hover:opacity-75"
                 >
                   <span className="sr-only">Twitter</span>
 
@@ -305,15 +252,15 @@ function Footer() {
                   >
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                   </svg>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-blue-700 transition hover:opacity-75"
                 >
                   <span className="sr-only">GitHub</span>
 
@@ -329,15 +276,15 @@ function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   rel="noreferrer"
                   target="_blank"
-                  className="text-gray-700 transition hover:opacity-75"
+                  className="text-blue-700 transition hover:opacity-75"
                 >
                   <span className="sr-only">Dribbble</span>
 
@@ -353,7 +300,7 @@ function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -365,24 +312,36 @@ function Footer() {
               &copy; 2022. Company Name. All rights reserved.
             </p>
 
-            <nav aria-label="Footer Navigation - Support" className="mt-8 sm:mt-0">
+            <nav
+              aria-label="Footer Navigation - Support"
+              className="mt-8 sm:mt-0"
+            >
               <ul className="flex flex-wrap justify-start gap-4 text-xs lg:justify-end">
                 <li>
-                  <a href="#" className="text-gray-500 transition hover:opacity-75">
+                  <Link
+                    to="#"
+                    className="text-gray-500 transition hover:opacity-75"
+                  >
                     Terms & Conditions
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a href="#" className="text-gray-500 transition hover:opacity-75">
+                  <Link
+                    to="#"
+                    className="text-gray-500 transition hover:opacity-75"
+                  >
                     Privacy Policy
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a href="#" className="text-gray-500 transition hover:opacity-75">
+                  <Link
+                    to="#"
+                    className="text-gray-500 transition hover:opacity-75"
+                  >
                     Cookies
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>

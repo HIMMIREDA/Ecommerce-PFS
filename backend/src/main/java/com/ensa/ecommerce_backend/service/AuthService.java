@@ -9,13 +9,14 @@ import com.ensa.ecommerce_backend.response.RefreshJwtResponse;
 import com.ensa.ecommerce_backend.response.RegistrationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public interface AuthService {
     RegistrationResponse createUser(RegistrationRequest registrationRequest, HttpServletRequest httpRequest);
 
-    LoginResponse loginUser(LoginRequest request, HttpServletResponse response);
+    LoginResponse loginUser(LoginRequest request, HttpSession session, HttpServletResponse response);
 
-    void logoutUser(String refreshToken, HttpServletResponse response);
+    void logoutUser(String refreshToken);
 
     boolean userExists(String email, String username);
 
@@ -23,6 +24,6 @@ public interface AuthService {
 
     EmailVerificationTokenEntity createEmailVerificationToken(UserEntity user, String token);
 
-    void verifyAccount(String token);
+    void verifyAccount(String token, HttpSession session);
 }
 

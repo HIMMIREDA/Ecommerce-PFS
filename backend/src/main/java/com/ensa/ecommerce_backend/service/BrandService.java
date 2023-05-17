@@ -15,7 +15,7 @@ public interface BrandService {
 
     BrandDto getBrandById(Long id);
 
-    Page<BrandDto> getAllBrands(int numPage, int pageCount);
+    Page<BrandDto> getAllBrands(int numPage, int pageCount, String all);
 
     Page<ProductDto> getBrandProducts(Long brandId, int numPage, int pageCount);
 }

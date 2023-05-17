@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class ReviewDTO {
+public class ReviewDto {
     private RatingValue ratingValue;
     private String comment;
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ProductCard from "../products/ProductCard";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import "swiper/css";
@@ -7,19 +7,22 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
-
-const featuredProducts = [];
+import { useSelector } from "react-redux";
 
 const FeaturedProducts = () => {
   const swiperRef = useRef(null);
+  const { products } = useSelector((state) => state.product);
   return (
     <section>
-      <div className=" px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8">
-        <div className="max-w-7xl  items-center flex flex-col  space-y-3">
+      <div className=" px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8 ">
+        <div className="max-w-7xl mx-auto items-center flex flex-col  space-y-3 ">
           <h2 className="max-w-xl text-xl font-bold tracking-tight sm:text-3xl text-center">
             Featured Products
           </h2>
-          <Link to={"/products/featured"} className="group mt-4 inline-flex  gap-1 text-xl font-medium items-center">
+          <Link
+            to={"/products/featured"}
+            className="group mt-4 inline-flex  gap-1 text-xl font-medium items-center"
+          >
             See more now{" "}
             <span
               aria-hidden="true"
@@ -50,28 +53,19 @@ const FeaturedProducts = () => {
             }}
             className="!overflow-hidden"
           >
-            <SwiperSlide className="swiper-slide max-w-xl">
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide max-w-xl">
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide max-w-xl">
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide max-w-xl">
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide max-w-xl">
-              <ProductCard />
-            </SwiperSlide>
-
+            {products?.slice(0, 10)?.map((product) => {
+              return (
+                  <SwiperSlide key={product?.id} className="swiper-slide max-w-xl">
+                    <ProductCard product={product} />
+                  </SwiperSlide>
+              );
+            })}
 
             {/* Swiper buttons next and prev */}
             <div className="mt-8 flex justify-center gap-4 ">
               <button
                 aria-label="Previous slide"
-                className="rounded-full border border-pink-600 p-4 text-pink-600 hover:bg-pink-600 hover:text-white"
+                className="rounded-full border border-blue-600 p-4 text-blue-600 hover:bg-blue-600 hover:text-white"
                 onClick={() => swiperRef.current?.slidePrev()}
               >
                 <FiArrowLeft size={20} />
@@ -79,7 +73,7 @@ const FeaturedProducts = () => {
 
               <button
                 aria-label="Next slide"
-                className="rounded-full border border-pink-600 p-4 text-pink-600 hover:bg-pink-600 hover:text-white"
+                className="rounded-full border border-blue-600 p-4 text-blue-600 hover:bg-blue-600 hover:text-white"
                 onClick={() => swiperRef.current?.slideNext()}
               >
                 <FiArrowRight size={20} />

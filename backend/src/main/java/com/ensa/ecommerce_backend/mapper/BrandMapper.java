@@ -5,11 +5,11 @@ import com.ensa.ecommerce_backend.entity.BrandEntity;
 
 public class BrandMapper {
 
-    static public BrandDto mapBrandEntityToBrandDto(BrandEntity brand) {
+    static public BrandDto toDto(BrandEntity brand) {
         return brand == null ? null :
                 BrandDto.builder()
                         .id(brand.getId())
-                        .image(ImageMapper.mapImageEntityToImageDto(brand.getImage()))
+                        .image(ImageMapper.toDto(brand.getImage()))
                         .name(brand.getName())
                         .build();
     }

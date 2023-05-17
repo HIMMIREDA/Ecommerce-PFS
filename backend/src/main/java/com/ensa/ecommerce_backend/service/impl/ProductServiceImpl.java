@@ -1,9 +1,12 @@
 package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDTO;
-import com.ensa.ecommerce_backend.entity.*;
-import com.ensa.ecommerce_backend.enums.RatingValue;
+import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
+import com.ensa.ecommerce_backend.DTO.ReviewDto;
+import com.ensa.ecommerce_backend.entity.BrandEntity;
+import com.ensa.ecommerce_backend.entity.CategoryEntity;
+import com.ensa.ecommerce_backend.entity.ImageEntity;
+import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
 import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;
 import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
@@ -15,8 +18,9 @@ import com.ensa.ecommerce_backend.repository.CategoryRepository;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
-import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
+import com.ensa.ecommerce_backend.search.SearchCriteria;
+import com.ensa.ecommerce_backend.search.product.ProductSpecificationBuilder;
 import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -24,6 +28,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +42,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
-
+    static private final List<String> sortByFieldsList = Arrays.asList(
+            "createdAt",
+            "name",
+            "price"
+    );
     private ProductRepository productRepository;
     private ImageService imageService;
     private ImageRepository imageRepository;
@@ -79,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
                         })
                         .collect(Collectors.toList())
         );
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
@@ -108,16 +117,28 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory(category);
         }
 
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
-    public Page<ProductDto> getAllProducts(int numPage, int pageCount, String query) {
-
-        Pageable paging = PageRequest.of(numPage, pageCount);
-        return query.equals("") ?
-                productRepository.findAll(paging).map(ProductMapper::mapProductEntityToProductDto)
-                : productRepository.findProductEntitiesByNameContainingIgnoreCase(query, paging).map(ProductMapper::mapProductEntityToProductDto);
+    public Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder) {
+        ProductSpecificationBuilder builder = new ProductSpecificationBuilder();
+        if (productSearchDto != null) {
+            List<SearchCriteria> criteriaList = productSearchDto.getSearchCriteriaList();
+            if (criteriaList != null) {
+                criteriaList.forEach(x -> {
+                    x.setDataOption(productSearchDto.getDataOption());
+                    builder.with(x);
+                });
+            }
+        }
+        Sort sortCriteria = Sort.by(Sort.Direction.DESC, "createdAt");
+        if (sortByFieldsList.contains(sortBy)) {
+            sortCriteria = Sort.by(sortOrder.equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        }
+        Pageable paging = PageRequest.of(numPage, pageCount, sortCriteria);
+        Page<ProductEntity> pageOfProducts = productSearchDto == null ? productRepository.findAll(paging) : productRepository.findAll(builder.build(), paging);
+        return pageOfProducts.map(ProductMapper::toDto);
     }
 
     @Override
@@ -131,7 +152,7 @@ public class ProductServiceImpl implements ProductService {
         ImageEntity imageEntity = imageService.uploadImageToFileSystem(image);
         imageEntity.setProduct(product);
         product.getImages().add(imageEntity);
-        return ProductMapper.mapProductEntityToProductDto(productRepository.save(product));
+        return ProductMapper.toDto(productRepository.save(product));
     }
 
     @Override
@@ -151,14 +172,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ReviewDTO> getProductReviews(Long productId) {
+    public List<ReviewDto> getProductReviews(Long productId) {
         ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id : " + productId + " not found"));
         return product.getReviews().stream().map(ReviewMapper::mapReviewEntitytoReviewDTO).collect(Collectors.toList());
-                    }
+    }
 
     @Override
     public ProductDto getProductById(Long id) {
-        return ProductMapper.mapProductEntityToProductDto(
+        return ProductMapper.toDto(
                 productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id : " + id + " not found"))
         );
     }

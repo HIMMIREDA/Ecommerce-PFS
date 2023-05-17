@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.entity;
 
 import com.ensa.ecommerce_backend.converter.RatingValueConverter;
+import com.ensa.ecommerce_backend.entityListener.ReviewEntityListener;
 import com.ensa.ecommerce_backend.enums.RatingValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
+@EntityListeners(ReviewEntityListener.class)
 public class ReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

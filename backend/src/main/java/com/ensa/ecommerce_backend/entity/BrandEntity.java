@@ -1,11 +1,9 @@
 package com.ensa.ecommerce_backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class BrandEntity {
+@EqualsAndHashCode(exclude = {"products"})
+public class BrandEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +21,7 @@ public class BrandEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "brand")
+    @OneToMany(mappedBy = "brand",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductEntity> products = new ArrayList<>();
 
     @OneToOne

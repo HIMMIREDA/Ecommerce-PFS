@@ -2,25 +2,34 @@ package com.ensa.ecommerce_backend.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
+@EqualsAndHashCode(exclude = {"cart"})
 @Data
-public class CartItemEntity {
+public class CartItemEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(updatable = false, nullable = false)
+    private UUID id;
     private Integer quantity;
 
     @ManyToOne
-    private ProductEntity productItem;
+    private ProductEntity product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private CartEntity cart;
+
+    @PrePersist
+    protected void onCreate() {
+        if (Objects.isNull(this.id)) {
+            this.id = UUID.randomUUID();
+        }
+    }
 }

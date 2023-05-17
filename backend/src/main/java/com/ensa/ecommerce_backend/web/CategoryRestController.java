@@ -32,8 +32,8 @@ public class CategoryRestController {
 
     // get grandchildren categories
     @GetMapping("/grandchilds")
-    public ResponseEntity<GetItemsResponse<CategoryDto>> getGrandChildCategories(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count) {
-        Page<CategoryDto> categoriesPage = categoryService.getGrandChildCategories(numPage - 1, count);
+    public ResponseEntity<GetItemsResponse<CategoryDto>> getGrandChildCategories(@RequestParam(value = "page", defaultValue = "1") int numPage, @RequestParam(value = "count", defaultValue = "10") int count, @RequestParam(required = false) String all) {
+        Page<CategoryDto> categoriesPage = categoryService.getGrandChildCategories(numPage - 1, count, all);
         return ResponseEntity.ok(
                 GetItemsResponse.<CategoryDto>builder()
                         .items(categoriesPage.getContent())

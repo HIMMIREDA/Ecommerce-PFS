@@ -23,21 +23,21 @@ public class RegistrationRequest {
     private String email;
 
     @NotEmpty
-    @Length(min = 6)
+    @Length(min = 6, message = "must be more than 6 characters")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     private String firstName;
 
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     private String lastName;
 
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     @Size(min = 10, max = 10)
     // @Phone
     private String phoneNumber;
 
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     private String address;
 
 }

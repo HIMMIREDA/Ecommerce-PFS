@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 public class UpdateCategoryRequest {
 
     @Nullable
-    @Size(min = 4)
+    @Size(min = 4, message = "must be more than 4 characters")
     private String name;
 
     @Nullable
-    @Size(max = 1000)
+    @Size(max = 1000, message = "cant be more than 1000 character ")
     private String description;
 }

@@ -16,7 +16,7 @@ public class AddReviewRequest {
     @Range(min = 1, max = 5, message = "Value must be between 1 and 5")
     private Integer ratingValue;
 
-    @Size(min = 4, max = 100)
+    @Size(min = 4, max = 100, message = "must be between 4 and 100 character")
     private String comment;
 
     private String productName;

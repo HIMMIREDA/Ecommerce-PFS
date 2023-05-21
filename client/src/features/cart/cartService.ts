@@ -1,7 +1,10 @@
 import axios, { axiosPrivate } from "../../api/axios";
 import { AddToCartPayload } from "../../types/payloads";
 
-const fetchCartItems = async (abortController: AbortController, token: string | null) => {
+const fetchCartItems = async (
+  abortController: AbortController,
+  token: string | null
+) => {
   if (token) {
     const response = await axiosPrivate.get(`/cart`, {
       signal: abortController.signal,
@@ -19,7 +22,10 @@ const fetchCartItems = async (abortController: AbortController, token: string | 
   return response.data;
 };
 
-const deleteCartItem = async (cartItemId: string | undefined, token: string | null) => {
+const deleteCartItem = async (
+  cartItemId: string | undefined,
+  token: string | null
+) => {
   if (token) {
     const response = await axiosPrivate.delete(`/cart/${cartItemId}`, {
       headers: {
@@ -47,7 +53,11 @@ const addToCart = async (cartItem: AddToCartPayload, token: string | null) => {
   return response.data;
 };
 
-const updateCartItem = async (cartItemId: string | undefined, cartItem: AddToCartPayload, token: string | null) => {
+const updateCartItem = async (
+  cartItemId: string | undefined,
+  cartItem: AddToCartPayload,
+  token: string | null
+) => {
   if (token) {
     const response = await axiosPrivate.put(`/cart/${cartItemId}`, cartItem, {
       headers: {

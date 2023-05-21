@@ -81,11 +81,7 @@ function Product() {
         toastId: "cartErrorToast",
       });
     }
-    if (productSlice.isSuccess && productSlice.message) {
-      toast.success(productSlice.message, {
-        toastId: "createUpdateDeleteCartToast",
-      });
-    }
+    
     dispatch(resetProductSlice());
   }, [productSlice.message, productSlice.isError, productSlice.isSuccess, productSlice.isLoading, dispatch]);
 

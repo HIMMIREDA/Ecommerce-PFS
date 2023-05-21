@@ -1,9 +1,5 @@
-import { FaTrash } from "react-icons/fa";
 import { CartItem } from "../../../types/cartItem";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { deleteCartItem, reset } from "../../../features/cart/cartSlice";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+
 import DeleteCartItemBtn from "../shoppingcart/DeleteCartItemBtn";
 
 type Props = {

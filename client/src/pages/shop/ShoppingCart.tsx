@@ -23,6 +23,11 @@ const ShoppingCart = () => {
         toastId: "cartErrorToast",
       });
     }
+    if (isSuccess && message) {
+      toast.success(message, {
+        toastId: "createUpdateDeleteCartToast",
+      });
+    }
     dispatch(reset());
   }, [isError, isSuccess, message, dispatch, isLoading]);
 

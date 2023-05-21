@@ -4,38 +4,13 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { deleteCartItem, reset } from "../../../features/cart/cartSlice";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import DeleteCartItemBtn from "../shoppingcart/DeleteCartItemBtn";
 
 type Props = {
   item: CartItem;
 };
 
 export default function ShoppingCartItem({ item }: Props) {
-  const dispatch = useAppDispatch();
-  const { isLoading, isSuccess, message, isError } = useAppSelector(
-    (state) => state.cart
-  );
-  const deleteItemFromCart = () => {
-    dispatch(
-      deleteCartItem({
-        cartItemId: item?.id,
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (isError && message) {
-      toast.error(message, {
-        toastId: "cartErrorToast",
-      });
-    }
-    if (isSuccess && message) {
-      toast.success(message, {
-        toastId: "createUpdateDeleteCartToast",
-      });
-    }
-
-    dispatch(reset());
-  }, [isError, isSuccess, isLoading, message, dispatch]);
   return (
     <div
       key={item.id}
@@ -75,9 +50,7 @@ export default function ShoppingCartItem({ item }: Props) {
           </div>
           <div className="flex items-center space-x-4">
             <p className="text-sm">${item.product.price}</p>
-            <button onClick={deleteItemFromCart}>
-              <FaTrash className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500" />
-            </button>
+            <DeleteCartItemBtn cartItemId={item.id} />
           </div>
         </div>
       </div>

@@ -1,21 +1,19 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.VariationDto;
-import com.ensa.ecommerce_backend.DTO.VariationOptionDto;
-import org.springframework.data.domain.Page;
+import com.ensa.ecommerce_backend.DTO.VariationDTO;
+import com.ensa.ecommerce_backend.DTO.VariationOptionDTO;
+import com.ensa.ecommerce_backend.entity.VariationEntity;
+import com.ensa.ecommerce_backend.entity.VariationOptionEntity;
+import com.ensa.ecommerce_backend.request.AddOptionToVariationRequest;
+import com.ensa.ecommerce_backend.request.AddVariationRequest;
+
+import java.util.List;
 
 public interface VariationService {
-    VariationDto saveVariation(VariationDto variationDto);
+    VariationDTO addVariation(AddVariationRequest addVariationRequest);
 
-    void deleteVariationById(Long id);
+    void deleteVariation(Long id);
 
-    VariationDto updateVariationById(Long id, VariationDto variationDto);
+    VariationDTO getVariationById(Long id);
 
-    Page<VariationDto> getAllVariations();
-
-    VariationDto getVariationById(Long id);
-
-    VariationDto addVariationOptionToVariation(Long variationId, VariationOptionDto variationOptionDto);
-
-    void deleteVariationOptionFromVariation(Long variationId, Long variationOptionId);
 }

@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.mapper;
 
-import com.ensa.ecommerce_backend.DTO.CartItemDto;
+import com.ensa.ecommerce_backend.dto.CartItemDto;
 import com.ensa.ecommerce_backend.entity.CartItemEntity;
 
 public class CartItemMapper {

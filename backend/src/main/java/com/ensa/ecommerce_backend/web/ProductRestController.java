@@ -1,14 +1,15 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.ProductDto;
-import com.ensa.ecommerce_backend.DTO.ProductSearchDto;
-import com.ensa.ecommerce_backend.DTO.ReviewDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
+import com.ensa.ecommerce_backend.dto.ProductSearchDto;
+import com.ensa.ecommerce_backend.dto.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;
 import com.ensa.ecommerce_backend.service.CategoryService;
 import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
+import com.ensa.ecommerce_backend.service.ReviewService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class ProductRestController {
     private ProductService productService;
 
     private CategoryService categoryService;
+    private ReviewService reviewService;
 
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -105,7 +107,7 @@ public class ProductRestController {
 
     @GetMapping("/{productId}/reviews")
     public ResponseEntity<List<ReviewDto>> getProductReviews(@PathVariable Long productId){
-        return ResponseEntity.ok(productService.getProductReviews(productId));
+        return ResponseEntity.ok(reviewService.getProductReviews(productId));
     }
 
 }

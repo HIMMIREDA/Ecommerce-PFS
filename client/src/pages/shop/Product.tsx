@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import ImagesNavigation from "../../components/shop/products/ImagesNavigation";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchProduct } from "../../features/product/productSlice";
+import ReviewList from "../../components/shop/reviews/ReviewList";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -271,7 +272,8 @@ function Product() {
             </form>
           </div>
 
-          <div className="w-full max-w-md px-2 py-16 sm:px-0">
+        </div>
+          <div className="w-full px-2 py-16 sm:px-0">
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl  p-1">
                 <Tab
@@ -334,7 +336,7 @@ function Product() {
                     "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
                   )}
                 >
-                  here's reviews
+                  <ReviewList />
                 </Tab.Panel>
                 <Tab.Panel
                   key={3}
@@ -348,7 +350,6 @@ function Product() {
               </Tab.Panels>
             </Tab.Group>
           </div>
-        </div>
       </div>
     </section>
   );

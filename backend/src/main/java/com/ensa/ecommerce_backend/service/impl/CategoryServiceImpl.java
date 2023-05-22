@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service.impl;
 
-import com.ensa.ecommerce_backend.DTO.CategoryDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.CategoryDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
 import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;

@@ -1,8 +1,8 @@
 package com.ensa.ecommerce_backend.web;
 
 
-import com.ensa.ecommerce_backend.DTO.CategoryDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.CategoryDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.request.AddCategoryRequest;
 import com.ensa.ecommerce_backend.request.UpdateCategoryRequest;
 import com.ensa.ecommerce_backend.response.GetItemsResponse;

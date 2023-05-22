@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.mapper;
 
-import com.ensa.ecommerce_backend.DTO.ImageDto;
+import com.ensa.ecommerce_backend.dto.ImageDto;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;

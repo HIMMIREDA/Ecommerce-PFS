@@ -20,7 +20,7 @@ public class ReviewEntity {
     private Long id;
 
     @Convert(converter = RatingValueConverter.class)
-    private RatingValue ratingValue;
+    private RatingValue rating;
 
     private String comment;
 

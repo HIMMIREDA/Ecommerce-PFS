@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service.impl;
 
-import com.ensa.ecommerce_backend.DTO.BrandDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.BrandDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.entity.BrandEntity;
 import com.ensa.ecommerce_backend.entity.ImageEntity;
 import com.ensa.ecommerce_backend.exception.BrandAlreadyFoundException;

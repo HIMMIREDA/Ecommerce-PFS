@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.mapper;
 
-import com.ensa.ecommerce_backend.DTO.CategoryDto;
+import com.ensa.ecommerce_backend.dto.CategoryDto;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 
 import java.util.ArrayList;

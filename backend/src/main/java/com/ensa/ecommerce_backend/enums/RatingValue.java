@@ -10,9 +10,9 @@ public enum RatingValue {
     FOUR(4),
     FIVE(5);
 
-    private int value;
+    private final int value;
 
-    private static Map map = new HashMap<>();
+    private static final Map<Integer, RatingValue> map = new HashMap<>();
 
     private RatingValue(int value) {
         this.value = value;

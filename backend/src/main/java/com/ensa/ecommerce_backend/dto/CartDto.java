@@ -1,6 +1,5 @@
-package com.ensa.ecommerce_backend.DTO;
+package com.ensa.ecommerce_backend.dto;
 
-import com.ensa.ecommerce_backend.entity.CartItemEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

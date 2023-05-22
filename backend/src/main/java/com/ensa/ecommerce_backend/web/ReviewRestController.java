@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.ReviewDto;
+import com.ensa.ecommerce_backend.dto.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.service.ReviewService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class ReviewRestController {
     private ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDto> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest){
+    public ResponseEntity<ReviewDto> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest) {
         ReviewDto reviewDTO = reviewService.saveReview(addReviewRequest);
         return new ResponseEntity<>(reviewDTO, HttpStatus.CREATED);
     }
@@ -37,6 +37,5 @@ public class ReviewRestController {
         response.put("id", id);
         return ResponseEntity.ok(response);
     }
-
 
 }

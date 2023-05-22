@@ -2,7 +2,6 @@ package com.ensa.ecommerce_backend;
 
 import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.entity.RoleEntity;
-import com.ensa.ecommerce_backend.enums.RatingValue;
 import com.ensa.ecommerce_backend.enums.RoleEnum;
 import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.repository.RoleRepository;
@@ -33,8 +32,6 @@ public class BackendApplication implements CommandLineRunner {
     private ReviewService reviewService;
 
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
     }
@@ -47,17 +44,7 @@ public class BackendApplication implements CommandLineRunner {
             RoleEntity admin = RoleEntity.builder().name(RoleEnum.ADMIN).build();
             RoleEntity seller = RoleEntity.builder().name(RoleEnum.SELLER).build();
             roleRepository.saveAll(Arrays.asList(user, admin, seller));
-            ProductEntity productEntity = ProductEntity.builder().name("iphone").build();
 
-            productRepository.save(productEntity);
-
-            AddReviewRequest reviewRequest = AddReviewRequest.builder()
-                    .comment("This is a good iphone")
-                    .ratingValue(4)
-                    .productName("iphone")
-                    .build();
-
-            reviewService.saveReview(reviewRequest);
         } catch (Exception exception) {
         }
     }

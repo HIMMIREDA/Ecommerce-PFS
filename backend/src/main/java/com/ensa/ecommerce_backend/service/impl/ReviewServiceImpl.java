@@ -14,11 +14,12 @@ import com.ensa.ecommerce_backend.repository.UserRepository;
 import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.service.ReviewService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -31,8 +32,9 @@ public class ReviewServiceImpl implements ReviewService {
     private ProductRepository productRepository;
 
     @Override
-    public List<ReviewDto> getProductReviews(Long productId) {
-        return reviewRepository.findByProductId(productId).stream().map(ReviewMapper::toDto).toList();
+    public Page<ReviewDto> getProductReviews(Long productId, int numPage, int count) {
+        Pageable paging = PageRequest.of(numPage, count);
+        return reviewRepository.findReviewEntitiesByProductId(productId, paging).map(ReviewMapper::toDto);
     }
 
     @Override

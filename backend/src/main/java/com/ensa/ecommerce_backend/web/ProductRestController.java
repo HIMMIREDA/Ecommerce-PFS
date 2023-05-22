@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -54,8 +53,8 @@ public class ProductRestController {
     public ResponseEntity<GetItemsResponse<ProductDto>> getAllProducts(
             @RequestParam(value = "page", defaultValue = "1") int numPage,
             @RequestParam(value = "count", defaultValue = "10") int count,
-            @RequestParam(value = "sortBy",defaultValue = "createdAt") String sortBy,
-            @RequestParam(value = "sortOrder",defaultValue = "DESC") String sortOrder,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "DESC") String sortOrder,
             @RequestBody(required = false) ProductSearchDto productSearchDto
     ) {
         Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto, sortBy, sortOrder);
@@ -106,8 +105,21 @@ public class ProductRestController {
     }
 
     @GetMapping("/{productId}/reviews")
-    public ResponseEntity<List<ReviewDto>> getProductReviews(@PathVariable Long productId){
-        return ResponseEntity.ok(reviewService.getProductReviews(productId));
+    public ResponseEntity<GetItemsResponse<ReviewDto>> getProductReviews(
+            @PathVariable Long productId,
+            @RequestParam(value = "page", defaultValue = "1") int numPage,
+            @RequestParam(value = "count", defaultValue = "10") int count
+    ) {
+        Page<ReviewDto> reviewsPage = reviewService.getProductReviews(productId, numPage - 1, count);
+
+        return ResponseEntity.ok(
+                GetItemsResponse.<ReviewDto>builder()
+                        .items(reviewsPage.getContent())
+                        .currentPage(reviewsPage.getNumber() + 1)
+                        .totalItems(reviewsPage.getTotalElements())
+                        .totalPages(reviewsPage.getTotalPages())
+                        .build()
+        );
     }
 
 }

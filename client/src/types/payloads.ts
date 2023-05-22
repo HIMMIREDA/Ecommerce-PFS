@@ -40,3 +40,9 @@ export interface AddProductPayload {
 }
 
 export type UpdateProductPayload = Omit<AddProductPayload, "images">;
+
+export interface AddReviewPayload {
+  productId: string;
+  rating: number;
+  comment: string;
+}

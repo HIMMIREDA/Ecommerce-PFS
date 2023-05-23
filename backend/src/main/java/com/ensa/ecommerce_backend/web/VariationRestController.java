@@ -3,6 +3,7 @@ package com.ensa.ecommerce_backend.web;
 import com.ensa.ecommerce_backend.DTO.VariationDTO;
 import com.ensa.ecommerce_backend.request.AddVariationRequest;
 import com.ensa.ecommerce_backend.service.VariationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class VariationRestController {
     VariationService variationService;
 
     @PostMapping
-    public ResponseEntity<VariationDTO> addVariation(@RequestBody AddVariationRequest addVariationRequest){
+    public ResponseEntity<VariationDTO> addVariation(@RequestBody @Valid AddVariationRequest addVariationRequest){
         VariationDTO variationDTO = variationService.addVariation(addVariationRequest);
         return new ResponseEntity<>(variationDTO, HttpStatus.CREATED);
     }

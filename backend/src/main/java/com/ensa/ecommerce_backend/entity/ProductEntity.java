@@ -52,6 +52,8 @@ public class ProductEntity implements Serializable {
     private Integer meanRating = 0;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @ManyToMany
+    private List<OrderEntity> orders = new ArrayList<>();
 
     @PrePersist
     public void initializeMeanRating() {

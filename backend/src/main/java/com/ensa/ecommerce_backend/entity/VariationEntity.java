@@ -1,34 +1,31 @@
 package com.ensa.ecommerce_backend.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class VariationEntity implements Serializable {
+@Data
+public class VariationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false,unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ProductEntity product;
+    @ManyToMany(mappedBy = "variations",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CategoryEntity> categories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "variation", cascade = CascadeType.ALL)
-    private List<VariationOptionEntity> variationOptions = new ArrayList<>();
+    @OneToMany(mappedBy = "variation",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<VariationOptionEntity> variations = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_variation",

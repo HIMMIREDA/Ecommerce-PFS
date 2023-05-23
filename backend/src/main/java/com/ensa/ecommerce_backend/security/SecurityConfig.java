@@ -40,7 +40,8 @@ public class SecurityConfig {
             "/api/brands/**",
             "/api/images/**",
             "/api/categories/**",
-            "/api/reviews/**"
+            "/api/reviews/**",
+            "/api/variations/**"
 
     );
     private JwtAuthFilter jwtAuthFilter;

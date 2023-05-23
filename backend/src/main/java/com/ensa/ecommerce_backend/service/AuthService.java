@@ -24,6 +24,6 @@ public interface AuthService {
 
     EmailVerificationTokenEntity createEmailVerificationToken(UserEntity user, String token);
 
-    void verifyAccount(String token, HttpSession session);
+    void verifyAccount(String token);
 }
 

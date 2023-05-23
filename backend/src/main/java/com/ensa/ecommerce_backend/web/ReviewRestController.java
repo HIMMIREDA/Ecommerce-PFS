@@ -1,12 +1,13 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.ReviewDto;
+import com.ensa.ecommerce_backend.dto.ReviewDto;
 import com.ensa.ecommerce_backend.request.AddReviewRequest;
 import com.ensa.ecommerce_backend.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class ReviewRestController {
     private ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDto> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest){
+    public ResponseEntity<ReviewDto> saveReview(@RequestBody @Valid AddReviewRequest addReviewRequest) {
         ReviewDto reviewDTO = reviewService.saveReview(addReviewRequest);
         return new ResponseEntity<>(reviewDTO, HttpStatus.CREATED);
     }
@@ -37,6 +38,5 @@ public class ReviewRestController {
         response.put("id", id);
         return ResponseEntity.ok(response);
     }
-
 
 }

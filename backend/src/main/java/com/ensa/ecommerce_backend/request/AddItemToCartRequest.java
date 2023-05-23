@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AddItemToCartRequest {
-    @Digits(integer = 10,fraction = 0)
+    @Digits(integer = 10,fraction = 0,message = "product id must be a valid id")
     private Long productId;
 
-    @Digits(integer = 10,fraction = 0)
+    @Digits(integer = 10,fraction = 0, message = "quantity of product must be integer")
     private Integer quantity;
 }

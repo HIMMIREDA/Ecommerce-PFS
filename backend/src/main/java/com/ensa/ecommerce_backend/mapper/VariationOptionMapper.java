@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.mapper;
 
 
-import com.ensa.ecommerce_backend.DTO.VariationOptionDto;
+import com.ensa.ecommerce_backend.dto.VariationOptionDto;
 import com.ensa.ecommerce_backend.entity.VariationOptionEntity;
 
 public class VariationOptionMapper {

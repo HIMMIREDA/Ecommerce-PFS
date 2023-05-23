@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.mapper;
 
-import com.ensa.ecommerce_backend.DTO.BrandDto;
+import com.ensa.ecommerce_backend.dto.BrandDto;
 import com.ensa.ecommerce_backend.entity.BrandEntity;
 
 public class BrandMapper {

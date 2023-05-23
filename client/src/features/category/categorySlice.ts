@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import categoryService from "./categoryService";
 import axios from "axios";
 import { RootState } from "../../app/store";
@@ -201,11 +201,14 @@ const categorySlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.categories = action.payload;
-      })
+      .addCase(
+        fetchCategories.fulfilled,
+        (state, action: PayloadAction<Category[]>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.categories = action.payload;
+        }
+      )
       .addCase(fetchGrandChildCategories.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -217,14 +220,25 @@ const categorySlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(fetchGrandChildCategories.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.grandChildCategories = action.payload?.items;
-        state.currentPage = action.payload?.currentPage;
-        state.totalItems = action.payload?.totalItems;
-        state.totalPages = action.payload?.totalPages;
-      })
+      .addCase(
+        fetchGrandChildCategories.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            items: Category[];
+            currentPage: number;
+            totalPages: number;
+            totalItems: number;
+          }>
+        ) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.grandChildCategories = action.payload?.items;
+          state.currentPage = action.payload?.currentPage;
+          state.totalItems = action.payload?.totalItems;
+          state.totalPages = action.payload?.totalPages;
+        }
+      )
       .addCase(deleteCategory.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;

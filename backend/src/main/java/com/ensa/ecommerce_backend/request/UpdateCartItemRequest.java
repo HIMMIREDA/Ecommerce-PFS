@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UpdateCartItemRequest {
-    @Digits(integer = 10,fraction = 0)
+    @Digits(integer = 10,fraction = 0, message = "must be an integer")
     private Integer quantity;
 }

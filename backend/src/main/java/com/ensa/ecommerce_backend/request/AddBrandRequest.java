@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AddBrandRequest {
 
     @NotEmpty
-    @Size(min = 4)
+    @Size(min = 4, message = "brand name must be at least 4 characters")
     private String name;
 
     @NotNull

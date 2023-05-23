@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service.impl;
 
-import com.ensa.ecommerce_backend.DTO.VariationDto;
-import com.ensa.ecommerce_backend.DTO.VariationOptionDto;
+import com.ensa.ecommerce_backend.dto.VariationDto;
+import com.ensa.ecommerce_backend.dto.VariationOptionDto;
 import com.ensa.ecommerce_backend.entity.VariationEntity;
 import com.ensa.ecommerce_backend.exception.VariationAlreadyFoundException;
 import com.ensa.ecommerce_backend.mapper.VariationMapper;

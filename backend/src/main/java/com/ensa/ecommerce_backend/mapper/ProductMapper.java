@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.mapper;
 
-import com.ensa.ecommerce_backend.DTO.ImageDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.ImageDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.entity.CategoryEntity;
 import com.ensa.ecommerce_backend.entity.ProductEntity;
 
@@ -25,6 +25,7 @@ public class ProductMapper {
                 .description(product.getDescription())
                 .quantity(product.getQuantity())
                 .price(product.getPrice())
+                .meanRating(product.getMeanRating())
                 .images(images)
                 .brand(BrandMapper.toDto(product.getBrand()))
                 .category(CategoryMapper.toDto(firstLvlCategory))

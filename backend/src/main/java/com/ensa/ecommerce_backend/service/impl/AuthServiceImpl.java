@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void verifyAccount(String token, HttpSession session) {
+    public void verifyAccount(String token) {
         EmailVerificationTokenEntity verificationToken = emailVerificationTokenRepository.findEmailVerificationTokenByToken(token).orElseThrow();
 
         if (verificationToken.getExpiryDate().before(new Date())) {
@@ -132,8 +132,8 @@ public class AuthServiceImpl implements AuthService {
     public RefreshJwtResponse refreshToken(String token) {
 
         RefreshTokenEntity refreshToken = refreshTokenRepository.findRefreshTokensByToken(token).orElseThrow();
-
-        UserDetails userDetails = User.builder().username(refreshToken.getUser().getEmail()).password(refreshToken.getUser().getPassword()).disabled(!refreshToken.getUser().isEnabled()).authorities(refreshToken.getUser().getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toUnmodifiableSet())).build();
+        UserEntity user = refreshToken.getUser();
+        UserDetails userDetails = User.builder().username(user.getEmail()).password(user.getPassword()).disabled(!user.isEnabled()).authorities(user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toUnmodifiableSet())).build();
 
         if (!jwtService.isTokenValid(token, userDetails, TokenType.REFRESH)) {
             throw new RefreshTokenNotValidException("refresh token not valid");
@@ -142,6 +142,10 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateAccessToken(userDetails);
 
         return RefreshJwtResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .roles(user.getRoles().stream().map(RoleEntity::getName).toList())
                 .accessToken(accessToken)
                 .build();
     }

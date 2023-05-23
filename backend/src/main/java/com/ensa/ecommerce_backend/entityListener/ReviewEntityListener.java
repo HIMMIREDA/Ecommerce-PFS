@@ -3,31 +3,42 @@ package com.ensa.ecommerce_backend.entityListener;
 
 import com.ensa.ecommerce_backend.entity.ProductEntity;
 import com.ensa.ecommerce_backend.entity.ReviewEntity;
-import com.ensa.ecommerce_backend.repository.ProductRepository;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
-import jakarta.persistence.PostUpdate;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreRemove;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-@Component
-@NoArgsConstructor
-@Data
-public class ReviewEntityListener {
-    private ProductRepository productRepository;
+import java.util.Objects;
 
-    @PostPersist
-    @PostRemove
-    @PostUpdate
-    public void updateMeanRating(ReviewEntity review) {
+public class ReviewEntityListener extends SpringBeanAutowiringSupport {
+
+
+    public void updateMeanRating(ReviewEntity review, String typeOfOperation) {
         ProductEntity product = review.getProduct();
+        double meanRating = 0;
+        meanRating = product.getReviews().stream().mapToDouble(
+                        (reviewEntity -> (double) reviewEntity.getRating().getValue())
+                )
+                .sum();
+        if (Objects.equals(typeOfOperation, "DELETE")) {
+            if (product.getReviews().size() > 0) {
+                meanRating = meanRating / product.getReviews().size();
+            }
+        }
+        if (Objects.equals(typeOfOperation, "INSERT")) {
+            meanRating += review.getRating().getValue();
+            meanRating = meanRating / (product.getReviews().size() + 1);
+        }
+        // Update the mean rating value
+        product.setMeanRating((int) meanRating);
+    }
 
-        Double meanRating = productRepository.calculateMeanRating(product.getId());
+    @PrePersist
+    public void onPersist(ReviewEntity review) {
+        updateMeanRating(review, "INSERT");
+    }
 
-        product.setMeanRating(meanRating.intValue());
-        productRepository.save(product);
+    @PreRemove
+    public void onRemove(ReviewEntity review) {
+        updateMeanRating(review, "DELETE");
     }
 }

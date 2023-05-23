@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.BrandDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.BrandDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.request.AddBrandRequest;
 import com.ensa.ecommerce_backend.request.UpdateBrandRequest;
 import org.springframework.data.domain.Page;

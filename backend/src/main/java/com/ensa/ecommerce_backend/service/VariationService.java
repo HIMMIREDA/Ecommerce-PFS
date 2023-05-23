@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.VariationDto;
-import com.ensa.ecommerce_backend.DTO.VariationOptionDto;
+import com.ensa.ecommerce_backend.dto.VariationDto;
+import com.ensa.ecommerce_backend.dto.VariationOptionDto;
 import org.springframework.data.domain.Page;
 
 public interface VariationService {

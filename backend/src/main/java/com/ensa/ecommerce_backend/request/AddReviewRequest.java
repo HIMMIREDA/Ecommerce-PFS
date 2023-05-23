@@ -1,5 +1,6 @@
 package com.ensa.ecommerce_backend.request;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,11 @@ import org.hibernate.validator.constraints.Range;
 public class AddReviewRequest {
 
     @Range(min = 1, max = 5, message = "Value must be between 1 and 5")
-    private Integer ratingValue;
+    private Integer rating;
 
-    @Size(min = 4, max = 100)
+    @NotEmpty
+    @Size(min = 4, max = 100, message = "must be between 4 and 100 character")
     private String comment;
 
-    private String productName;
+    private Long productId;
 }

@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class UpdateBrandRequest {
     @Nullable
-    @Size(min = 4)
+    @Size(min = 4, message = "must be more than 4 characters")
     private String name;
 
     private MultipartFile image = null;

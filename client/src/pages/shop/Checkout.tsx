@@ -1,5 +1,7 @@
 function Checkout() {
-  return <div>Checkout</div>;
+  return (
+    <div>Checkout</div>
+  );
 }
 
 export default Checkout;

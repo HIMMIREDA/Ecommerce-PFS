@@ -27,6 +27,7 @@ function Product() {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
   const productSlice = useAppSelector((state) => state.product);
+  const { user } = useAppSelector((state) => state.auth);
 
   const cartSlice = useAppSelector((state) => state.cart);
   const addToCartForm = useFormik({
@@ -181,11 +182,11 @@ function Product() {
 
             <div className="mt-5 flex items-center">
               <div className="flex items-center">
-                {Array.from(Array(productSlice.product?.meanRating || 0).keys()).map(
-                  (index) => (
-                    <FaStar key={index} className="text-yellow-400" />
-                  )
-                )}
+                {Array.from(
+                  Array(productSlice.product?.meanRating || 0).keys()
+                ).map((index) => (
+                  <FaStar key={index} className="text-yellow-400" />
+                ))}
               </div>
             </div>
             <ValidationErrors errors={addToCartForm.errors} />
@@ -321,20 +322,22 @@ function Product() {
               >
                 Reviews
               </Tab>
-              <Tab
-                key={3}
-                className={({ selected }) =>
-                  classNames(
-                    "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
-                    "focus:outline-none focus:ring-2",
-                    selected
-                      ? " shadow border-b-2 border-base-content"
-                      : " hover:bg-base-300 hover:text-base-content"
-                  )
-                }
-              >
-                Add Review
-              </Tab>
+              {user && (
+                <Tab
+                  key={3}
+                  className={({ selected }) =>
+                    classNames(
+                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
+                      "focus:outline-none focus:ring-2",
+                      selected
+                        ? " shadow border-b-2 border-base-content"
+                        : " hover:bg-base-300 hover:text-base-content"
+                    )
+                  }
+                >
+                  Add Review
+                </Tab>
+              )}
             </Tab.List>
             <Tab.Panels className="mt-2">
               <Tab.Panel
@@ -355,15 +358,17 @@ function Product() {
               >
                 <ReviewList productId={productId} />
               </Tab.Panel>
-              <Tab.Panel
-                key={3}
-                className={classNames(
-                  "rounded-xl  p-3",
-                  "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
-                )}
-              >
-                <ReviewForm productId={productId!}/>
-              </Tab.Panel>
+              {user && (
+                <Tab.Panel
+                  key={3}
+                  className={classNames(
+                    "rounded-xl  p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                  )}
+                >
+                  <ReviewForm productId={productId!} />
+                </Tab.Panel>
+              )}
             </Tab.Panels>
           </Tab.Group>
         </div>

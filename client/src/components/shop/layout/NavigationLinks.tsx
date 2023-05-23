@@ -6,7 +6,6 @@ const navigationLinks = [
   { title: "Categories", link: "/categories", component: <CategoryDropDown /> },
   { title: "Shop", link: "/shop" },
   { title: "Brands", link: "/brands" },
-  { title: "Deals", link: "/deals" },
 ];
 const NavigationLinks = () => {
   return (

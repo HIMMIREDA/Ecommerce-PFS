@@ -17,13 +17,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
 
     private ReviewRepository reviewRepository;
@@ -33,7 +36,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Page<ReviewDto> getProductReviews(Long productId, int numPage, int count) {
-        Pageable paging = PageRequest.of(numPage, count);
+        Sort sortCriteria = Sort.by(Sort.Direction.ASC, "createdAt");
+        Pageable paging = PageRequest.of(numPage, count, sortCriteria);
         return reviewRepository.findReviewEntitiesByProductId(productId, paging).map(ReviewMapper::toDto);
     }
 
@@ -64,7 +68,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReviewById(Long id) {
-        reviewRepository.deleteById(id);
+        reviewRepository.findById(id).ifPresent(
+                reviewEntity -> {
+                    reviewEntity.getReviewer().getReviews().removeIf(r -> r.getId().equals(reviewEntity.getId()));
+                    reviewEntity.getProduct().getReviews().removeIf(r -> r.getId().equals(reviewEntity.getId()));
+                    reviewRepository.delete(reviewEntity);
+                }
+        );
     }
 
 }

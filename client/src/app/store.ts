@@ -4,6 +4,7 @@ import brandReducer from "../features/brand/brandSlice.ts";
 import productReducer from "../features/product/productSlice.ts";
 import cartReducer from '../features/cart/cartSlice.ts';
 import authReducer from '../features/auth/authSlice.ts';
+import reviewReducer from '../features/review/reviewSlice.ts';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         brand: brandReducer,
         product: productReducer,
         cart: cartReducer,
-        auth: authReducer
+        auth: authReducer,
+        review: reviewReducer,
     }
 });
 

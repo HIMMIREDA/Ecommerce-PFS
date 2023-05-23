@@ -12,12 +12,12 @@ import com.ensa.ecommerce_backend.repository.ProductRepository;
 import com.ensa.ecommerce_backend.request.AddCategoryRequest;
 import com.ensa.ecommerce_backend.request.UpdateCategoryRequest;
 import com.ensa.ecommerce_backend.service.CategoryService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;

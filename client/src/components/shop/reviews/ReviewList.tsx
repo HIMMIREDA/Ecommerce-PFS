@@ -1,57 +1,81 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import Review from "./Review";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import {
+  clearState,
+  fetchProductReviews,
+  incrementCurrentPage,
+  reset,
+} from "../../../features/review/reviewSlice";
+import { toast } from "react-toastify";
 
-const reviews = [
-  {
-    id: "1",
-    user: {
-      id: "1",
-      username: "Jhon Doe",
-    },
-    comment: "Great product! Highly recommended.",
-    rating: 4,
-  },
-  {
-    id: "2",
-    user: {
-      id: "2",
-      username: "Jane Dae",
-    },
-    comment: "I love it! Works like a charm.",
-    rating: 5,
-  },
-  {
-    id: "3",
-    user: {
-      id: "1",
-      username: "Jhon Doe",
-    },
-    comment: "Excellent quality and fast shipping.",
-    rating: 4,
-  },
 
-  // ... more review objects
-];
+type PropsType = {
+  productId: string | undefined;
+};
 
-const ReviewList = () => {
-  const [showMore, setShowMore] = useState(false);
+const ReviewList = ({ productId }: PropsType) => {
+  const {
+    currentPage,
+    totalPages,
+    totalItems,
+    isLoading,
+    isError,
+    isSuccess,
+    message,
+    reviews,
+  } = useAppSelector((state) => state.review);
+  const dispatch = useAppDispatch();
 
-  const visibleReviews = showMore ? reviews : reviews.slice(0, 3);
+  // const [pageNum , setPageNum] = useState<number>(1);
+  // const handleShowMore = () => {
 
-  const handleShowMore = () => {
-    setShowMore(true);
-  };
+  // };
 
+  useEffect(() => {
+    let abortController = new AbortController();
+    dispatch(
+      fetchProductReviews({
+        abortController,
+        productId,
+        page: currentPage,
+      })
+    );
+
+    return () => {
+      abortController.abort();
+    };
+  }, [currentPage]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message, {
+        toastId: "cartErrorToast",
+      });
+    }
+
+    dispatch(reset());
+  }, [message, isError, isSuccess, isLoading, dispatch]);
   return (
     <div className="py-8">
-      {visibleReviews.map((review) => (
-        <Review review={review} />
+      <h2>Reviews ({totalItems})</h2>
+      {reviews.map((review) => (
+        <Review review={review} key={review.id} />
       ))}
 
-      {!showMore && (
+      {currentPage < totalPages && (
         <div className="flex justify-center">
           <button
-            onClick={handleShowMore}
+            disabled={isLoading}
+            onClick={() => {
+              dispatch(incrementCurrentPage());
+            }}
             className="py-2 px-4 text-white bg-blue-500 hover:bg-blue-600 rounded-md"
           >
             Show More

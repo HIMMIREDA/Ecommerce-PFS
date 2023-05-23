@@ -25,6 +25,7 @@ public class ProductMapper {
                 .description(product.getDescription())
                 .quantity(product.getQuantity())
                 .price(product.getPrice())
+                .meanRating(product.getMeanRating())
                 .images(images)
                 .brand(BrandMapper.toDto(product.getBrand()))
                 .category(CategoryMapper.toDto(firstLvlCategory))

@@ -17,6 +17,7 @@ public class ProductDto {
     private String description;
     private Integer quantity;
     private Double price;
+    private Integer meanRating;
 
     private BrandDto brand;
     private CategoryDto category;

@@ -21,13 +21,13 @@ import com.ensa.ecommerce_backend.search.SearchCriteria;
 import com.ensa.ecommerce_backend.search.product.ProductSpecificationBuilder;
 import com.ensa.ecommerce_backend.service.ImageService;
 import com.ensa.ecommerce_backend.service.ProductService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;

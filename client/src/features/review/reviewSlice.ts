@@ -15,7 +15,7 @@ export const fetchProductReviews = createAsyncThunk(
       limit,
     }: {
       abortController: AbortController;
-      productId: string;
+      productId?: string;
       page?: number;
       limit?: number;
     },
@@ -123,8 +123,18 @@ const reviewSlice = createSlice({
       state.isSuccess = false;
       state.message = "";
     },
-    setCurrentPage: (state, action) => {
-      state.currentPage = action.payload;
+    incrementCurrentPage: (state) => {
+      state.currentPage = state.currentPage + 1;
+    },
+    clearState: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+      state.reviews = [];
+      state.currentPage = 1;
+      state.totalPages = 1;
+      state.totalItems = 0;
     },
   },
   extraReducers: (builder) => {
@@ -153,7 +163,7 @@ const reviewSlice = createSlice({
         ) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.reviews = action.payload?.items;
+          state.reviews = [...state.reviews, ...action.payload?.items];
           state.currentPage = action.payload?.currentPage;
           state.totalItems = action.payload?.totalItems;
           state.totalPages = action.payload?.totalPages;
@@ -176,6 +186,7 @@ const reviewSlice = createSlice({
         state.reviews = state.reviews.filter(
           (review) => review.id !== action.payload?.id
         );
+        state.totalItems -= 1;
       })
       .addCase(createReview.pending, (state) => {
         state.isLoading = true;
@@ -194,11 +205,12 @@ const reviewSlice = createSlice({
           state.isLoading = false;
           state.isSuccess = true;
           state.reviews = [...state.reviews, action.payload];
+          state.totalItems += 1;
         }
       );
   },
 });
 
-export const { reset, setCurrentPage } = reviewSlice.actions;
+export const { reset, incrementCurrentPage, clearState } = reviewSlice.actions;
 
 export default reviewSlice.reducer;

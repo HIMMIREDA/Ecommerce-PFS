@@ -1,19 +1,23 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import ReactStars from "react-rating-stars-component";
 import { BsCart, BsHeart } from "react-icons/bs";
 import { Tab } from "@headlessui/react";
 import { useFormik } from "formik";
 import ValidationErrors from "../../components/common/ValidationErrors";
 import * as Yup from "yup";
 import VariationInputList from "../../components/shop/products/VariationInputList";
-import { addToCart, reset as resetCartSlice } from "../../features/cart/cartSlice";
+import {
+  addToCart,
+  reset as resetCartSlice,
+} from "../../features/cart/cartSlice";
 import { reset as resetProductSlice } from "../../features/product/productSlice";
 import { toast } from "react-toastify";
 import ImagesNavigation from "../../components/shop/products/ImagesNavigation";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchProduct } from "../../features/product/productSlice";
 import ReviewList from "../../components/shop/reviews/ReviewList";
+import { FaStar } from "react-icons/fa";
+import ReviewForm from "../../components/shop/reviews/ReviewForm";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -22,12 +26,9 @@ function classNames(...classes: string[]) {
 function Product() {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
-  const productSlice = useAppSelector(
-    (state) => state.product
-  );
+  const productSlice = useAppSelector((state) => state.product);
 
   const cartSlice = useAppSelector((state) => state.cart);
-
   const addToCartForm = useFormik({
     initialValues: {
       quantity: 1,
@@ -37,7 +38,10 @@ function Product() {
     validate: (values) => {
       const errors: { [key: string]: string } = {};
 
-      if (productSlice.product?.quantity && values.quantity > productSlice.product?.quantity) {
+      if (
+        productSlice.product?.quantity &&
+        values.quantity > productSlice.product?.quantity
+      ) {
         errors.quantity = `the quantity of product added to cart cant surpass ${productSlice.product?.quantity}`;
       }
       if (values.quantity <= 0) {
@@ -82,9 +86,15 @@ function Product() {
         toastId: "cartErrorToast",
       });
     }
-    
+
     dispatch(resetProductSlice());
-  }, [productSlice.message, productSlice.isError, productSlice.isSuccess, productSlice.isLoading, dispatch]);
+  }, [
+    productSlice.message,
+    productSlice.isError,
+    productSlice.isSuccess,
+    productSlice.isLoading,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if (cartSlice.isError && cartSlice.message) {
@@ -132,7 +142,9 @@ function Product() {
                     className="rounded-md p-1 text-sm font-medium text-gray-600 focus:text-base-content focus:shadow hover:text-gray-800"
                   >
                     {" "}
-                    {productSlice.product?.category?.subCategories[0]?.name}{" "}
+                    {
+                      productSlice.product?.category?.subCategories[0]?.name
+                    }{" "}
                   </Link>
                 </div>
               </div>
@@ -149,8 +161,8 @@ function Product() {
                   >
                     {" "}
                     {
-                      productSlice.product?.category?.subCategories[0]?.subCategories[0]
-                        ?.name
+                      productSlice.product?.category?.subCategories[0]
+                        ?.subCategories[0]?.name
                     }{" "}
                   </Link>
                 </div>
@@ -169,10 +181,11 @@ function Product() {
 
             <div className="mt-5 flex items-center">
               <div className="flex items-center">
-                <ReactStars count={5} size={20} color="#ffd700" edit={false} />
-                <p className="ml-2 text-sm font-medium text-gray-500">
-                  1,209 Reviews
-                </p>
+                {Array.from(Array(productSlice.product?.meanRating || 0).keys()).map(
+                  (index) => (
+                    <FaStar key={index} className="text-yellow-400" />
+                  )
+                )}
               </div>
             </div>
             <ValidationErrors errors={addToCartForm.errors} />
@@ -236,7 +249,8 @@ function Product() {
                     addToCartForm.setValues({
                       ...addToCartForm.values,
                       quantity:
-                        addToCartForm.values.quantity < (productSlice.product?.quantity || 0)
+                        addToCartForm.values.quantity <
+                        (productSlice.product?.quantity || 0)
                           ? addToCartForm.values.quantity + 1
                           : addToCartForm.values.quantity,
                     });
@@ -247,20 +261,24 @@ function Product() {
               </div>
 
               <div className="mt-10 flex flex-col items-center justify-between space-y-4 space-x-3 border-t border-b py-4 md:flex-row sm:space-y-0">
-                {productSlice.product?.price && productSlice.product?.price > 0 && (
-                  <div className="flex items-end">
-                    <h1 className="text-3xl font-bold">{productSlice.product?.price}$</h1>
-                  </div>
-                )}
-                {productSlice.product?.price && productSlice.product?.price > 0 && (
-                  <button
-                    type="submit"
-                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-base-content  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
-                  >
-                    <BsCart className="shrink-0 mr-3 h-5 w-5" />
-                    Add to cart
-                  </button>
-                )}
+                {productSlice.product?.price &&
+                  productSlice.product?.price > 0 && (
+                    <div className="flex items-end">
+                      <h1 className="text-3xl font-bold">
+                        {productSlice.product?.price}$
+                      </h1>
+                    </div>
+                  )}
+                {productSlice.product?.price &&
+                  productSlice.product?.price > 0 && (
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-base-content  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                    >
+                      <BsCart className="shrink-0 mr-3 h-5 w-5" />
+                      Add to cart
+                    </button>
+                  )}
                 <button
                   type="button"
                   className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-400  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-red-500"
@@ -271,85 +289,84 @@ function Product() {
               </div>
             </form>
           </div>
-
         </div>
-          <div className="w-full px-2 py-16 sm:px-0">
-            <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl  p-1">
-                <Tab
-                  key={1}
-                  className={({ selected }) =>
-                    classNames(
-                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content ",
-                      "focus:outline-none focus:ring-2",
-                      selected
-                        ? " shadow border-b-2 border-base-content"
-                        : " hover:bg-base-300 hover:text-base-content"
-                    )
-                  }
-                >
-                  Description
-                </Tab>
-                <Tab
-                  key={2}
-                  className={({ selected }) =>
-                    classNames(
-                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
-                      "focus:outline-none focus:ring-2",
-                      selected
-                        ? " shadow border-b-2 border-base-content"
-                        : " hover:bg-base-300 hover:text-base-content"
-                    )
-                  }
-                >
-                  Reviews
-                </Tab>
-                <Tab
-                  key={3}
-                  className={({ selected }) =>
-                    classNames(
-                      "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
-                      "focus:outline-none focus:ring-2",
-                      selected
-                        ? " shadow border-b-2 border-base-content"
-                        : " hover:bg-base-300 hover:text-base-content"
-                    )
-                  }
-                >
-                  Add Review
-                </Tab>
-              </Tab.List>
-              <Tab.Panels className="mt-2">
-                <Tab.Panel
-                  key={1}
-                  className={classNames(
-                    "rounded-xl  p-3",
-                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
-                  )}
-                >
-                  {productSlice.product?.description}
-                </Tab.Panel>
-                <Tab.Panel
-                  key={2}
-                  className={classNames(
-                    "rounded-xl  p-3",
-                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
-                  )}
-                >
-                  <ReviewList />
-                </Tab.Panel>
-                <Tab.Panel
-                  key={3}
-                  className={classNames(
-                    "rounded-xl  p-3",
-                    "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
-                  )}
-                >
-                  here's add review
-                </Tab.Panel>
-              </Tab.Panels>
-            </Tab.Group>
-          </div>
+        <div className="w-full px-2 py-16 sm:px-0">
+          <Tab.Group>
+            <Tab.List className="flex space-x-1 rounded-xl  p-1">
+              <Tab
+                key={1}
+                className={({ selected }) =>
+                  classNames(
+                    "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content ",
+                    "focus:outline-none focus:ring-2",
+                    selected
+                      ? " shadow border-b-2 border-base-content"
+                      : " hover:bg-base-300 hover:text-base-content"
+                  )
+                }
+              >
+                Description
+              </Tab>
+              <Tab
+                key={2}
+                className={({ selected }) =>
+                  classNames(
+                    "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
+                    "focus:outline-none focus:ring-2",
+                    selected
+                      ? " shadow border-b-2 border-base-content"
+                      : " hover:bg-base-300 hover:text-base-content"
+                  )
+                }
+              >
+                Reviews
+              </Tab>
+              <Tab
+                key={3}
+                className={({ selected }) =>
+                  classNames(
+                    "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-base-content",
+                    "focus:outline-none focus:ring-2",
+                    selected
+                      ? " shadow border-b-2 border-base-content"
+                      : " hover:bg-base-300 hover:text-base-content"
+                  )
+                }
+              >
+                Add Review
+              </Tab>
+            </Tab.List>
+            <Tab.Panels className="mt-2">
+              <Tab.Panel
+                key={1}
+                className={classNames(
+                  "rounded-xl  p-3",
+                  "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                )}
+              >
+                {productSlice.product?.description}
+              </Tab.Panel>
+              <Tab.Panel
+                key={2}
+                className={classNames(
+                  "rounded-xl  p-3",
+                  "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                )}
+              >
+                <ReviewList productId={productId} />
+              </Tab.Panel>
+              <Tab.Panel
+                key={3}
+                className={classNames(
+                  "rounded-xl  p-3",
+                  "ring-white ring-opacity-60 ring-offset-2 focus:outline-none focus:ring-2"
+                )}
+              >
+                <ReviewForm productId={productId!}/>
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
+        </div>
       </div>
     </section>
   );

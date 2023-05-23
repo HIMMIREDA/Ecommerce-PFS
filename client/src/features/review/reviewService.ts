@@ -5,7 +5,7 @@ const PAGE_LIMIT = 3;
 
 const fetchProductReviews = async (
   abortController: AbortController,
-  productId: string,
+  productId: string | undefined,
   page: number | undefined,
   limit: number | undefined
 ) => {

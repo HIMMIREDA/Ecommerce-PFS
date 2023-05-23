@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderEntity> getAuthenticatedUserOrders() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        UserEntity user = userRepository.findUserEntityByEmail(userEmail).orElseThrow(()-> new UsernameNotFoundException("User Not Authenticated"));
+        UserEntity user = userRepository.findUserEntityByEmail(userEmail).orElseThrow(()-> new UsernameNotFoundException("User Not Found"));
 
         return user.getOrders();
 

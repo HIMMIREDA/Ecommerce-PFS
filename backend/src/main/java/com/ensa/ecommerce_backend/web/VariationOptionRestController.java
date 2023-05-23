@@ -1,9 +1,7 @@
 package com.ensa.ecommerce_backend.web;
-
-import com.ensa.ecommerce_backend.DTO.VariationDTO;
-import com.ensa.ecommerce_backend.DTO.VariationOptionDTO;
+import com.ensa.ecommerce_backend.dto.VariationOptionDto;
 import com.ensa.ecommerce_backend.request.AddVariationOptionRequest;
-import com.ensa.ecommerce_backend.request.AddVariationRequest;
+
 import com.ensa.ecommerce_backend.service.VariationOptionService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,8 +20,8 @@ public class VariationOptionRestController {
     VariationOptionService variationOptionService;
 
     @PostMapping
-    public ResponseEntity<VariationOptionDTO> addVariation(@RequestBody @Valid AddVariationOptionRequest addVariationOptionRequest){
-        VariationOptionDTO variationOptionDTO = variationOptionService.addVariationOption(addVariationOptionRequest);
+    public ResponseEntity<VariationOptionDto> addVariation(@RequestBody @Valid AddVariationOptionRequest addVariationOptionRequest){
+        VariationOptionDto variationOptionDTO = variationOptionService.addVariationOption(addVariationOptionRequest);
         return new ResponseEntity<>(variationOptionDTO, HttpStatus.CREATED);
     }
 

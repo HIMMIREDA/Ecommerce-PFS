@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.CartDto;
+import com.ensa.ecommerce_backend.dto.CartDto;
 import com.ensa.ecommerce_backend.entity.CartEntity;
 import jakarta.servlet.http.HttpSession;
 

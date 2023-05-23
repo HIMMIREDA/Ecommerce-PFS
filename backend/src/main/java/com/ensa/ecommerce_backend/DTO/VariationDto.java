@@ -1,6 +1,4 @@
-package com.ensa.ecommerce_backend.DTO;
-
-import jakarta.validation.constraints.NotNull;
+package com.ensa.ecommerce_backend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class VariationDTO {
+public class VariationDto {
 
-    Long id;
 
-    String name;
+        Long id;
 
-    List<VariationOptionDTO> variations = new ArrayList<>();
+        String name;
+
+        List<VariationOptionDto> variations = new ArrayList<>();
+
 
 }

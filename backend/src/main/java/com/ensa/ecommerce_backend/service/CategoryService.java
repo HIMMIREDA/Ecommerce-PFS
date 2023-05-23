@@ -1,7 +1,7 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.CategoryDto;
-import com.ensa.ecommerce_backend.DTO.ProductDto;
+import com.ensa.ecommerce_backend.dto.CategoryDto;
+import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.request.AddCategoryRequest;
 import com.ensa.ecommerce_backend.request.UpdateCategoryRequest;
 import org.springframework.data.domain.Page;

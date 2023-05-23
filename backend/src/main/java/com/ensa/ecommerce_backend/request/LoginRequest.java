@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginRequest {
     @Email
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     private String email;
-    @NotEmpty
+    @NotEmpty(message = "cant be empty")
     private String password;
 }

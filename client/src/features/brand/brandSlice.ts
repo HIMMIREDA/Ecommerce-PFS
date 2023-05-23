@@ -211,9 +211,10 @@ const brandSlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(createBrand.fulfilled, (state) => {
+      .addCase(createBrand.fulfilled, (state, action: PayloadAction<Brand>) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.brands = [...state.brands, action.payload];
       })
       .addCase(updateBrand.pending, (state) => {
         state.isLoading = true;

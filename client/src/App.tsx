@@ -12,6 +12,7 @@ import Products from "./pages/shop/Products";
 import PersistLogin from "./components/common/PersistLogin";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Checkout from "./pages/shop/Checkout";
+import ShoppingCart from './pages/shop/ShoppingCart';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/products/:productId" element={<Product />} />
               <Route path="/shop" element={<Products />} />
+              <Route path="/cart" element={<ShoppingCart />} />
               {/* private routes */}
               <Route element={<PrivateRoute />}>
                 <Route path="/checkout" element={<Checkout />} />

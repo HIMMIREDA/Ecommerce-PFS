@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AddCategoryRequest {
 
     @NotEmpty
-    @Size(min = 4)
+    @Size(min = 4, message = "category name must be at least 4 characters")
     private String name;
 
     @NotEmpty

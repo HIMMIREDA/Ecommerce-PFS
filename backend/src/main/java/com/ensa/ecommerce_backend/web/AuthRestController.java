@@ -48,12 +48,12 @@ public class AuthRestController {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token, HttpSession session) {
+    public ResponseEntity<RefreshJwtResponse> refreshToken(@CookieValue(name = "jwt-refresh-token") String token) {
         return ResponseEntity.ok(authService.refreshToken(token));
     }
 
     @GetMapping("/confirm-registration")
-    public void confirmRegistration(@RequestParam("token") String token, HttpSession session) {
-        authService.verifyAccount(token, session);
+    public void confirmRegistration(@RequestParam("token") String token) {
+        authService.verifyAccount(token);
     }
 }

@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -20,7 +23,7 @@ public class ReviewEntity {
     private Long id;
 
     @Convert(converter = RatingValueConverter.class)
-    private RatingValue ratingValue;
+    private RatingValue rating;
 
     private String comment;
 
@@ -30,4 +33,7 @@ public class ReviewEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductEntity product;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

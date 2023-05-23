@@ -4,9 +4,9 @@ import com.ensa.ecommerce_backend.entity.ImageEntity;
 import com.ensa.ecommerce_backend.exception.UploadFileException;
 import com.ensa.ecommerce_backend.repository.ImageRepository;
 import com.ensa.ecommerce_backend.service.ImageService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

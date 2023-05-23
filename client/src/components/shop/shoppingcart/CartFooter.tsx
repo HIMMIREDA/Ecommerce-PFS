@@ -1,9 +1,9 @@
 import { toggleOpenCart } from "../../../features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { Link } from "react-router-dom";
 
 const CartFooter = () => {
-
-  const {total} = useAppSelector(state => state.cart);
+  const { total } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
   return (
@@ -16,18 +16,18 @@ const CartFooter = () => {
         Shipping and taxes calculated at checkout.
       </p>
       <div className="mt-6 space-y-2">
-        <a
-          href="#"
+        <Link
+          to={"/cart"}
           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
         >
           View Cart
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          to={"/checkout"}
           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
         >
           Checkout
-        </a>
+        </Link>
       </div>
       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
         <p>

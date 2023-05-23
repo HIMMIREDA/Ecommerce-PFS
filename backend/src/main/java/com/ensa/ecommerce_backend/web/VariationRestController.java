@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.VariationDTO;
+import com.ensa.ecommerce_backend.dto.VariationDto;
 import com.ensa.ecommerce_backend.request.AddVariationRequest;
 import com.ensa.ecommerce_backend.service.VariationService;
 import jakarta.validation.Valid;
@@ -20,8 +20,8 @@ public class VariationRestController {
     VariationService variationService;
 
     @PostMapping
-    public ResponseEntity<VariationDTO> addVariation(@RequestBody @Valid AddVariationRequest addVariationRequest){
-        VariationDTO variationDTO = variationService.addVariation(addVariationRequest);
+    public ResponseEntity<VariationDto> addVariation(@RequestBody @Valid AddVariationRequest addVariationRequest){
+        VariationDto variationDTO = variationService.addVariation(addVariationRequest);
         return new ResponseEntity<>(variationDTO, HttpStatus.CREATED);
     }
 
@@ -34,7 +34,7 @@ public class VariationRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VariationDTO> getVariationById(@PathVariable Long id) {
+    public ResponseEntity<VariationDto> getVariationById(@PathVariable Long id) {
         return ResponseEntity.ok(variationService.getVariationById(id));
     }
 }

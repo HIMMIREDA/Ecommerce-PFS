@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
 import { RootState } from "../../app/store";
 import axios from "axios";
@@ -259,14 +259,25 @@ const productSlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.products = action.payload?.items;
-        state.currentPage = action.payload?.currentPage;
-        state.totalItems = action.payload?.totalItems;
-        state.totalPages = action.payload?.totalPages;
-      })
+      .addCase(
+        fetchProducts.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            items: Product[];
+            currentPage: number;
+            totalPages: number;
+            totalItems: number;
+          }>
+        ) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.products = action.payload?.items;
+          state.currentPage = action.payload?.currentPage;
+          state.totalItems = action.payload?.totalItems;
+          state.totalPages = action.payload?.totalPages;
+        }
+      )
       .addCase(fetchProduct.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -278,11 +289,14 @@ const productSlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(fetchProduct.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.product = action.payload;
-      })
+      .addCase(
+        fetchProduct.fulfilled,
+        (state, action: PayloadAction<Product>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.product = action.payload;
+        }
+      )
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -312,10 +326,14 @@ const productSlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(createProduct.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-      })
+      .addCase(
+        createProduct.fulfilled,
+        (state, action: PayloadAction<Product>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.products = [...state.products, action.payload];
+        }
+      )
       .addCase(updateProduct.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;

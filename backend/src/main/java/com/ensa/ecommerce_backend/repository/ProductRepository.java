@@ -25,6 +25,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>, J
     @Query("SELECT p FROM ProductEntity p WHERE p.category.id = :categoryId or p.category.parentCategory.id = :categoryId or p.category.parentCategory.parentCategory.id = :categoryId")
     Page<ProductEntity> findProductEntitiesByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
-    @Query("SELECT AVG(r.ratingValue) FROM ReviewEntity r WHERE r.product.id = :productId")
+    @Query("SELECT AVG(r.rating) FROM ReviewEntity r WHERE r.product.id = :productId")
     Double calculateMeanRating(@Param("productId") Long productId);
 }

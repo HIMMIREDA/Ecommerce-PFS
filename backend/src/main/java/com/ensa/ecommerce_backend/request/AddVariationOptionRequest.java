@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.request;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AddVariationOptionRequest {
-    @NotEmpty
+    @NotNull
     Long variationId;
     @NotEmpty
     String optionValue;

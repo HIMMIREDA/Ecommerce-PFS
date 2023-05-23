@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
-import com.ensa.ecommerce_backend.DTO.CartDto;
+import com.ensa.ecommerce_backend.dto.CartDto;
 import com.ensa.ecommerce_backend.request.AddItemToCartRequest;
 import com.ensa.ecommerce_backend.request.UpdateCartItemRequest;
 import com.ensa.ecommerce_backend.service.CartService;

@@ -36,4 +36,7 @@ public class CategoryEntity implements Serializable {
     @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
     private List<ProductEntity> products = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VariationEntity> variations = new ArrayList<>();
+
 }

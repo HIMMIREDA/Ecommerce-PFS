@@ -41,7 +41,9 @@ public class SecurityConfig {
             "/api/images/**",
             "/api/categories/**",
             "/api/reviews/**",
-            "/api/payments/**"
+            "/api/payments/**",
+            "/api/variations/**"
+
     );
     private JwtAuthFilter jwtAuthFilter;
     private UserDetailsService userDetailsService;

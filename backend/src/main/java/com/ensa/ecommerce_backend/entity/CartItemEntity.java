@@ -26,6 +26,10 @@ public class CartItemEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private CartEntity cart;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private OrderEntity order;
+
+
     @PrePersist
     protected void onCreate() {
         if (Objects.isNull(this.id)) {

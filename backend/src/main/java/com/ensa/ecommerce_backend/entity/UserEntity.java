@@ -62,4 +62,7 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderEntity> orders = new ArrayList<>();
 }

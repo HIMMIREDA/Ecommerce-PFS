@@ -1,5 +1,6 @@
 package com.ensa.ecommerce_backend.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
+@Builder
 public class VariationOptionDto {
-    private Long id;
-    private String name;
+    Long id;
 
+    String value;
 }

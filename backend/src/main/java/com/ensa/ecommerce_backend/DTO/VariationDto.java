@@ -1,6 +1,4 @@
 package com.ensa.ecommerce_backend.dto;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +9,16 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
+@Builder
 public class VariationDto {
-    private Long id;
 
-    private String name;
 
-    private List<VariationOptionDto> variationOptions = new ArrayList<>();
+        Long id;
+
+        String name;
+
+        List<VariationOptionDto> variations = new ArrayList<>();
+
 
 }

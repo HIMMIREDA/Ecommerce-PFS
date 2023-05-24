@@ -21,8 +21,9 @@ import java.util.Set;
 @Data
 @Builder
 public class OrderEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
     private double total;
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -34,6 +35,6 @@ public class OrderEntity {
     private UserEntity user;
     @ManyToOne(cascade = CascadeType.ALL)
     private AddressEntity address;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private Set<CartItemEntity> cartItems = new HashSet<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemEntity> orderItems = new ArrayList<>();
 }

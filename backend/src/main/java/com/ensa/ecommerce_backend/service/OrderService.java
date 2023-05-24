@@ -7,7 +7,7 @@ import com.ensa.ecommerce_backend.request.AddOrderRequest;
 import java.util.List;
 
 public interface OrderService {
-    OrderEntity addOrder(AddOrderRequest addOrderRequest);
+    OrderEntity addOrder(String orderId,AddOrderRequest addOrderRequest);
     void deleteOrderById(Long id);
 
     OrderEntity getOrderById(Long id);

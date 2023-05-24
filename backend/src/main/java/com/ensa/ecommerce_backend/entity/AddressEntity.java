@@ -28,6 +28,7 @@ public class AddressEntity implements Serializable {
     private Long postalCode;
 
     private String country;
+    private String city;
 
     @ManyToOne @JsonIgnore
     private UserEntity user;

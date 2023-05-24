@@ -1,17 +1,22 @@
 package com.ensa.ecommerce_backend.service.impl;
 
+import com.ensa.ecommerce_backend.DTO.AddressDto;
 import com.ensa.ecommerce_backend.entity.CartEntity;
 import com.ensa.ecommerce_backend.exception.CartTotalMismatchException;
 import com.ensa.ecommerce_backend.repository.CartRepository;
+import com.ensa.ecommerce_backend.request.AddOrderRequest;
 import com.ensa.ecommerce_backend.response.CreatePaymentIntentResponse;
 import com.ensa.ecommerce_backend.service.CartService;
+import com.ensa.ecommerce_backend.service.OrderService;
 import com.ensa.ecommerce_backend.service.StripeService;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
 import com.stripe.net.Webhook;
+import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +31,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class StripeServiceImpl implements StripeService {
     private final CartService cartService;
     private final CartRepository cartRepository;
+    private final OrderService orderService;
     @Value("${stripe.secret_key}")
     private String STRIPE_SECRET_KEY;
     @Value("${stripe.webhook_secret_key}")
     private String STRIPE_WEBHOOK_SECRET;
 
     @Autowired
-    public StripeServiceImpl(CartService cartService, CartRepository cartRepository) {
+    public StripeServiceImpl(CartService cartService, CartRepository cartRepository, OrderService orderService) {
         this.cartService = cartService;
         this.cartRepository = cartRepository;
+        this.orderService = orderService;
     }
 
     @PostConstruct
@@ -43,7 +50,7 @@ public class StripeServiceImpl implements StripeService {
     }
 
     @Override
-    public CreatePaymentIntentResponse createPaymentIntent() throws StripeException {
+    public CreatePaymentIntentResponse createPaymentIntent(AddressDto addressDto) throws StripeException {
         // @TODO: move this to order service
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CartEntity cart = cartRepository.findCartEntityByUserEmail(authentication.getName()).orElseThrow();
@@ -53,9 +60,21 @@ public class StripeServiceImpl implements StripeService {
         // @END:TODO
 
         // @TODO: dont forget to lock product when payment is successful and reduce quantity of product
+        CustomerCreateParams.Address address = CustomerCreateParams.Address.builder()
+                .setCity(addressDto.getCity())
+                .setCountry(addressDto.getCountry())
+                .setLine1(addressDto.getAddressLine())
+                .setPostalCode(addressDto.getPostalCode().toString())
+                .build();
+        CustomerCreateParams customerParams = CustomerCreateParams.builder()
+                .setAddress(address)
+                .setEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+                .build();
+        Customer customer = Customer.create(customerParams);
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setAmount((long) cart.getTotal())
                 .setCurrency("usd")
+                .setCustomer(customer.getId())
                 .setAutomaticPaymentMethods(
                         PaymentIntentCreateParams.AutomaticPaymentMethods
                                 .builder()
@@ -84,5 +103,51 @@ public class StripeServiceImpl implements StripeService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean handleWebHookEvent(String payload, String sigHeader) throws StripeException {
+        if (!verifyWebhookEvent(payload, sigHeader)) {
+            return false;
+        }
+
+        Event event = parseWebhookEvent(payload);
+        if (event == null) {
+            return false;
+        }
+        // Handle the event based on its type
+        switch (event.getType()) {
+            case "payment_intent.processing" -> System.out.println("payment processing");
+            case "payment_intent.succeeded" -> System.out.println("payment succeeded");
+            case "payment_intent.payment_failed" -> System.out.println("payment failed");
+        }
+
+        return true;
+    }
+
+    public void handlePaymentProcessing(Event event) throws StripeException {
+        PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().orElse(null);
+
+        System.out.println(paymentIntent);
+        if (paymentIntent != null) {
+            Customer customer = Customer.retrieve(paymentIntent.getCustomer());
+            AddOrderRequest addOrderRequest = new AddOrderRequest(
+                    AddressDto.builder()
+                            .city(customer.getAddress().getCity())
+                            .addressLine(customer.getAddress().getLine1())
+                            .postalCode(Long.parseLong(customer.getAddress().getPostalCode()))
+                            .country(customer.getAddress().getCountry())
+                            .build()
+            );
+            orderService.addOrder(paymentIntent.getId(), addOrderRequest);
+        }
+    }
+
+    public void handlePaymentSucceeded(Event event){
+
+    }
+
+    public void handlePaymentFailed(Event event){
+
     }
 }

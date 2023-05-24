@@ -14,5 +14,6 @@ public class AddressDto {
 
     private Long postalCode;
 
+    private String city;
     private String country;
 }

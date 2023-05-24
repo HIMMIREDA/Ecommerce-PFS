@@ -7,8 +7,11 @@ import com.ensa.ecommerce_backend.response.CreatePaymentIntentResponse;
 import com.ensa.ecommerce_backend.service.CartService;
 import com.ensa.ecommerce_backend.service.StripeService;
 import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
+import com.stripe.net.Webhook;
 import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +67,22 @@ public class StripeServiceImpl implements StripeService {
         return CreatePaymentIntentResponse.builder()
                 .clientSecret(paymentIntent.getClientSecret())
                 .build();
+    }
+
+    public boolean verifyWebhookEvent(String payload, String signatureHeader) {
+        try {
+            Event event = Webhook.constructEvent(payload, signatureHeader, STRIPE_WEBHOOK_SECRET);
+            return event.getId() != null;
+        } catch (SignatureVerificationException e) {
+            return false;
+        }
+    }
+
+    public Event parseWebhookEvent(String payload) {
+        try {
+            return Event.PRETTY_PRINT_GSON.fromJson(payload, Event.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

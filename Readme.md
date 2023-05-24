@@ -21,6 +21,10 @@ install remotelivereload chrome extension for auto reload springboot app : [Remo
 ```bash
 ./mynpm install <nameOfPackage>
 ```
-
+## Run stripe cli to forward events to local webhook endpoint
+```bash
+STRIPE_API_KEY=sk_.......
+docker run --rm -it stripe/stripe-cli:latest listen --api-key $STRIPE_API_KEY --forward-to http://backend:8080/api/payments/webhook
+```
 
 

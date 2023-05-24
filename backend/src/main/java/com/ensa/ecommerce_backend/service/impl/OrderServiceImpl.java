@@ -29,9 +29,7 @@ public class OrderServiceImpl implements OrderService {
     CartRepository cartRepository;
 
     @Override
-    public OrderEntity addOrder(String orderId, AddOrderRequest addOrderRequest) {
-
-        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+    public OrderEntity addOrder(String orderId, AddOrderRequest addOrderRequest, String userEmail) {
 
         UserEntity user = userRepository.findUserEntityByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
@@ -69,12 +67,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrderById(Long id) {
+    public void deleteOrderById(String id) {
         orderRepository.deleteById(id);
     }
 
     @Override
-    public OrderEntity getOrderById(Long id) {
+    public OrderEntity getOrderById(String id) {
         return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order Not Found"));
     }
 
@@ -89,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity updateOrderStatus(Long id, OrderStatus status) {
+    public OrderEntity updateOrderStatus(String id, OrderStatus status) {
         OrderEntity order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order Not Found"));
         order.setStatus(status);
         return orderRepository.save(order);

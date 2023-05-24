@@ -2,6 +2,7 @@ package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.DTO.AddressDto;
 import com.ensa.ecommerce_backend.entity.CartEntity;
+import com.ensa.ecommerce_backend.enums.OrderStatus;
 import com.ensa.ecommerce_backend.exception.CartTotalMismatchException;
 import com.ensa.ecommerce_backend.repository.CartRepository;
 import com.ensa.ecommerce_backend.request.AddOrderRequest;
@@ -51,13 +52,12 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public CreatePaymentIntentResponse createPaymentIntent(AddressDto addressDto) throws StripeException {
-        // @TODO: move this to order service
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CartEntity cart = cartRepository.findCartEntityByUserEmail(authentication.getName()).orElseThrow();
         if (cartService.getCartTotal() != cart.getTotal() || cart.getTotal() == 0) {
             throw new CartTotalMismatchException("There is a discrepancy in the cart total. Please review your order and try again.");
         }
-        // @END:TODO
+
         CustomerCreateParams.Address address = CustomerCreateParams.Address.builder()
                 .setCity(addressDto.getCity())
                 .setCountry(addressDto.getCountry())
@@ -118,7 +118,7 @@ public class StripeServiceImpl implements StripeService {
         // Handle the event based on its type
         switch (event.getType()) {
             case "payment_intent.processing" -> System.out.println("payment processing");
-            case "payment_intent.succeeded" -> System.out.println("payment succeeded");
+            case "payment_intent.succeeded" -> handlePaymentSucceeded(event);
             case "payment_intent.payment_failed" -> System.out.println("payment failed");
         }
 
@@ -139,12 +139,30 @@ public class StripeServiceImpl implements StripeService {
                             .country(customer.getAddress().getCountry())
                             .build()
             );
-            orderService.addOrder(paymentIntent.getId(), addOrderRequest);
+            orderService.addOrder(paymentIntent.getId(), addOrderRequest, customer.getEmail());
         }
     }
 
-    public void handlePaymentSucceeded(Event event) {
+    public void handlePaymentSucceeded(Event event) throws StripeException {
+        PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().orElse(null);
 
+        System.out.println(paymentIntent);
+        if (paymentIntent != null) {
+            Customer customer = Customer.retrieve(paymentIntent.getCustomer());
+            AddOrderRequest addOrderRequest = new AddOrderRequest(
+                    AddressDto.builder()
+                            .city(customer.getAddress().getCity())
+                            .addressLine(customer.getAddress().getLine1())
+                            .postalCode(Long.parseLong(customer.getAddress().getPostalCode()))
+                            .country(customer.getAddress().getCountry())
+                            .build()
+            );
+            // @TODO:
+            // reduce product quantity and handle refund here use optimistic locking
+            //@END:TODO
+            orderService.addOrder(paymentIntent.getId(), addOrderRequest, customer.getEmail());
+            orderService.updateOrderStatus(paymentIntent.getId(), OrderStatus.PAID);
+        }
     }
 
     public void handlePaymentFailed(Event event) {

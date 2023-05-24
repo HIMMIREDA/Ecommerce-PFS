@@ -32,7 +32,6 @@ function Login() {
   if (loading) {
     return <Spinner />;
   }
-  console.log(user)
   return user != null ? (
     <Navigate to="/" />
   ) : (

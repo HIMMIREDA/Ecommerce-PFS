@@ -31,7 +31,7 @@ public class OrderRestController {
      */
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOrder(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteOrder(@PathVariable("id") String id) {
         orderService.deleteOrderById(id);
         Map<String, Object> response = new HashMap<>();
         response.put("id", id);
@@ -39,7 +39,7 @@ public class OrderRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderEntity> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderEntity> getOrderById(@PathVariable String id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
@@ -50,7 +50,7 @@ public class OrderRestController {
 
     /*
     @PutMapping("/{id}")
-    public ResponseEntity<OrderEntity> updateOrder(@PathVariable("id") Long id, @RequestBody OrderStatus status) {
+    public ResponseEntity<OrderEntity> updateOrder(@PathVariable("id") String id, @RequestBody OrderStatus status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
      */

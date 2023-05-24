@@ -23,7 +23,7 @@ public class OrderRestController {
 
 
     @PostMapping
-    public ResponseEntity<OrderEntity> addOrder(@RequestBody @Valid AddOrderRequest addOrderRequest) {
+    public ResponseEntity<OrderEntity> addOrder(@RequestBody AddOrderRequest addOrderRequest) {
         OrderEntity order = orderService.addOrder(addOrderRequest);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
@@ -50,6 +50,5 @@ public class OrderRestController {
     public ResponseEntity<OrderEntity> updateOrder(@PathVariable("id") Long id, @RequestBody OrderStatus status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
-
 
 }

@@ -27,6 +27,7 @@ const PersistLogin = () => {
       } catch (error) {
         if (error instanceof Error && error.name !== "CanceledError") {
           setIsLoading(false);
+          dispatch(setUser(null));
           dispatch(logoutUser());
         }
       }

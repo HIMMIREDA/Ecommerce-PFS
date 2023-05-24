@@ -58,8 +58,6 @@ public class StripeServiceImpl implements StripeService {
             throw new CartTotalMismatchException("There is a discrepancy in the cart total. Please review your order and try again.");
         }
         // @END:TODO
-
-        // @TODO: dont forget to lock product when payment is successful and reduce quantity of product
         CustomerCreateParams.Address address = CustomerCreateParams.Address.builder()
                 .setCity(addressDto.getCity())
                 .setCountry(addressDto.getCountry())
@@ -71,6 +69,8 @@ public class StripeServiceImpl implements StripeService {
                 .setEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .build();
         Customer customer = Customer.create(customerParams);
+
+
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setAmount((long) cart.getTotal())
                 .setCurrency("usd")
@@ -143,11 +143,11 @@ public class StripeServiceImpl implements StripeService {
         }
     }
 
-    public void handlePaymentSucceeded(Event event){
+    public void handlePaymentSucceeded(Event event) {
 
     }
 
-    public void handlePaymentFailed(Event event){
+    public void handlePaymentFailed(Event event) {
 
     }
 }

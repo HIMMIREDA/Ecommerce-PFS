@@ -1,7 +1,6 @@
 package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.DTO.AddressDto;
-import com.ensa.ecommerce_backend.entity.AddressEntity;
 import com.ensa.ecommerce_backend.service.StripeService;
 import com.stripe.exception.StripeException;
 import lombok.AllArgsConstructor;
@@ -27,8 +26,13 @@ public class PaymentRestController {
 
     @PostMapping("/webhook")
     public ResponseEntity<?> handleWebhookEvent(@RequestBody String payload, @RequestHeader("Stripe-Signature") String signature) {
-        boolean isPayloadValid = stripeService.handleWebHookEvent(payload, signature);
+        try {
 
-        return isPayloadValid ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            boolean isPayloadValid = stripeService.handleWebHookEvent(payload, signature);
+            return isPayloadValid ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (StripeException exception) {
+            return ResponseEntity.internalServerError().body("Error occurred on server. try again later.");
+        }
+
     }
 }

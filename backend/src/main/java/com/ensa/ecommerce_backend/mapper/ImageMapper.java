@@ -18,9 +18,10 @@ public class ImageMapper {
     }
 
     static public ImageDto toDto(ImageEntity imageEntity) {
-        return ImageDto.builder()
-                .id(imageEntity.getId())
-                .url(getBaseUrl() + "/api/images/" + imageEntity.getId() + "." + imageEntity.getExtension())
-                .build();
+        return imageEntity == null ? null :
+                ImageDto.builder()
+                        .id(imageEntity.getId())
+                        .url(getBaseUrl() + "/api/images/" + imageEntity.getId() + "." + imageEntity.getExtension())
+                        .build();
     }
 }

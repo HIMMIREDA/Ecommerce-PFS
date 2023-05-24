@@ -20,23 +20,3 @@ export const axiosPrivate = axios.create({
   },
   validateStatus: (status) => status >= 200 && status < 400,
 });
-
-axiosPrivate.interceptors.request.use(
-  (config) => {
-    const url = config.url;
-    // Exclude the SESSION cookie for cart endpoints (authenticated users)
-    if (url?.startsWith("/cart")) {
-      const cookies = config.headers["Cookie"];
-
-      if (cookies) {
-        const updatedCookies = cookies.replace(/SESSION=[^;]+(;|$)/, "");
-        config.headers["Cookie"] = updatedCookies;
-      }
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);

@@ -79,6 +79,7 @@ public class CartServiceImpl implements CartService {
         Set<CartItemEntity> storedCartItems = storedCart.getCartItems();
         for (CartItemEntity newCartItem : sessionCartItems) {
             mergeItemWithCart(storedCartItems, newCartItem);
+            newCartItem.setCart(storedCart);
         }
         storedCart.setCartItems(storedCartItems);
         cartRepository.save(storedCart);

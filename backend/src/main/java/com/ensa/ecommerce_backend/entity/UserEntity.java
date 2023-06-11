@@ -73,6 +73,6 @@ public class UserEntity implements Serializable {
     public void initializeWishList() {
         WishListEntity wishList = new WishListEntity();
         wishList.setUser(this);
-        this.wishList = wishList;
+        setWishList(wishList);
     }
 }

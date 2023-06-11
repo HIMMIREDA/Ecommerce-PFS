@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerUser, reset } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 import Spinner from "../../components/common/Spinner";
@@ -234,9 +234,9 @@ function Register() {
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                   Already have an account?&nbsp;
-                  <a href="#" className="text-gray-700 underline">
+                  <Link to="/login" className="text-gray-700 underline">
                     Log in
-                  </a>
+                  </Link>
                   .
                 </p>
               </div>

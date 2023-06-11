@@ -20,6 +20,7 @@ import CheckoutForm from "./components/shop/checkout/CheckoutForm";
 import CheckoutSuccess from "./pages/shop/CheckoutSuccess";
 import Orders from "./pages/shop/Orders";
 import Changepassword from "./pages/shop/ChangePassword";
+import Categories from "./pages/shop/Categories";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path="/products/:productId" element={<Product />} />
               <Route path="/shop" element={<Products />} />
               <Route path="/cart" element={<ShoppingCart />} />
+              <Route path="/categories" element={<Categories />} />
               {/* private routes */}
               <Route element={<PrivateRoute />}>
                 <Route path="/checkout" element={<MultiStepCheckout />}>

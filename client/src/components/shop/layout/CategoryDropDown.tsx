@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, createSearchParams } from "react-router-dom";
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { useAppSelector } from "../../../app/hooks";
 
@@ -37,15 +37,15 @@ export default function CategoryDropDown() {
               className="dropdown dropdown-hover relative"
               tabIndex={0}
             >
-              <Link
+              <div
                 tabIndex={0}
-                to={`/category/${category?.id}`}
+                
                 className="block rounded-lg px-4 py-2 text-sm font-bold hover:bg-gray-50 hover:text-gray-700"
               >
                 <span className="flex justify-between">
                   {category?.name} <FiChevronRight />
                 </span>
-              </Link>
+              </div>
               {category?.subCategories?.length !== 0 && (
                 <ul
                   tabIndex={0}
@@ -57,14 +57,13 @@ export default function CategoryDropDown() {
                       className="dropdown dropdown-hover relative"
                       tabIndex={0}
                     >
-                      <Link
-                        to={`/category/${subCategory?.id}`}
+                      <div
                         className="block rounded-lg px-4 py-2 text-sm font-bold hover:bg-gray-50 hover:text-gray-700"
                       >
                         <span className="flex justify-between">
                           {subCategory?.name} <FiChevronRight />
                         </span>
-                      </Link>
+                      </div>
                       {(subCategory?.subCategories || []).length !== 0 && (
                         <ul
                           tabIndex={0}
@@ -73,7 +72,12 @@ export default function CategoryDropDown() {
                           {subCategory?.subCategories?.map((subSubCategory) => (
                             <Link
                               key={subSubCategory?.id}
-                              to={`/category/${subSubCategory?.id}`}
+                              to={{
+                                pathname: "/shop",
+                                search: `?${createSearchParams({
+                                  category: subSubCategory.name,
+                                })}`,
+                              }}
                               className="block rounded-lg px-4 py-2 text-sm font-bold hover:bg-gray-50 hover:text-gray-700"
                             >
                               <span className="flex justify-between">

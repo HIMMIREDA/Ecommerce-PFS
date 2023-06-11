@@ -11,6 +11,7 @@ import com.ensa.ecommerce_backend.mapper.UserMapper;
 import com.ensa.ecommerce_backend.repository.*;
 import com.ensa.ecommerce_backend.request.LoginRequest;
 import com.ensa.ecommerce_backend.request.RegistrationRequest;
+import com.ensa.ecommerce_backend.request.UpdatePasswordRequest;
 import com.ensa.ecommerce_backend.response.LoginResponse;
 import com.ensa.ecommerce_backend.response.RefreshJwtResponse;
 import com.ensa.ecommerce_backend.response.RegistrationResponse;
@@ -31,6 +32,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +84,21 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         List<EmailVerificationTokenEntity> userTokens = emailVerificationTokenRepository.findEmailVerificationTokenByUser(user).orElseThrow();
         emailVerificationTokenRepository.deleteAll(userTokens);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = userRepository.findUserEntityByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("user not found")
+        );
+        boolean oldPasswordMatches = passwordEncoder.matches(updatePasswordRequest.getOldPassword(),user.getPassword());
+        if(!oldPasswordMatches){
+            throw new RuntimeException("The old password is incorrect");
+        }
+        String encodedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
 
     @Override

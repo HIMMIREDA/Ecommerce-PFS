@@ -4,6 +4,7 @@ import com.ensa.ecommerce_backend.entity.EmailVerificationTokenEntity;
 import com.ensa.ecommerce_backend.entity.UserEntity;
 import com.ensa.ecommerce_backend.request.LoginRequest;
 import com.ensa.ecommerce_backend.request.RegistrationRequest;
+import com.ensa.ecommerce_backend.request.UpdatePasswordRequest;
 import com.ensa.ecommerce_backend.response.LoginResponse;
 import com.ensa.ecommerce_backend.response.RefreshJwtResponse;
 import com.ensa.ecommerce_backend.response.RegistrationResponse;
@@ -25,5 +26,7 @@ public interface AuthService {
     EmailVerificationTokenEntity createEmailVerificationToken(UserEntity user, String token);
 
     void verifyAccount(String token);
+
+    void updatePassword(UpdatePasswordRequest updatePasswordRequest);
 }
 

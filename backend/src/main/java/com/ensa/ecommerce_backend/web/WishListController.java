@@ -34,5 +34,4 @@ public class WishListController {
         response.put("id", id);
         return ResponseEntity.ok(response);
     }
-
 }

@@ -54,7 +54,7 @@ public class WishListServiceImpl implements WishListService {
 
         if (!productExists) {
             user.getWishList().getProducts().add(product);
-            userRepository.save(user);
+            wishListRepository.save(user.getWishList());
         }
         return ProductMapper.toDto(product);
     }
@@ -76,6 +76,6 @@ public class WishListServiceImpl implements WishListService {
 
         wishList.getProducts().remove(productToRemove);
 
-        userRepository.save(user);
+        wishListRepository.save(user.getWishList());
     }
 }

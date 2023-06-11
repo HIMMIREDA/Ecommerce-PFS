@@ -2,6 +2,7 @@ package com.ensa.ecommerce_backend.service;
 
 import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.dto.ProductSearchDto;
+import com.ensa.ecommerce_backend.entity.CartEntity;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import org.springframework.data.domain.Page;
@@ -21,4 +22,6 @@ public interface ProductService {
     ProductDto addImageToProduct(Long productId, MultipartFile image);
 
     void deleteImageFromProduct(Long productId, String imageId);
+
+    void reduceProductsQuantity(CartEntity cart);
 }

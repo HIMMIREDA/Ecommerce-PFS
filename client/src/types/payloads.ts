@@ -1,3 +1,5 @@
+import { OrderStatus } from "./order";
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -45,4 +47,8 @@ export interface AddReviewPayload {
   productId: string;
   rating: number;
   comment: string;
+}
+
+export interface UpdateOrderPayload {
+  status: OrderStatus;
 }

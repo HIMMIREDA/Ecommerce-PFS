@@ -25,7 +25,6 @@ function Login() {
     }
     if (isSuccess) {
       dispatch(reset());
-      navigate("/");
     }
     dispatch(reset());
   }, [isError, isSuccess, message, dispatch, navigate]);
@@ -33,7 +32,7 @@ function Login() {
   if (loading) {
     return <Spinner />;
   }
-  return user ? (
+  return user != null ? (
     <Navigate to="/" />
   ) : (
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">

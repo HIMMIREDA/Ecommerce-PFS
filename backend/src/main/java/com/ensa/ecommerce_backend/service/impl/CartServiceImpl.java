@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
         final CartEntity cart = (CartEntity) session.getAttribute("cart");
         updateUnAuthCartProducts(cart);
         cart.setTotal(cart.getCartItems().stream().mapToDouble(item -> item.getQuantity() * item.getProduct().getPrice()).sum());
-        session.setAttribute("cart",cart);
+        session.setAttribute("cart", cart);
         return CartMapper.toDto(cart);
     }
 
@@ -79,6 +79,7 @@ public class CartServiceImpl implements CartService {
         Set<CartItemEntity> storedCartItems = storedCart.getCartItems();
         for (CartItemEntity newCartItem : sessionCartItems) {
             mergeItemWithCart(storedCartItems, newCartItem);
+            newCartItem.setCart(storedCart);
         }
         storedCart.setCartItems(storedCartItems);
         cartRepository.save(storedCart);
@@ -293,5 +294,13 @@ public class CartServiceImpl implements CartService {
         cart.setTotal(cart.getCartItems().stream().mapToDouble(item -> item.getQuantity() * item.getProduct().getPrice()).sum());
         session.setAttribute("cart", cart);
         return CartMapper.toDto(cart);
+    }
+
+    @Override
+    public Double getCartTotal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CartEntity cart = cartRepository.findCartEntityByUserEmail(authentication.getName()).orElseThrow();
+
+        return cart.getCartItems().stream().mapToDouble((item) -> item.getProduct().getPrice() * item.getQuantity()).sum();
     }
 }

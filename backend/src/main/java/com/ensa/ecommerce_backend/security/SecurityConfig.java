@@ -41,6 +41,7 @@ public class SecurityConfig {
             "/api/images/**",
             "/api/categories/**",
             "/api/reviews/**",
+            "/api/payments/**",
             "/api/variations/**"
 
     );
@@ -66,11 +67,8 @@ public class SecurityConfig {
                             .permitAll()
                             .anyRequest().authenticated();
                 })
-                .securityContext(securityContext -> securityContext.securityContextRepository(
-                        new NullSecurityContextRepository()
-                ))
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authenticationManager(authenticationManager(http))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

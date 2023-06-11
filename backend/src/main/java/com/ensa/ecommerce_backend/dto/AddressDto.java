@@ -1,4 +1,4 @@
-package com.ensa.ecommerce_backend.DTO;
+package com.ensa.ecommerce_backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,6 @@ public class AddressDto {
 
     private Long postalCode;
 
+    private String city;
     private String country;
 }

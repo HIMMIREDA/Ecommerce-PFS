@@ -63,11 +63,11 @@ public class UserEntity implements Serializable {
     @OneToMany(mappedBy = "reviewer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<OrderEntity> orders = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    private WishListEntity wishList=new WishListEntity();
+    private WishListEntity wishList = new WishListEntity();
 
     @PrePersist
     public void initializeWishList() {

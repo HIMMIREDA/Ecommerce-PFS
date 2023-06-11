@@ -14,4 +14,6 @@ public interface CartService {
     CartDto updateCartItem(String cartItemId, Integer quantity, HttpSession session);
 
     void mergeCarts(CartEntity sessionCart, CartEntity storedCart);
+
+    Double getCartTotal();
 }

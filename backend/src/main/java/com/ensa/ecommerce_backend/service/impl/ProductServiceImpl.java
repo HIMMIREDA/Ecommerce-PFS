@@ -2,19 +2,10 @@ package com.ensa.ecommerce_backend.service.impl;
 
 import com.ensa.ecommerce_backend.dto.ProductDto;
 import com.ensa.ecommerce_backend.dto.ProductSearchDto;
-import com.ensa.ecommerce_backend.entity.BrandEntity;
-import com.ensa.ecommerce_backend.entity.CategoryEntity;
-import com.ensa.ecommerce_backend.entity.ImageEntity;
-import com.ensa.ecommerce_backend.entity.ProductEntity;
-import com.ensa.ecommerce_backend.exception.CategoryNotFoundException;
-import com.ensa.ecommerce_backend.exception.InvalidCategoryLevelException;
-import com.ensa.ecommerce_backend.exception.ProductImageArraySizeException;
-import com.ensa.ecommerce_backend.exception.ProductNotFoundException;
+import com.ensa.ecommerce_backend.entity.*;
+import com.ensa.ecommerce_backend.exception.*;
 import com.ensa.ecommerce_backend.mapper.ProductMapper;
-import com.ensa.ecommerce_backend.repository.BrandRepository;
-import com.ensa.ecommerce_backend.repository.CategoryRepository;
-import com.ensa.ecommerce_backend.repository.ImageRepository;
-import com.ensa.ecommerce_backend.repository.ProductRepository;
+import com.ensa.ecommerce_backend.repository.*;
 import com.ensa.ecommerce_backend.request.AddProductRequest;
 import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import com.ensa.ecommerce_backend.search.SearchCriteria;
@@ -26,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +42,21 @@ public class ProductServiceImpl implements ProductService {
     private ImageRepository imageRepository;
     private CategoryRepository categoryRepository;
     private BrandRepository brandRepository;
+    private UserRepository userRepository;
 
+
+    @Override
+    public void reduceProductsQuantity(CartEntity cart) {
+        // reduce product Quantity
+        cart.getCartItems().forEach(cartItemEntity -> {
+            ProductEntity product = productRepository.findById(cartItemEntity.getProduct().getId()).orElseThrow(ProductNotFoundException::new);
+            if (product.getQuantity() < cartItemEntity.getQuantity()) {
+                throw new ProductQuantityException();
+            }
+            product.setQuantity(product.getQuantity() - cartItemEntity.getQuantity());
+            productRepository.save(product);
+        });
+    }
 
     @Override
     public ProductDto saveProduct(AddProductRequest addProductRequest) {

@@ -3,6 +3,8 @@ import ProductItemList from "../../components/shop/products/ProductItemList";
 import Pagination from "../../components/common/Pagination";
 import {
   fetchProducts,
+  setBrandFilter,
+  setCategoryFilter,
   setSearchQuery,
 } from "../../features/product/productSlice";
 import FilterByCategory from "../../components/shop/products/filters/FilterByCategory";
@@ -19,6 +21,8 @@ function Products() {
 
   useEffect(() => {
     dispatch(setSearchQuery(searchParams.get("search")));
+    dispatch(setCategoryFilter(searchParams.get("category")));
+    dispatch(setBrandFilter(searchParams.get("brand")));
     let abortController = new AbortController();
     dispatch(fetchProducts({ abortController, page: 1 }));
     return () => {

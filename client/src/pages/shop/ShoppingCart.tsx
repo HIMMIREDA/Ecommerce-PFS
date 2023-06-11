@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchCartItems, reset } from "../../features/cart/cartSlice";
 import { toast } from "react-toastify";
 import ShoppingCartItem from "../../components/shop/shoppingcartpage/ShoppingCartItem";
+import { Link } from "react-router-dom";
 
 const ShoppingCart = () => {
   const { isLoading, isSuccess, isError, message, cartItems, total } =
@@ -47,9 +48,12 @@ const ShoppingCart = () => {
               <p className="mb-1 text-lg font-bold">${total}</p>
             </div>
           </div>
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+          <Link
+            to={"/checkout/AddressForm"}
+            className="mt-6 w-full rounded-md btn btn-outline bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+          >
             Check out
-          </button>
+          </Link>
         </div>
       </div>
     </div>

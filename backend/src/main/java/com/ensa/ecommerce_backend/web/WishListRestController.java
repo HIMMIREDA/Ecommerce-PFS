@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/wishlist")
-public class WishListController {
+public class WishListRestController {
 
     private WishListService wishListService;
 

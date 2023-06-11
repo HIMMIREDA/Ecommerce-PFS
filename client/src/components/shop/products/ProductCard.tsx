@@ -32,9 +32,10 @@ const ProductCard = ({ product }: PropTypes) => {
           {product?.name}
         </Link>
 
-        <p className="mt-1.5 text-sm">{product?.price} $</p>
-
-        <AddToCartBtn productId={product?.id} />
+        <p className="mt-1.5 text-sm p-2">{product?.price} $</p>
+        <div className="mt-5">
+          <AddToCartBtn productId={product?.id} />
+        </div>
       </div>
     </div>
   );

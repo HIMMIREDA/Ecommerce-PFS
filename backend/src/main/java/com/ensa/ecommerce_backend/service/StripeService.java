@@ -1,6 +1,6 @@
 package com.ensa.ecommerce_backend.service;
 
-import com.ensa.ecommerce_backend.DTO.AddressDto;
+import com.ensa.ecommerce_backend.dto.AddressDto;
 import com.ensa.ecommerce_backend.response.CreatePaymentIntentResponse;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;

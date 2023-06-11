@@ -215,52 +215,53 @@ function Product() {
               className="mt-3 flex select-none flex-wrap justify-center gap-1 flex-col"
             >
               <VariationInputList />
-              <div className="flex items-center justify-start mt-6">
-                <h2 className="me-2">Quantity:</h2>
-                <button
-                  className="border border-gray-400 rounded-l px-3 py-1"
-                  type="button"
-                  onClick={() => {
-                    addToCartForm.setValues({
-                      ...addToCartForm.values,
-                      quantity:
-                        addToCartForm.values.quantity > 1
-                          ? addToCartForm.values.quantity - 1
-                          : addToCartForm.values.quantity,
-                    });
-                  }}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  max={productSlice.product?.quantity}
-                  className="w-12 text-center border-t border-b border-gray-400 py-1"
-                  id="firstName"
-                  name="firstName"
-                  onChange={addToCartForm.handleChange}
-                  value={addToCartForm.values.quantity}
-                />
+              {(productSlice.product?.quantity || 0) > 0 && (
+                <div className="flex items-center justify-start mt-6">
+                  <h2 className="me-2">Quantity:</h2>
+                  <button
+                    className="border border-gray-400 rounded-l px-3 py-1"
+                    type="button"
+                    onClick={() => {
+                      addToCartForm.setValues({
+                        ...addToCartForm.values,
+                        quantity:
+                          addToCartForm.values.quantity > 1
+                            ? addToCartForm.values.quantity - 1
+                            : addToCartForm.values.quantity,
+                      });
+                    }}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    max={productSlice.product?.quantity}
+                    className="w-12 text-center border-t border-b border-gray-400 py-1"
+                    id="firstName"
+                    name="firstName"
+                    onChange={addToCartForm.handleChange}
+                    value={addToCartForm.values.quantity}
+                  />
 
-                <button
-                  className="border border-gray-400 rounded-r px-3 py-1"
-                  type="button"
-                  onClick={() => {
-                    addToCartForm.setValues({
-                      ...addToCartForm.values,
-                      quantity:
-                        addToCartForm.values.quantity <
-                        (productSlice.product?.quantity || 0)
-                          ? addToCartForm.values.quantity + 1
-                          : addToCartForm.values.quantity,
-                    });
-                  }}
-                >
-                  +
-                </button>
-              </div>
-
+                  <button
+                    className="border border-gray-400 rounded-r px-3 py-1"
+                    type="button"
+                    onClick={() => {
+                      addToCartForm.setValues({
+                        ...addToCartForm.values,
+                        quantity:
+                          addToCartForm.values.quantity <
+                          (productSlice.product?.quantity || 0)
+                            ? addToCartForm.values.quantity + 1
+                            : addToCartForm.values.quantity,
+                      });
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              )}
               <div className="mt-10 flex flex-col items-center justify-between space-y-4 space-x-3 border-t border-b py-4 md:flex-row sm:space-y-0">
                 {productSlice.product?.price &&
                   productSlice.product?.price > 0 && (

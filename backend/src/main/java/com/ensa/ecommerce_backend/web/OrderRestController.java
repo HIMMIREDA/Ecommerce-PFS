@@ -1,6 +1,7 @@
 package com.ensa.ecommerce_backend.web;
 
 
+import com.ensa.ecommerce_backend.dto.OrderDto;
 import com.ensa.ecommerce_backend.entity.OrderEntity;
 import com.ensa.ecommerce_backend.enums.OrderStatus;
 import com.ensa.ecommerce_backend.request.AddOrderRequest;
@@ -22,14 +23,6 @@ public class OrderRestController {
     OrderService orderService;
 
 
-    /*
-    @PostMapping
-    public ResponseEntity<OrderEntity> addOrder(@RequestBody AddOrderRequest addOrderRequest) {
-        OrderEntity order = orderService.addOrder(addOrderRequest);
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
-    }
-     */
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteOrder(@PathVariable("id") String id) {
         orderService.deleteOrderById(id);
@@ -39,20 +32,20 @@ public class OrderRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderEntity> getOrderById(@PathVariable String id) {
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable String id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderEntity>> getOrders(){
+    public ResponseEntity<List<OrderDto>> getOrders(){
         return ResponseEntity.ok(orderService.getAuthenticatedUserOrders());
     }
 
-    /*
+
     @PutMapping("/{id}")
-    public ResponseEntity<OrderEntity> updateOrder(@PathVariable("id") String id, @RequestBody OrderStatus status) {
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable("id") String id, @RequestBody OrderStatus status) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
-     */
+
 
 }

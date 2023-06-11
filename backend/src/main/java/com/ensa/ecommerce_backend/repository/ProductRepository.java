@@ -27,4 +27,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long>, J
 
     @Query("SELECT AVG(r.rating) FROM ReviewEntity r WHERE r.product.id = :productId")
     Double calculateMeanRating(@Param("productId") Long productId);
+
 }

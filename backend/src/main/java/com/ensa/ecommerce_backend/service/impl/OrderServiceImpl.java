@@ -1,21 +1,19 @@
 package com.ensa.ecommerce_backend.service.impl;
 
+import com.ensa.ecommerce_backend.dto.OrderDto;
 import com.ensa.ecommerce_backend.entity.*;
 import com.ensa.ecommerce_backend.enums.OrderStatus;
 import com.ensa.ecommerce_backend.exception.OrderNotFoundException;
-import com.ensa.ecommerce_backend.repository.AddressRepository;
-import com.ensa.ecommerce_backend.repository.CartRepository;
-import com.ensa.ecommerce_backend.repository.OrderRepository;
-import com.ensa.ecommerce_backend.repository.UserRepository;
+import com.ensa.ecommerce_backend.mapper.OrderMapper;
+import com.ensa.ecommerce_backend.repository.*;
 import com.ensa.ecommerce_backend.request.AddOrderRequest;
 import com.ensa.ecommerce_backend.service.OrderService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -27,14 +25,15 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     AddressRepository addressRepository;
     CartRepository cartRepository;
+    ProductRepository productRepository;
 
     @Override
-    public OrderEntity addOrder(String orderId, AddOrderRequest addOrderRequest, String userEmail) {
+    public OrderDto addOrder(String orderId, AddOrderRequest addOrderRequest, String userEmail) {
 
         UserEntity user = userRepository.findUserEntityByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
-        CartEntity cart = user.getCart();
 
+        CartEntity cart = user.getCart();
         OrderEntity order = OrderEntity.builder()
                 .id(orderId)
                 .user(user)
@@ -46,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
                 .addressLine(addOrderRequest.getAddress().getAddressLine())
                 .country(addOrderRequest.getAddress().getCountry())
                 .postalCode(addOrderRequest.getAddress().getPostalCode())
+                .city(addOrderRequest.getAddress().getCity())
+                .user(user)
                 .build();
 
         List<OrderItemEntity> orderItems = cart.getCartItems().stream().map(
@@ -60,11 +61,9 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(address);
         user.getOrders().add(order);
 
-        // clear cart
-        cart.setCartItems(new HashSet<>());
-        cartRepository.save(cart);
-        return orderRepository.save(order);
+        return OrderMapper.toDto(orderRepository.save(order));
     }
+
 
     @Override
     public void deleteOrderById(String id) {
@@ -72,24 +71,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderEntity getOrderById(String id) {
-        return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order Not Found"));
+    public OrderDto getOrderById(String id) {
+        return OrderMapper.toDto(orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order Not Found")));
     }
 
     @Override
-    public List<OrderEntity> getAuthenticatedUserOrders() {
+    public List<OrderDto> getAuthenticatedUserOrders() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
         UserEntity user = userRepository.findUserEntityByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
 
-        return user.getOrders();
+        return user.getOrders().stream().map(OrderMapper::toDto).toList();
 
     }
 
     @Override
-    public OrderEntity updateOrderStatus(String id, OrderStatus status) {
+    public OrderDto updateOrderStatus(String id, OrderStatus status) {
         OrderEntity order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order Not Found"));
         order.setStatus(status);
-        return orderRepository.save(order);
+        return OrderMapper.toDto(orderRepository.save(order));
     }
 }

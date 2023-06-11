@@ -56,6 +56,9 @@ public class ProductEntity implements Serializable {
     @ManyToMany
     private List<OrderEntity> orders = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "products",cascade = CascadeType.ALL)
+    private List<WishListEntity> wishLists = new ArrayList<>();
+
     @PrePersist
     public void initializeMeanRating() {
         this.meanRating = 0;

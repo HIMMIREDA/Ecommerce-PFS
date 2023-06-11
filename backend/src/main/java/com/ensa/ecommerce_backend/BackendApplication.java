@@ -21,16 +21,8 @@ import java.util.Arrays;
 @EnableRedisHttpSession
 public class BackendApplication implements CommandLineRunner {
 
-
     @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ReviewService reviewService;
-
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);

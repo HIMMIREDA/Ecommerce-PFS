@@ -10,7 +10,7 @@ import {
   reset as resetBrandSLice,
 } from "../../features/brand/brandSlice";
 import {
-  fetchProducts,
+  searchProducts,
   reset as resetProductSLice,
 } from "../../features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -23,7 +23,7 @@ const Home = () => {
   useEffect(() => {
     let abortController = new AbortController();
     dispatch(fetchBrands({abortController, page: 1, limit: 3}));
-    dispatch(fetchProducts({ abortController, page: 1, limit: 10 }));
+    dispatch(searchProducts({ abortController, page: 1, limit: 10 }));
 
     return () => {
       abortController.abort();

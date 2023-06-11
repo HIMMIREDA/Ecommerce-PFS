@@ -6,7 +6,7 @@ import {
 } from "../../../../features/category/categorySlice";
 import { FaChevronDown } from "react-icons/fa";
 import {
-  fetchProducts,
+  searchProducts,
   setCategoryFilter,
 } from "../../../../features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
@@ -36,7 +36,7 @@ const FilterByCategory = () => {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchProducts({ abortController, page: 1 }));
+    dispatch(searchProducts({ abortController, page: 1 }));
 
     return () => {
       abortController.abort();

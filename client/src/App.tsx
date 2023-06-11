@@ -1,9 +1,15 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/shop/Home";
 import NavBar from "./components/shop/layout/NavBar";
 import Cart from "./components/shop/shoppingcart/Cart";
 import Footer from "./components/shop/layout/Footer";
 import Login from "./pages/shop/Login";
+import LoginAdmin from "./pages/admin/AdminLogin";
 import Register from "./pages/shop/Register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +28,12 @@ import Changepassword from "./pages/shop/ChangePassword";
 import Categories from "./pages/shop/Categories";
 import Brands from "./pages/shop/Brands";
 import WishList from "./pages/shop/WishList";
+import AdminRoute from "./components/common/AdminRoute";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminHeader from "./components/admin/Layout/AdminHeader";
+import AdminSidebar from "./components/admin/Layout/AdminSidebar";
+import AdminAddProduct from "./pages/admin/AdminAddProduct";
 
 function App() {
   return (
@@ -30,32 +42,40 @@ function App() {
       <div className="flex flex-col min-h-[100vh] w-full">
         <NavBar />
         <Cart />
-        <main className="flex flex-col justify-center mt-1 md:mt-5">
-          <Routes>
-            <Route element={<PersistLogin />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/products/:productId" element={<Product />} />
-              <Route path="/shop" element={<Products />} />
-              <Route path="/cart" element={<ShoppingCart />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/brands" element={<Brands />} />
-              {/* private routes */}
-              <Route element={<PrivateRoute />}>
-                <Route path="/wishlist" element={<WishList />} />
-                <Route path="/checkout" element={<MultiStepCheckout />}>
-                  <Route path="addressForm" element={<Address />} />
-                  <Route path="checkoutForm" element={<Checkout />} />
-                  <Route path="success" element={<CheckoutSuccess />} />
-                </Route>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/change-password" element={<Changepassword />} />
+        <Routes>
+          <Route element={<PersistLogin />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/products/:productId" element={<Product />} />
+            <Route path="/shop" element={<Products />} />
+            <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/brands" element={<Brands />} />
+            <Route path="/admin/login" element={<LoginAdmin />} />
+
+            {/* private routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/wishlist" element={<WishList />} />
+              <Route path="/checkout" element={<MultiStepCheckout />}>
+                <Route path="addressForm" element={<Address />} />
+                <Route path="checkoutForm" element={<Checkout />} />
+                <Route path="success" element={<CheckoutSuccess />} />
+              </Route>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/change-password" element={<Changepassword />} />
+
+              {/* admin routes */}
+              <Route element={<AdminRoute />}>
+                <Route path="/admin/products" element={<AdminProducts />} />
+                <Route path="/admin/categories" element={<AdminCategories />} />
+                <Route path="/admin/addProduct" element={<AdminAddProduct />} />
               </Route>
             </Route>
-          </Routes>
-        </main>
+          </Route>
+        </Routes>
+
         <Footer />
       </div>
     </Router>

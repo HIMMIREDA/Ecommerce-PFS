@@ -23,9 +23,7 @@ function Login() {
     if (isError && message) {
       toast.error(message);
     }
-    if (isSuccess) {
-      dispatch(reset());
-    }
+    
     dispatch(reset());
   }, [isError, isSuccess, message, dispatch, navigate]);
 

@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import axios from "../../api/axios";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Spinner from "./Spinner";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     // try getting new access token using refresh token
@@ -44,7 +46,13 @@ const PersistLogin = () => {
   if (isLoading) {
     return <Spinner />;
   }
-  return <Outlet />;
+  return isAdminRoute ? (
+    <Outlet />
+  ) : (
+    <main className="flex flex-col justify-center mt-1 md:mt-5">
+      <Outlet />
+    </main>
+  );
 };
 
 export default PersistLogin;

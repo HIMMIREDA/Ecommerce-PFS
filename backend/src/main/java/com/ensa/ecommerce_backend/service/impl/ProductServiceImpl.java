@@ -46,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll().stream().map(ProductMapper::toDto).toList();
+    }
+
+    @Override
     public void reduceProductsQuantity(CartEntity cart) {
         // reduce product Quantity
         cart.getCartItems().forEach(cartItemEntity -> {
@@ -125,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder) {
+    public Page<ProductDto> getPaginatedProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder) {
         ProductSpecificationBuilder builder = new ProductSpecificationBuilder();
         if (productSearchDto != null) {
             List<SearchCriteria> criteriaList = productSearchDto.getSearchCriteriaList();

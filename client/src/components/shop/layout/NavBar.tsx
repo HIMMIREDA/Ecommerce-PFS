@@ -1,4 +1,4 @@
-import{ useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AiFillShop,
   AiOutlineClose,
@@ -9,7 +9,7 @@ import {
 import SearchBar from "./SearchBar";
 import CartIcon from "./CartIcon";
 import NavigationLinks from "./NavigationLinks";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   fetchCategories,
   reset,
@@ -20,6 +20,8 @@ import { logoutUser } from "../../../features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 
 function NavBar() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
   const [openMenu, setOpenMenu] = useState(false);
   const { isError, message, isSuccess } = useAppSelector(
     (state) => state.category
@@ -49,7 +51,7 @@ function NavBar() {
     dispatch(reset());
   }, [isError, message, isSuccess, dispatch]);
 
-  return (
+  return isAdminRoute ? null : (
     <nav className="shadow z-20 w-full sticky top-0 bg-base-100">
       <div className="container px-6 py-4 mx-auto">
         <div className="lg:flex lg:items-center">
@@ -123,7 +125,11 @@ function NavBar() {
                         <Link to="/profile" className="p-2">
                           Profile
                         </Link>
-                        <Link onClick={logoutClickHandler} to={"#"} className="p-2">
+                        <Link
+                          onClick={logoutClickHandler}
+                          to={"#"}
+                          className="p-2"
+                        >
                           Logout
                         </Link>
                       </>

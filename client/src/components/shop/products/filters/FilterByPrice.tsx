@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import {
-  fetchProducts,
+  searchProducts,
   setPriceFilter,
 } from "../../../../features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
@@ -19,7 +19,7 @@ function FilterByPrice() {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchProducts({ abortController, page: 1 }));
+    dispatch(searchProducts({ abortController, page: 1 }));
 
     return () => {
       abortController.abort();

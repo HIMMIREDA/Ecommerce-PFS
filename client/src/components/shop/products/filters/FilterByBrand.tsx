@@ -3,7 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { fetchBrands, reset } from "../../../../features/brand/brandSlice";
 import { toast } from "react-toastify";
 import {
-  fetchProducts,
+  searchProducts,
   setBrandFilter,
 } from "../../../../features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
@@ -34,7 +34,7 @@ function FilterByBrand() {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchProducts({ abortController, page: 1 }));
+    dispatch(searchProducts({ abortController, page: 1 }));
     return () => {
       abortController.abort();
     };

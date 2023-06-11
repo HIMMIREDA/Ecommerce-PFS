@@ -3,7 +3,15 @@ import { AddProductPayload, UpdateProductPayload } from "../../types/payloads";
 
 const PAGE_LIMIT = 3;
 
-const fetchProducts = async (
+const fetchAllProducts = async (abortController: AbortController) => {
+  const response = await axios.get("products", {
+    signal: abortController.signal,
+  });
+
+  return response.data;
+};
+
+const searchProducts = async (
   abortController: AbortController,
   page: number | undefined,
   limit: number | undefined,
@@ -142,7 +150,8 @@ const updateProduct = async (
 };
 
 const productService = {
-  fetchProducts,
+  fetchAllProducts,
+  searchProducts,
   fetchProduct,
   deleteProduct,
   updateProduct,

@@ -67,12 +67,14 @@ public class UserEntity implements Serializable {
     private List<OrderEntity> orders = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    private WishListEntity wishList;
+    private WishListEntity wishList=new WishListEntity();
 
     @PrePersist
     public void initializeWishList() {
-        WishListEntity wishList = new WishListEntity();
-        wishList.setUser(this);
-        this.wishList = wishList;
+        if (this.wishList == null) {
+            WishListEntity wishList = new WishListEntity();
+            wishList.setUser(this);
+            this.wishList = wishList;
+        }
     }
 }

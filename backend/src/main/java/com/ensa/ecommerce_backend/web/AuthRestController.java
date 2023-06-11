@@ -2,6 +2,7 @@ package com.ensa.ecommerce_backend.web;
 
 import com.ensa.ecommerce_backend.request.LoginRequest;
 import com.ensa.ecommerce_backend.request.RegistrationRequest;
+import com.ensa.ecommerce_backend.request.UpdatePasswordRequest;
 import com.ensa.ecommerce_backend.response.LoginResponse;
 import com.ensa.ecommerce_backend.response.RefreshJwtResponse;
 import com.ensa.ecommerce_backend.response.RegistrationResponse;
@@ -55,5 +56,11 @@ public class AuthRestController {
     @GetMapping("/confirm-registration")
     public void confirmRegistration(@RequestParam("token") String token) {
         authService.verifyAccount(token);
+    }
+
+    @PutMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest){
+        authService.updatePassword(updatePasswordRequest);
     }
 }

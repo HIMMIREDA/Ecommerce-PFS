@@ -159,31 +159,6 @@ function Footer() {
               </nav>
             </div>
 
-            <div className="col-span-2 sm:col-span-1">
-              <p className="font-bold">SELLER</p>
-
-              <nav aria-label="Footer Navigation - Downloads" className="mt-6">
-                <ul className="space-y-4 text-sm">
-                  <li>
-                    <Link
-                      to="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      Be a seller
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      to="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      Seller dashboard
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </div>
 
             <ul className="col-span-2 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
               <li>

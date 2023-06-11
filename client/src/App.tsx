@@ -16,11 +16,12 @@ import ShoppingCart from "./pages/shop/ShoppingCart";
 import Profile from "./pages/shop/Profile";
 import MultiStepCheckout from "./pages/shop/MultiStepCheckout";
 import Address from "./pages/shop/Address";
-import CheckoutForm from "./components/shop/checkout/CheckoutForm";
 import CheckoutSuccess from "./pages/shop/CheckoutSuccess";
 import Orders from "./pages/shop/Orders";
 import Changepassword from "./pages/shop/ChangePassword";
 import Categories from "./pages/shop/Categories";
+import Brands from "./pages/shop/Brands";
+import WishList from "./pages/shop/WishList";
 
 function App() {
   return (
@@ -39,8 +40,10 @@ function App() {
               <Route path="/shop" element={<Products />} />
               <Route path="/cart" element={<ShoppingCart />} />
               <Route path="/categories" element={<Categories />} />
+              <Route path="/brands" element={<Brands />} />
               {/* private routes */}
               <Route element={<PrivateRoute />}>
+                <Route path="/wishlist" element={<WishList />} />
                 <Route path="/checkout" element={<MultiStepCheckout />}>
                   <Route path="addressForm" element={<Address />} />
                   <Route path="checkoutForm" element={<Checkout />} />

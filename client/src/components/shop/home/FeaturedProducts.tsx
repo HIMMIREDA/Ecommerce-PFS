@@ -21,7 +21,7 @@ const FeaturedProducts = () => {
             Featured Products
           </h2>
           <Link
-            to={"/products/featured"}
+            to={"/shop"}
             className="group mt-4 inline-flex  gap-1 text-xl font-medium items-center"
           >
             See more now{" "}

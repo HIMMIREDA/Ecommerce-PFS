@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import orderService from "./orderService";
+import wishListService from "./wishlistService";
 import axios from "axios";
 import { RootState } from "../../app/store";
-import { UpdateOrderPayload } from "../../types/payloads";
-import { Order } from "../../types/order";
+import { Product } from "../../types/product";
 
-export const fetchOrders = createAsyncThunk(
-  "order/fetch",
+export const fecthFavorites = createAsyncThunk(
+  "wishlist/fetch",
   async (abortController: AbortController, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState)?.auth?.user?.accessToken || null;
 
     try {
-      const data = await orderService.fetchOrders(abortController, token);
+      const data = await wishListService.fecthFavorites(abortController, token);
       return data;
     } catch (error) {
       let message = "";
@@ -29,14 +28,14 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
-export const deleteOrder = createAsyncThunk(
-  "order/delete",
-  async ({ orderId }: { orderId: string | undefined }, thunkAPI) => {
+export const deleteFavorite = createAsyncThunk(
+  "wishlist/delete",
+  async ({ productId }: { productId: string | undefined }, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState).auth.user?.accessToken || null;
 
     try {
-      const data = await orderService.deleteOrder(token, orderId);
+      const data = await wishListService.deleteFavorite(token, productId);
       return data;
     } catch (error) {
       let message = "";
@@ -53,20 +52,14 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
-export const updateOrder = createAsyncThunk(
-  "order/update",
-  async (
-    {
-      orderId,
-      order,
-    }: { orderId: string | undefined; order: UpdateOrderPayload },
-    thunkAPI
-  ) => {
+export const addFavorite = createAsyncThunk(
+  "wishlist/add",
+  async ({ productId }: { productId: string | undefined }, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState).auth.user?.accessToken || null;
 
     try {
-      const data = await orderService.updateOrder(token, orderId, order);
+      const data = await wishListService.addFavorite(token, productId);
       return data;
     } catch (error) {
       let message = "";
@@ -84,21 +77,21 @@ export const updateOrder = createAsyncThunk(
 );
 
 const initialState: {
-  orders: Order[];
+  products: Product[];
   isSuccess: boolean;
   isError: boolean;
   message: string;
   isLoading: boolean;
 } = {
-  orders: [],
+  products: [],
   isSuccess: false,
   isError: false,
   message: "",
   isLoading: false,
 };
 
-const orderSlice = createSlice({
-  name: "order",
+const wsihlistSlice = createSlice({
+  name: "wishlist",
   initialState,
   reducers: {
     reset: (state) => {
@@ -110,64 +103,62 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
+      .addCase(fecthFavorites.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
-      .addCase(fetchOrders.rejected, (state, action) => {
+      .addCase(fecthFavorites.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
       .addCase(
-        fetchOrders.fulfilled,
-        (state, action: PayloadAction<Order[]>) => {
+        fecthFavorites.fulfilled,
+        (state, action: PayloadAction<Product[]>) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.orders = action.payload;
+          state.products = action.payload;
         }
       )
-      .addCase(deleteOrder.pending, (state) => {
+      .addCase(deleteFavorite.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
-      .addCase(deleteOrder.rejected, (state, action) => {
+      .addCase(deleteFavorite.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(deleteOrder.fulfilled, (state, action) => {
+      .addCase(deleteFavorite.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.orders = state.orders.filter(
-          (order) => order.id !== action.payload?.id
+        state.products = state.products.filter(
+          (product) => product.id !== action.payload?.id
         );
       })
-      .addCase(updateOrder.pending, (state) => {
+      .addCase(addFavorite.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
-      .addCase(updateOrder.rejected, (state, action) => {
+      .addCase(addFavorite.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(updateOrder.fulfilled, (state, action) => {
+      .addCase(addFavorite.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.orders = state.orders.map((order) =>
-          order.id == action.payload?.id ? action.payload : order
-        );
+        state.products = [...state.products, action.payload];
       });
   },
 });
 
-export const { reset } = orderSlice.actions;
+export const { reset } = wsihlistSlice.actions;
 
-export default orderSlice.reducer;
+export default wsihlistSlice.reducer;

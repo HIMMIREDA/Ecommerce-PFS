@@ -18,6 +18,7 @@ import { fetchProduct } from "../../features/product/productSlice";
 import ReviewList from "../../components/shop/reviews/ReviewList";
 import { FaStar } from "react-icons/fa";
 import ReviewForm from "../../components/shop/reviews/ReviewForm";
+import { addFavorite, reset } from "../../features/wishlist/wishlistSlice";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,7 @@ function Product() {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
   const productSlice = useAppSelector((state) => state.product);
+  const wishlistSlice = useAppSelector((state) => state.wishlist);
   const { user } = useAppSelector((state) => state.auth);
 
   const cartSlice = useAppSelector((state) => state.cart);
@@ -115,6 +117,22 @@ function Product() {
     cartSlice.isSuccess,
     cartSlice.isLoading,
     dispatch,
+  ]);
+
+  useEffect(() => {
+    if (wishlistSlice.isError && wishlistSlice.message) {
+      toast.error(wishlistSlice.message);
+    }
+    if (wishlistSlice.isSuccess) {
+      toast.success("product added to wishlist successfully");
+    }
+    dispatch(reset());
+  }, [
+    wishlistSlice.message,
+    dispatch,
+    wishlistSlice.isError,
+    wishlistSlice.isSuccess,
+    wishlistSlice.isLoading,
   ]);
 
   return (
@@ -283,6 +301,13 @@ function Product() {
                   )}
                 <button
                   type="button"
+                  onClick={() => {
+                    dispatch(
+                      addFavorite({
+                        productId: productId,
+                      })
+                    );
+                  }}
                   className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-400  bg-none px-8 py-3 text-center text-base font-bold text-base-100 transition-all duration-200 ease-in-out focus:shadow hover:bg-red-500"
                 >
                   <BsHeart className="shrink-0 mr-3 h-5 w-5" />

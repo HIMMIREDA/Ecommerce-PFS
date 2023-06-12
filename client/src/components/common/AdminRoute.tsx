@@ -7,7 +7,7 @@ const AdminRoute = () => {
   return user?.roles.includes(Role.ADMIN) ? (
     <div className="flex flex-row h-screen w-screen space-x-3">
       <AdminSidebar />
-      <div className="w-full h-full">
+      <div className="w-full h-full overflow-scroll">
         <Outlet />
       </div>
     </div>

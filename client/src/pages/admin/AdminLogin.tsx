@@ -37,11 +37,10 @@ const AdminLogin = () => {
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-sm">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="text-2xl font-bold sm:text-3xl">Get started today!</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">Access your account</h1>
           <ValidationErrors errors={errors} />
           <p className="mt-4 text-gray-500">
-            Veuillez vous connecter pour accéder à votre compte et passer
-            commande.
+            Admin Control Panel
           </p>
         </div>
         <form

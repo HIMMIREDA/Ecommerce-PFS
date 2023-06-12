@@ -10,7 +10,7 @@ const AdminSidebar = () => {
   const {user} = useAppSelector(state => state.auth);
 
   return !isAdminRoute ? null : (
-    <div className="flex flex-col top-14 left-0 w-14 hover:w-64 md:w-64 bg-blue-900 dark:bg-gray-900 h-full  text-white transition-all duration-300 border-none z-10 sidebar">
+    <div className="flex min-h-screen flex-col top-14 left-0 w-14 hover:w-64 md:w-64 bg-blue-900 dark:bg-gray-900  text-white transition-all duration-300 border-none z-10 sidebar">
       <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 bg-blue-800 dark:bg-gray-800 border-none">
         <img
           className="w-7 h-7 md:w-10 md:h-10 mr-2 rounded-md overflow-hidden"
@@ -160,7 +160,7 @@ const AdminSidebar = () => {
           </li>
         </ul>
         <p className="mb-14 px-5 py-3 hidden md:block text-center text-xs">
-          Copyright @2021
+          Copyright @2023
         </p>
       </div>
     </div>

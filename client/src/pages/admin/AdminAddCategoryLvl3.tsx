@@ -108,7 +108,7 @@ function AdminAddCategoryLvl3() {
             htmlFor="parentCategory"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Parent First-Level Category:
+            Parent Second-Level Category:
           </label>
           <select
             id="parentCategory"

@@ -1,7 +1,7 @@
 import axios, { axiosPrivate } from "../../api/axios";
 import { AddProductPayload, UpdateProductPayload } from "../../types/payloads";
 
-const PAGE_LIMIT = 3;
+const PAGE_LIMIT = 8;
 
 const fetchAllProducts = async (abortController: AbortController) => {
   const response = await axios.get("products", {

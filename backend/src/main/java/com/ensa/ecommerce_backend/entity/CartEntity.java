@@ -27,7 +27,7 @@ public class CartEntity implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartItemEntity> cartItems = new HashSet<>();
 
     public void setTotal(double total) {

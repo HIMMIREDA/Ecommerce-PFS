@@ -53,3 +53,8 @@ export interface AddReviewPayload {
 export interface UpdateOrderPayload {
   status: OrderStatus;
 }
+
+export interface UpdatePasswordPayload {
+  newPassword: string;
+  oldPassword: string;
+}

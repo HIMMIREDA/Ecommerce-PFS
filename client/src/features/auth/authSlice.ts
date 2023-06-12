@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
 import { User } from "../../types/user";
 import axios from "axios";
-import { LoginPayload, RegisterPayload } from "../../types/payloads";
+import {
+  LoginPayload,
+  RegisterPayload,
+  UpdatePasswordPayload,
+} from "../../types/payloads";
+import { RootState } from "../../app/store";
 
 const initialState: {
   user: User | null;
@@ -81,6 +86,29 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
+
+export const updatePassword = createAsyncThunk(
+  "auth/updatepassword",
+  async (payload: UpdatePasswordPayload, thunkAPI) => {
+    const token =
+    (thunkAPI.getState() as RootState).auth.user?.accessToken || null;
+    try {
+      await authService.updatePassword(payload, token);
+    } catch (error) {
+      let message = "";
+      if (axios.isAxiosError(error)) {
+        message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -93,7 +121,7 @@ const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -138,6 +166,21 @@ const authSlice = createSlice({
         state.isError = false;
         state.loading = false;
         state.user = null;
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+        state.isSuccess = false;
+        state.isError = false;
+      })
+      .addCase(updatePassword.rejected, (state) => {
+        state.isSuccess = false;
+        state.isError = true;
+        state.loading = false;
+      })
+      .addCase(updatePassword.fulfilled, (state) => {
+        state.isSuccess = true;
+        state.isError = false;
+        state.loading = false;
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;

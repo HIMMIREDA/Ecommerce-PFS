@@ -35,6 +35,6 @@ public class OrderEntity {
     private UserEntity user;
     @ManyToOne(cascade = CascadeType.ALL)
     private AddressEntity address;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER ,orphanRemoval = true)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 }

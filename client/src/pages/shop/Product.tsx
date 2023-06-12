@@ -5,7 +5,6 @@ import { Tab } from "@headlessui/react";
 import { useFormik } from "formik";
 import ValidationErrors from "../../components/common/ValidationErrors";
 import * as Yup from "yup";
-import VariationInputList from "../../components/shop/products/VariationInputList";
 import {
   addToCart,
   reset as resetCartSlice,
@@ -232,7 +231,6 @@ function Product() {
               }}
               className="mt-3 flex select-none flex-wrap justify-center gap-1 flex-col"
             >
-              <VariationInputList />
               {(productSlice.product?.quantity || 0) > 0 && (
                 <div className="flex items-center justify-start mt-6">
                   <h2 className="me-2">Quantity:</h2>

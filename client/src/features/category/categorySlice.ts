@@ -8,6 +8,26 @@ import {
 } from "../../types/payloads";
 import { Category } from "../../types/category";
 
+function removeCategoryAndSubcategories(categories: Category[], categoryId: string) {
+  return categories.filter((category) => {
+    if (category.id === categoryId) {
+      return false; // Exclude the category with the matching id
+    }
+
+    if (category.subCategories && category.subCategories.length > 0) {
+      // Recursively remove the category from subcategories
+      category.subCategories = removeCategoryAndSubcategories(
+        category.subCategories,
+        categoryId
+      );
+
+      return true; // Keep the category since it still has subcategories
+    }
+
+    return true; // Keep the category without any matching id or subcategories
+  });
+}
+
 export const fetchCategories = createAsyncThunk(
   "category/fetch",
   async (abortController: AbortController, thunkAPI) => {
@@ -72,12 +92,12 @@ export const fetchGrandChildCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk(
   "category/create",
-  async ({ category }: { category: AddCategoryPayload }, thunkAPI) => {
+  async ({ category, parentCategoryId }: { category: AddCategoryPayload, parentCategoryId?: string }, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState)?.auth?.user?.accessToken || null;
 
     try {
-      const data = await categoryService.createCategory(token, category);
+      const data = await categoryService.createCategory(token, category, parentCategoryId);
       return data;
     } catch (error) {
       let message = "";
@@ -253,9 +273,7 @@ const categorySlice = createSlice({
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categories = state.categories.filter(
-          (category) => category.id !== action.payload?.id
-        );
+        state.categories = removeCategoryAndSubcategories(state.categories,action.payload?.id);
       })
       .addCase(createCategory.pending, (state) => {
         state.isLoading = true;

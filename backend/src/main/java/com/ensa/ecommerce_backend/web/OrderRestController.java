@@ -2,13 +2,10 @@ package com.ensa.ecommerce_backend.web;
 
 
 import com.ensa.ecommerce_backend.dto.OrderDto;
-import com.ensa.ecommerce_backend.entity.OrderEntity;
 import com.ensa.ecommerce_backend.enums.OrderStatus;
-import com.ensa.ecommerce_backend.request.AddOrderRequest;
+import com.ensa.ecommerce_backend.request.UpdateOrderRequest;
 import com.ensa.ecommerce_backend.service.OrderService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,15 +34,21 @@ public class OrderRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> getOrders(){
+    public ResponseEntity<List<OrderDto>> getAuthenticatedUserOrders() {
         return ResponseEntity.ok(orderService.getAuthenticatedUserOrders());
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable("id") String id, @RequestBody OrderStatus status) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable("id") String id, @RequestBody UpdateOrderRequest updateOrderRequest) {
+        OrderStatus orderStatus = updateOrderRequest.getStatus();
+
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, orderStatus));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
+    }
 
 }

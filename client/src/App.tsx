@@ -2,7 +2,6 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useLocation,
 } from "react-router-dom";
 import Home from "./pages/shop/Home";
 import NavBar from "./components/shop/layout/NavBar";
@@ -31,9 +30,13 @@ import WishList from "./pages/shop/WishList";
 import AdminRoute from "./components/common/AdminRoute";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminCategories from "./pages/admin/AdminCategories";
-import AdminHeader from "./components/admin/Layout/AdminHeader";
-import AdminSidebar from "./components/admin/Layout/AdminSidebar";
 import AdminAddProduct from "./pages/admin/AdminAddProduct";
+import AdminAddCategoryLvl1 from "./pages/admin/AdminAddCategoryLvl1";
+import AdminAddCategoryLvl2 from "./pages/admin/AdminAddCategoryLvl2";
+import AdminAddCategoryLvl3 from "./pages/admin/AdminAddCategoryLvl3";
+import AdminBrands from "./pages/admin/AdminBrands";
+import AdminAddBrand from "./pages/admin/AdminAddBrand";
+import AdminOrders from "./pages/admin/AdminOrders";
 
 function App() {
   return (
@@ -71,6 +74,12 @@ function App() {
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin/categories" element={<AdminCategories />} />
                 <Route path="/admin/addProduct" element={<AdminAddProduct />} />
+                <Route path="/admin/addFirstLvlCategory" element={<AdminAddCategoryLvl1 />} />
+                <Route path="/admin/addSecondLvlCategory" element={<AdminAddCategoryLvl2 />} />
+                <Route path="/admin/addThirdLvlCategory" element={<AdminAddCategoryLvl3 />} />
+                <Route path="/admin/brands" element={<AdminBrands />} />
+                <Route path="/admin/addBrand" element={<AdminAddBrand />} />
+                <Route path="/admin/orders" element={<AdminOrders />} /> 
               </Route>
             </Route>
           </Route>

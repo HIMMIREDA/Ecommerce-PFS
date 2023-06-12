@@ -3,6 +3,7 @@ import brandService from "./brandService";
 import axios from "axios";
 import { Brand } from "../../types/brand";
 import { RootState } from "../../app/store";
+import { AddBrandPayload } from "../../types/payloads";
 
 export const fetchBrands = createAsyncThunk(
   "brand/fetch",
@@ -46,7 +47,7 @@ export const fetchBrands = createAsyncThunk(
 
 export const createBrand = createAsyncThunk(
   "brand/create",
-  async (brand, thunkAPI) => {
+  async (brand: AddBrandPayload, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState).auth?.user?.accessToken || null;
 

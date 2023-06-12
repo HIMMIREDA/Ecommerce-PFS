@@ -127,9 +127,7 @@ export const createProduct = createAsyncThunk(
       let message = "";
       if (axios.isAxiosError(error)) {
         message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
+          (error.response && error.response.data) ||
           error.message ||
           error.toString();
       }
@@ -216,6 +214,7 @@ const initialState: {
   isError: boolean;
   message: string;
   isLoading: boolean;
+  errors: string[];
 } = {
   currentPage: 1,
   totalPages: 1,
@@ -233,6 +232,7 @@ const initialState: {
   isError: false,
   message: "",
   isLoading: false,
+  errors: [],
 };
 
 const productSlice = createSlice({
@@ -244,6 +244,7 @@ const productSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.message = "";
+      state.errors = [];
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
@@ -362,9 +363,10 @@ const productSlice = createSlice({
         state.isError = false;
         state.message = "";
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createProduct.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isError = true;
+        state.errors = action.payload?.errors || [];
         state.message = action.payload as string;
       })
       .addCase(

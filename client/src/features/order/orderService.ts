@@ -1,11 +1,25 @@
 import { axiosPrivate } from "../../api/axios";
 import { UpdateOrderPayload } from "../../types/payloads";
 
-const fetchOrders = async (
+const fetchAuthOrders = async (
   abortController: AbortController,
   token: string | null
 ) => {
   const response = await axiosPrivate.get(`/orders`, {
+    signal: abortController.signal,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+const fetchAllOrders = async (
+  abortController: AbortController,
+  token: string | null
+) => {
+  const response = await axiosPrivate.get(`/orders/all`, {
     signal: abortController.signal,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -43,7 +57,8 @@ const updateOrder = async (
 };
 
 const categoryService = {
-  fetchOrders,
+  fetchAuthOrders,
+  fetchAllOrders,
   deleteOrder,
   updateOrder,
 };

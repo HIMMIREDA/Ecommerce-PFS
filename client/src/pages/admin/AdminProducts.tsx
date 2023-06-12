@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import {
   deleteProduct,
   fetchAllProducts,
-  fetchProducts,
   reset,
 } from "../../features/product/productSlice";
 import { toast } from "react-toastify";

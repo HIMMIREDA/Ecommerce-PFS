@@ -33,9 +33,6 @@ const CartItem = ({ item }: PropTypes) => {
             </h3>
             <p className="ml-4">${item?.product?.price}</p>
           </div>
-          <p className="mt-1 text-sm ">variation opt1</p>
-          <p className="mt-1 text-sm ">variation opt2</p>
-          <p className="mt-1 text-sm ">variation opt3</p>
         </div>
         <div className="flex flex-1 items-end justify-between text-sm">
           <p className="text-slate-600">Qty : {item?.quantity}</p>

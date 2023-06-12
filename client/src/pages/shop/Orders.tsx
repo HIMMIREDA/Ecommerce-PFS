@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
-import { fetchOrders, reset } from "../../features/order/orderSlice";
+import { fetchAuthOrders, reset } from "../../features/order/orderSlice";
 import { toast } from "react-toastify";
 import { Order, OrderStatus } from "../../types/order";
 
@@ -23,7 +23,7 @@ const Orders = () => {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchOrders(abortController));
+    dispatch(fetchAuthOrders(abortController));
     return () => {
       abortController.abort();
     };

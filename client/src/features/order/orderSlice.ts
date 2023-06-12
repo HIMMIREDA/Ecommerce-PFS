@@ -5,14 +5,38 @@ import { RootState } from "../../app/store";
 import { UpdateOrderPayload } from "../../types/payloads";
 import { Order } from "../../types/order";
 
-export const fetchOrders = createAsyncThunk(
-  "order/fetch",
+export const fetchAuthOrders = createAsyncThunk(
+  "order/fetchauth",
   async (abortController: AbortController, thunkAPI) => {
     const token =
       (thunkAPI.getState() as RootState)?.auth?.user?.accessToken || null;
 
     try {
-      const data = await orderService.fetchOrders(abortController, token);
+      const data = await orderService.fetchAuthOrders(abortController, token);
+      return data;
+    } catch (error) {
+      let message = "";
+      if (axios.isAxiosError(error) && error.name !== "CanceledError") {
+        message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchAllOrders = createAsyncThunk(
+  "order/fetchall",
+  async (abortController: AbortController, thunkAPI) => {
+    const token =
+      (thunkAPI.getState() as RootState)?.auth?.user?.accessToken || null;
+
+    try {
+      const data = await orderService.fetchAllOrders(abortController, token);
       return data;
     } catch (error) {
       let message = "";
@@ -54,7 +78,7 @@ export const deleteOrder = createAsyncThunk(
 );
 
 export const updateOrder = createAsyncThunk(
-  "ordre/update",
+  "order/update",
   async (
     {
       orderId,
@@ -110,19 +134,38 @@ const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
+      .addCase(fetchAuthOrders.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
-      .addCase(fetchOrders.rejected, (state, action) => {
+      .addCase(fetchAuthOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
       .addCase(
-        fetchOrders.fulfilled,
+        fetchAuthOrders.fulfilled,
+        (state, action: PayloadAction<Order[]>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.orders = action.payload;
+        }
+      )
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
+      })
+      .addCase(
+        fetchAllOrders.fulfilled,
         (state, action: PayloadAction<Order[]>) => {
           state.isLoading = false;
           state.isSuccess = true;

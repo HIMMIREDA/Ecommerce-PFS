@@ -1,5 +1,6 @@
 import axios, { axiosPrivate } from "../../api/axios";
 import { Brand } from "../../types/brand";
+import { AddBrandPayload } from "../../types/payloads";
 
 const PAGE_LIMIT = 10;
 
@@ -34,10 +35,15 @@ const deleteBrand = async (
   return response.data;
 };
 
-const createBrand = async (token: string | null, brand: any) => {
-  const response = await axiosPrivate.post<Brand>(`/brands`, brand, {
+const createBrand = async (token: string | null, brand: AddBrandPayload) => {
+  const formData = new FormData();
+  formData.append("name",brand.name);
+  formData.append("image",brand.image);
+
+  const response = await axiosPrivate.post<Brand>(`/brands`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data"
     },
   });
 

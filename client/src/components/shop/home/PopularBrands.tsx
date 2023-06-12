@@ -32,7 +32,7 @@ const PopularBrands = () => {
           <h2 className="text-xl font-bold sm:text-3xl">Popular Brands</h2>
 
           <Link
-            to="/brands/popular"
+            to="/brands"
             className="group mt-4 inline-flex  gap-1 text-xl font-medium items-center"
           >
             Most popular brands in our shop

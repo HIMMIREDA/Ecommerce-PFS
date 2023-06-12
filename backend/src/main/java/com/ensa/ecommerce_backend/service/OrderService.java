@@ -16,4 +16,6 @@ public interface OrderService {
     List<OrderDto> getAuthenticatedUserOrders();
 
     OrderDto updateOrderStatus(String id, OrderStatus status);
+
+    List<OrderDto> getAllOrders();
 }

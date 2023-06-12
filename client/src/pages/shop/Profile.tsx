@@ -10,11 +10,11 @@ const Profile = () => {
         <h2 className="text-3xl font-bold">My Profile</h2>
       </div>
       <div className="bg-white rounded-lg shadow-lg px-8 py-6 w-full md:w-2/3 lg:w-1/2">
-        <div className="flex flex-col md:flex-row justify-center items-center mb-6">
+        {/* <div className="flex flex-col md:flex-row justify-center items-center mb-6">
           <Link to="#" id="edit_profile" className="btn btn-primary ml-4">
             Edit Profile
           </Link>
-        </div>
+        </div> */}
         <div className="flex flex-col">
           <div className="mb-6">
             <h4 className="text-lg font-semibold">username</h4>

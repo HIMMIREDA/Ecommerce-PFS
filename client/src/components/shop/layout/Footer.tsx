@@ -1,8 +1,10 @@
 import { AiFillShop } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Footer() {
-  return (
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  return isAdminRoute ? null :(
     <footer aria-label="Site Footer">
       <div className="divider"></div>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -159,31 +161,6 @@ function Footer() {
               </nav>
             </div>
 
-            <div className="col-span-2 sm:col-span-1">
-              <p className="font-bold">SELLER</p>
-
-              <nav aria-label="Footer Navigation - Downloads" className="mt-6">
-                <ul className="space-y-4 text-sm">
-                  <li>
-                    <Link
-                      to="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      Be a seller
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      to="#"
-                      className="text-gray-700 transition hover:opacity-75"
-                    >
-                      Seller dashboard
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </div>
 
             <ul className="col-span-2 flex justify-start gap-6 lg:col-span-5 lg:justify-end">
               <li>

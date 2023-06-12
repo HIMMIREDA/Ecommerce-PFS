@@ -3,7 +3,15 @@ import { AddProductPayload, UpdateProductPayload } from "../../types/payloads";
 
 const PAGE_LIMIT = 3;
 
-const fetchProducts = async (
+const fetchAllProducts = async (abortController: AbortController) => {
+  const response = await axios.get("products", {
+    signal: abortController.signal,
+  });
+
+  return response.data;
+};
+
+const searchProducts = async (
   abortController: AbortController,
   page: number | undefined,
   limit: number | undefined,
@@ -118,9 +126,20 @@ const createProduct = async (
   token: string | null,
   product: AddProductPayload
 ) => {
-  const response = await axiosPrivate.post(`/products`, product, {
+  const formData = new FormData();
+  formData.append("name", product.name);
+  formData.append("description", product.description);
+  formData.append("price", product.price);
+  formData.append("quantity", product.quantity);
+  formData.append("categoryName", product.categoryName);
+  formData.append("brandName", product.brandName);
+  for (let i = 0; i < product.images.length; i++) {
+    formData.append("images", product.images[i]);
+  }
+  const response = await axiosPrivate.post(`/products`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
     },
   });
 
@@ -142,7 +161,8 @@ const updateProduct = async (
 };
 
 const productService = {
-  fetchProducts,
+  fetchAllProducts,
+  searchProducts,
   fetchProduct,
   deleteProduct,
   updateProduct,

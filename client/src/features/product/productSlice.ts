@@ -5,8 +5,30 @@ import axios from "axios";
 import { AddProductPayload, UpdateProductPayload } from "../../types/payloads";
 import { Product } from "../../types/product";
 
-export const fetchProducts = createAsyncThunk(
+export const fetchAllProducts = createAsyncThunk(
   "product/fetch",
+  async (abortController: AbortController, thunkAPI) => {
+    try {
+      const data = await productService.fetchAllProducts(abortController);
+
+      return data;
+    } catch (error) {
+      let message = "";
+      if (axios.isAxiosError(error) && error.name !== "CanceledError") {
+        message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const searchProducts = createAsyncThunk(
+  "product/search",
   async (
     {
       abortController,
@@ -39,7 +61,7 @@ export const fetchProducts = createAsyncThunk(
       search,
     };
     try {
-      const data = await productService.fetchProducts(
+      const data = await productService.searchProducts(
         abortController,
         page,
         limit,
@@ -105,9 +127,7 @@ export const createProduct = createAsyncThunk(
       let message = "";
       if (axios.isAxiosError(error)) {
         message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
+          (error.response && error.response.data) ||
           error.message ||
           error.toString();
       }
@@ -194,6 +214,7 @@ const initialState: {
   isError: boolean;
   message: string;
   isLoading: boolean;
+  errors: string[];
 } = {
   currentPage: 1,
   totalPages: 1,
@@ -211,6 +232,7 @@ const initialState: {
   isError: false,
   message: "",
   isLoading: false,
+  errors: [],
 };
 
 const productSlice = createSlice({
@@ -222,6 +244,7 @@ const productSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.message = "";
+      state.errors = [];
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
@@ -248,19 +271,38 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchAllProducts.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(fetchAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
       .addCase(
-        fetchProducts.fulfilled,
+        fetchAllProducts.fulfilled,
+        (state, action: PayloadAction<Product[]>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.products = action.payload;
+        }
+      )
+      .addCase(searchProducts.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(searchProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
+      })
+      .addCase(
+        searchProducts.fulfilled,
         (
           state,
           action: PayloadAction<{
@@ -321,9 +363,10 @@ const productSlice = createSlice({
         state.isError = false;
         state.message = "";
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createProduct.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isError = true;
+        state.errors = action.payload?.errors || [];
         state.message = action.payload as string;
       })
       .addCase(

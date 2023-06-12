@@ -8,6 +8,8 @@ import com.ensa.ecommerce_backend.request.UpdateProductRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface ProductService {
     ProductDto saveProduct(AddProductRequest addProductRequest);
 
@@ -15,7 +17,8 @@ public interface ProductService {
 
     ProductDto updateProductById(Long id, UpdateProductRequest updateProductRequest);
 
-    Page<ProductDto> getAllProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder);
+    Page<ProductDto> getPaginatedProducts(int numPage, int pageCount, ProductSearchDto productSearchDto, String sortBy, String sortOrder);
+    List<ProductDto> getAllProducts();
 
     ProductDto getProductById(Long id);
 

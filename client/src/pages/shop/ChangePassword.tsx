@@ -1,31 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { reset, updatePassword } from "../../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const Changepassword = () => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
+  const { isSuccess, isError, message, loading } = useAppSelector(
+    (state) => state.auth
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!oldPassword || !newPassword || !confirmPassword) {
-      setError('Please fill in all fields.');
+      setError("Please fill in all fields.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('New password and confirm password do not match.');
+      setError("New password and confirm password do not match.");
       return;
     }
 
+    dispatch(
+      updatePassword({
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      })
+    );
+
     // Perform password update logic here
 
-    setOldPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    setError('');
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setError("");
   };
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message);
+    }
+    if (isSuccess) {
+      toast.success("password changed successfully");
+    }
+    dispatch(reset());
+  }, [dispatch, isSuccess, isError, loading, message]);
 
   return (
     <div className="flex justify-center items-center h-screen ">
@@ -63,7 +87,10 @@ const Changepassword = () => {
           </div>
 
           <div>
-            <label htmlFor="confirm_password_field" className="block mb-2 text-sm">
+            <label
+              htmlFor="confirm_password_field"
+              className="block mb-2 text-sm"
+            >
               Confirm Password
             </label>
             <input

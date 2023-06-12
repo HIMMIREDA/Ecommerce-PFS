@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ProductItemList from "../../components/shop/products/ProductItemList";
 import Pagination from "../../components/common/Pagination";
 import {
-  fetchProducts,
+  searchProducts,
   setBrandFilter,
   setCategoryFilter,
   setSearchQuery,
@@ -24,7 +24,7 @@ function Products() {
     dispatch(setCategoryFilter(searchParams.get("category")));
     dispatch(setBrandFilter(searchParams.get("brand")));
     let abortController = new AbortController();
-    dispatch(fetchProducts({ abortController, page: 1 }));
+    dispatch(searchProducts({ abortController, page: 1 }));
     return () => {
       abortController.abort();
     };
@@ -87,7 +87,7 @@ function Products() {
           </div>
           <br></br>
           <br></br>
-          <Pagination sliceName={"product"} fetchDataAction={fetchProducts} />
+          <Pagination sliceName={"product"} fetchDataAction={searchProducts} />
         </div>
       </section>
     </div>

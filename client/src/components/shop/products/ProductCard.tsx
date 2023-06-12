@@ -2,15 +2,43 @@ import { FiHeart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import AddToCartBtn from "../shoppingcart/AddToCartBtn";
 import { Product } from "../../../types/product";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { addFavorite, reset } from "../../../features/wishlist/wishlistSlice";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 type PropTypes = {
   product: Product;
 };
 
 const ProductCard = ({ product }: PropTypes) => {
+  const dispatch = useAppDispatch();
+  const { isLoading, isError, message, isSuccess } = useAppSelector(
+    (state) => state.wishlist
+  );
+
+  useEffect(() => {
+    if (isError && message) {
+      toast.error(message);
+    }
+    if (isSuccess) {
+      toast.success("product added to wishlist successfully");
+    }
+    dispatch(reset());
+  }, [message, dispatch, isError, isSuccess, isLoading]);
+
   return (
     <div className="group relative block overflow-hidden">
-      <button className="absolute right-4 top-4 z-10  rounded-full  p-1.5 transition hover:text-gray-900/75">
+      <button
+        onClick={() => {
+          dispatch(
+            addFavorite({
+              productId: product.id,
+            })
+          );
+        }}
+        className="absolute right-4 top-4 z-10  rounded-full  p-1.5 transition hover:text-gray-900/75"
+      >
         <span className="sr-only">Wishlist</span>
 
         <FiHeart className="hover:text-red-500" />

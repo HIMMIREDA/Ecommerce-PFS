@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
-import { fetchOrders, reset } from "../../features/order/orderSlice";
+import { fetchAuthOrders, reset } from "../../features/order/orderSlice";
 import { toast } from "react-toastify";
-import { OrderStatus } from "../../types/order";
+import { Order, OrderStatus } from "../../types/order";
 
 const Orders = () => {
   const statusStyles = {
@@ -23,7 +23,7 @@ const Orders = () => {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchOrders(abortController));
+    dispatch(fetchAuthOrders(abortController));
     return () => {
       abortController.abort();
     };
@@ -59,7 +59,7 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {orders.map((order) => (
+                {orders.map((order: Order) => (
                   <tr key={order.id}>
                     <td className="py-4 px-6">{order.id}</td>
                     <td className="py-4 px-6">

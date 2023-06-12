@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,7 +58,7 @@ public class ProductRestController {
             @RequestParam(value = "sortOrder", defaultValue = "DESC") String sortOrder,
             @RequestBody(required = false) ProductSearchDto productSearchDto
     ) {
-        Page<ProductDto> productsPage = productService.getAllProducts(numPage - 1, count, productSearchDto, sortBy, sortOrder);
+        Page<ProductDto> productsPage = productService.getPaginatedProducts(numPage - 1, count, productSearchDto, sortBy, sortOrder);
         return ResponseEntity.ok(
                 GetItemsResponse.<ProductDto>builder()
                         .items(productsPage.getContent())
@@ -73,6 +74,10 @@ public class ProductRestController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProductById(id);

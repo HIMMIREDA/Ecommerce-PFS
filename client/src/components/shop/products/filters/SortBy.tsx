@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  fetchProducts,
+  searchProducts,
   setSortOptions,
 } from "../../../../features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
@@ -29,7 +29,7 @@ function SortBy() {
 
   useEffect(() => {
     let abortController = new AbortController();
-    dispatch(fetchProducts({ abortController, page: 1 }));
+    dispatch(searchProducts({ abortController, page: 1 }));
   }, [sortBy, sortOrder]);
 
   return (

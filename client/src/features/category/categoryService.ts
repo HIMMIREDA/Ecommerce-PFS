@@ -47,9 +47,14 @@ const deleteCategory = async (
 
 const createCategory = async (
   token: string | null,
-  category: AddCategoryPayload
+  category: AddCategoryPayload,
+  parentCategoryId?: string
 ) => {
-  const response = await axiosPrivate.post(`/categories`, category, {
+  let API_URL = "/categories"; 
+  if(parentCategoryId){
+    API_URL += `/${parentCategoryId}`;
+  }
+  const response = await axiosPrivate.post(API_URL, category, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

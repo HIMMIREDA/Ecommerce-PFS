@@ -17,6 +17,7 @@ export interface RegisterPayload {
 
 export interface AddBrandPayload {
   name: string;
+  image: File;
 }
 
 export interface AddToCartPayload {
@@ -35,7 +36,7 @@ export interface AddProductPayload {
   name: string;
   description: string;
   quantity: string;
-  price: number;
+  price: string;
   categoryName: string;
   brandName: string;
   images: File[];
@@ -51,4 +52,9 @@ export interface AddReviewPayload {
 
 export interface UpdateOrderPayload {
   status: OrderStatus;
+}
+
+export interface UpdatePasswordPayload {
+  newPassword: string;
+  oldPassword: string;
 }
